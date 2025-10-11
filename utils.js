@@ -129,6 +129,7 @@ class Scheduler {
 const Utils = {
     isScrollDown: true,
     iframeCnt: 0,
+    lastDelTime: 0,
     observer: new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting && !entry.target.paused && entry.target.controls)
@@ -140,8 +141,6 @@ const Utils = {
         meta.name = 'viewport';
         meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
         document.head.appendChild(meta);
-
-        window.timerMap = {};
         window.pageCache = {};
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
@@ -401,10 +400,8 @@ const Utils = {
                         }
                         if (!infiniteFlag)
                             clearInterval(timer);
-                    } else if (!infiniteFlag && Date.now() - timerMap[selector] > 6e4)
-                        clearInterval(timer);
+                    }
                 }, 1000);
-                timerMap[selector] = Date.now();
             }
         );
     },
@@ -417,11 +414,28 @@ const Utils = {
     rmElement: function (condition) {
         return ele => rmElements([ele],condition);
     },
-    rmElements: function (arr, condition) {
-        arr.forEach(ele => {
-            if (!condition || !/reddit/i.test(host) && eval(condition))
-                setTimeout(() => ele?.remove(),3000);
-        })
+    rmElements: async function (arr, condition) {
+        let flag = false;
+        while(!flag)
+            if(Date.now() - this.lastDelTime > 3000 && casLastTime(this.lastDelTime)){
+                flag = true;
+                arr.forEach(ele => {
+                    if (!condition || !/reddit/i.test(host) && eval(condition))
+                        ele?.remove();
+                });
+            }
+            else
+                await sleep(1000);
+    },
+    sleep : function(ms){
+        return new Promise(r => setTimeout(r, ms));
+    },
+    casLastTime: function (oldValue){
+        if(this.lastDelTime == oldValue){
+            this.lastDelTime = Date.now();
+            return true;
+        }
+        return false;
     },
     html2Element: function (htmlString) {
         const parser = new DOMParser();
