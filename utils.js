@@ -88,11 +88,20 @@ const Utils = {
         }
     },
     init: function () {
+        window.filterSubs = /DailySolitaire|korea|seoul|kpop|BlackPink|PlayGame/i;
+        window.destMap = {
+            "www.wenxuecity.com": "main",
+            "newmitbbs.com": "#wrap",
+            "news.zhibo8.com": "#main,.wrap .tzhanbao",
+            "botanwang.com": "#content",
+            "club.kdslife.com": ".post-details",
+            "h5.kdslife.com": ".detail-page"
+        };
         let startY = 0;
         let sTime = 0;
-        let isPulling = false; // 用于区分非页面顶部的触摸动作?
+        let isPulling = false;
         scroller.addEventListener('touchstart', e => {
-            if (scroller.scrollTop == 0) {  // 只有在页面顶部才触发
+            if (scroller.scrollTop == 0) {
                 startY = e.touches[0].pageY;
                 sTime = Date.now();
                 isPulling = true;
@@ -101,7 +110,7 @@ const Utils = {
         scroller.addEventListener('touchend', (e) => {
             if (!isPulling) return;
             const diff = e.changedTouches[0].pageY - startY;
-            if (diff > 100 && Date.now() - sTime > 500)  // 下拉超过阈值且超过0.5秒?
+            if (diff > 100 && Date.now() - sTime > 500)
                 window.location.reload();
             isPulling = false;
         });
@@ -125,7 +134,7 @@ const Utils = {
 
         console.log(`cacheMap: ${ss.size("cacheMap") / 1e6} MB`)
         console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB`)
-        if (JSON.stringify(localStorage).length > 5e6 && !/(html|htm)$|thread/.test(document.URL)) { // 整个localStorage的上限就是5.6M?不能清空vLinks,否则全部页面重新缓存?防止iframe清空缓存?
+        if (JSON.stringify(localStorage).length > 5e6 && !/(html|htm)$|thread/.test(document.URL)) {
             console.log(`document.URL:${document.URL}`)
             ss.remove("cacheMap");
         }
