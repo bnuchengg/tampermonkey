@@ -63,16 +63,6 @@ const Utils = {
         }
         return div;
     },
-    lazyLoad: function (ele, target, func) {
-        const timer = setInterval(() => {
-            const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
-            if (content) {
-                clearInterval(timer);
-                eval(func);
-            } else if (!/loading/.test(ele.classList))
-                loadContent(ele, target);
-        }, 1000);
-    },
     appendDiv: function (type) {
         return ele => {
             if (/\/search/i.test(document.URL)) {
@@ -97,43 +87,6 @@ const Utils = {
             else
                 ele.onclick = () => ss.add(arr, link);
         };
-    },
-    loadContent: function (link, selector, cloneLink) {
-        const key = "cacheMap";
-        if (ss.hashGet(key, link.href) || pageCache[link.href])
-            return;
-        link.classList.add("loading");
-        const iframe = document.createElement("iframe");
-        if (/club.kdslife/.test(host))
-            iframe.style.cssText = "width: 1080px";
-        else
-            iframe.style.cssText = "display: none";
-        iframe.src = link.href;
-        iframe.onload = (e) => {
-            const iframe = e.target;
-            const timer = setInterval(() => {
-                if (iframe.contentDocument?.querySelector(selector)) {
-                    clearInterval(timer);
-                    const content = iframe.contentDocument?.querySelector(selector);
-                    if (cloneLink)
-                        content.prepend(link.cloneNode(true));
-                    if (ss.size(key) < 5e6)
-                        ss.hashSet(key, link.href, content.outerHTML);
-                    else
-                        pageCache[link.href] = content.outerHTML;
-                    link.classList.remove("loading");
-                    this.iframeCnt--;
-                    iframe.remove();
-                }
-            }, 1000);
-        };
-        const timer = setInterval(() => {
-            if (this.iframeCnt < 3) {
-                this.iframeCnt++;
-                clearInterval(timer);
-                document.body.append(iframe);
-            }
-        }, 1000);
     },
     createNode: function (tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬"};
