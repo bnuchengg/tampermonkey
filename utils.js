@@ -1,4 +1,10 @@
 const Utils = {
+    observer: new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting && !entry.target.paused && entry.target.controls)
+                entry.target.pause();
+        });
+    }, {threshold: 0.5}),
     ss: {
         set(key, value) {
             if (typeof value == "object")
@@ -45,6 +51,88 @@ const Utils = {
         clear() {
             localStorage.clear();
         }
+    },
+    lazyLoad: function (ele, target, func) {
+        const timer = setInterval(() => { // 点击后等待内容加载成功?
+            const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
+            if (content) {
+                clearInterval(timer);
+                eval(func); // 将字符串内容当函数体执行? 里面的ele直接读取当前函数的形参?
+            } else if (!/loading/.test(ele.classList)) // 避免重复加载?
+                loadContent(ele, target);
+        }, 1000);
+    },
+    appendDiv: function (type) {
+        return ele => {
+            if (/\/search/i.test(document.URL)) {
+                const container = document.createElement("div");
+                container.style.cssText = "max-width: 100px !important; flex-shrink: 0"; // 防止被左边文字太多导致压缩变形?
+                if (/img/i.test(type))
+                    container.innerHTML = `<img src="${ele.poster || ele.src}" style="width: auto; max-height: 100px"/>
+                        <span style="position: absolute; top: 0; right: 20px; font-size: 10px !important">${ele.tagName}</span>`;
+                else
+                    container.textContent = ele.textContent.slice(0, 35) + "…";
+                ele.closest("article")?.append(container);
+                ele.closest("[aria-labelledby]")?.remove();
+            }
+        };
+    },
+    visitLink: function () {
+        return ele => {
+            const arr = "vLinks";
+            const link = ele.href || ele.textContent;
+            if (ss.contains(arr, link))
+                ele.classList.add("visited"); // 扫描到链接就置灰?
+            else
+                ele.onclick = () => ss.add(arr, link);
+        };
+    },
+    loadContent: function (link, selector, cloneLink) {
+        const key = "cacheMap";
+        if (ss.hashGet(key, link.href) || pageCache[link.href])
+            return;
+        link.classList.add("loading");
+        const iframe = document.createElement("iframe");
+        if (/club.kdslife/.test(host))
+            iframe.style.cssText = "width: 1080px"; // 防止傻逼kds跳转h5页面?
+        else
+            iframe.style.cssText = "display: none";
+        iframe.src = link.href;
+        iframe.onload = (e) => {
+            const iframe = e.target;
+            const timer = setInterval(() => {
+                if (iframe.contentDocument?.querySelector(selector)) {
+                    clearInterval(timer);
+                    const content = iframe.contentDocument?.querySelector(selector);
+                    if (cloneLink)
+                        content.prepend(link.cloneNode(true));
+                    if (ss.size(key) < 5e6)
+                        ss.hashSet(key, link.href, content.outerHTML);
+                    else
+                        pageCache[link.href] = content.outerHTML; // localStorage超限时存入页面缓存?
+                    link.classList.remove("loading");
+                    console.log(`iframeCnt: ${iframeCnt}, ${link.textContent.replace(/\s/g, '')} loaded.`)
+                    iframeCnt--;
+                    iframe.remove();
+                }
+            }, 1000);
+        };
+        const timer = setInterval(() => {
+            if (iframeCnt < 3) {
+                iframeCnt++;
+                console.log(`iframeCnt: ${iframeCnt}, loading ${link.textContent.replace(/\s/g, '')}`)
+                clearInterval(timer);
+                document.body.append(iframe);
+            }
+        }, 1000);
+    },
+    createNode: function (tagName, cssText, action) {
+        const map = {"top": "⏫", "bottom": "⏬"};
+        const node = document.createElement(tagName);
+        node.textContent = map[action];
+        node.style.cssText = `${cssText}`;
+        node.onclick = () => menuAction(action);
+        return node;
     },
     moveImg: function (e) { // 绑定onclick事件的回调函数自带event参数?
         const img = e.target;
