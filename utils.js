@@ -1,3 +1,33 @@
+class Scheduler {
+    constructor(cnt) {
+        this.waitingList = [];
+        this.destMap = {};
+        this.maxRunning = cnt;
+        this.loadingNum = 0;
+    }
+    add(link, selector) {
+        this.remove(link);
+        this.destMap[link] = selector;
+        this.waitingList.push(link);
+    }
+    remove(link) {
+        const index = this.waitingList.indexOf(link);
+        if (index > -1)
+            this.waitingList.splice(index, 1);
+    }
+    run() {
+        setInterval(() => {
+            if (this.waitingList.length > 0 && this.loadingNum < this.maxRunning) {
+                this.loadingNum++;
+                const link = this.waitingList.pop();
+                const selector = this.destMap[link];
+                delete this.destMap[link];
+                loadContent(link, selector);
+            }
+        }, 1000);
+    }
+}
+
 const Utils = {
     isScrollDown: true,
     iframeCnt: 0,
@@ -53,6 +83,44 @@ const Utils = {
         clear() {
             localStorage.clear();
         }
+    },
+    loadContent: function (link, selector) {
+        const key = "cacheMap";
+        if (ss.hashGet(key, link.href) || pageCache[link.href]) {
+            scheduler.loadingNum--;
+            return;
+        }
+        link.classList.add("loading");
+        const iframe = document.createElement("iframe");
+        if (/club.kdslife/.test(host))
+            iframe.style.cssText = "width: 1080px";
+        else
+            iframe.style.cssText = "display: none";
+        iframe.src = link.href;
+        iframe.onload = (e) => {
+            const iframe = e.target;
+            const content = iframe.contentDocument?.querySelector(selector);
+            if (link.getAttribute("cloneLink"))
+                content?.prepend(link.cloneNode(true));
+            if (ss.size(key) < 5e6)
+                ss.hashSet(key, link.href, content.outerHTML);
+            else
+                pageCache[link.href] = content.outerHTML;
+            scheduler.loadingNum--;
+            link.classList.remove("loading");
+            iframe.remove();
+        };
+        document.body.append(iframe);
+    },
+    lazyLoad: function (ele, target, func) {
+        const timer = setInterval(() => {
+            const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
+            if (content) {
+                clearInterval(timer);
+                eval(func);
+            } else if (!/loading/.test(ele.classList))
+                scheduler.add(ele, target);
+        }, 1000);
     },
     mergeLink: function (div) {
         if (div.querySelectorAll("a").length > 1) {
@@ -238,4 +306,5 @@ const Utils = {
     }
 };
 
+window.Scheduler = Scheduler;
 window.Utils = Utils;
