@@ -16,12 +16,12 @@ const Utils = {
         hashSet(key, field, value) {
             const map = this.getJson(key);
             map[field] = value;
-            this.set(key, map); // 由set方法统一将对象转成字符串?
+            this.set(key, map);
         },
         hashGet(key, field) {
-            return this.getJson(key)[field]; // get方法已经将字符串转成对象,获取field的value无需再转?
+            return this.getJson(key)[field];
         },
-        add(arr, item) { // 集合添加去重元素?
+        add(arr, item) {
             const _arr = this.getArray(arr);
             if (!_arr.includes(item))
                 _arr.push(item);
@@ -35,7 +35,7 @@ const Utils = {
             return item ? JSON.parse(item) : null;
         },
         getJson(key) {
-            if (!this.get(key)) // 要通过this调用同一对象的其他方法?
+            if (!this.get(key))
                 this.set(key, {});
             return this.get(key);
         },
@@ -45,7 +45,7 @@ const Utils = {
             return this.get(key);
         },
         size(key) {
-            return localStorage.getItem(key)?.length ?? 0; // ss.get会返回对象,localStorage.getItem返回的是字符串?
+            return localStorage.getItem(key)?.length ?? 0;
         },
         remove(key) {
             localStorage.removeItem(key);
@@ -55,12 +55,12 @@ const Utils = {
         }
     },
     lazyLoad: function (ele, target, func) {
-        const timer = setInterval(() => { // 点击后等待内容加载成功?
+        const timer = setInterval(() => {
             const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
             if (content) {
                 clearInterval(timer);
-                eval(func); // 将字符串内容当函数体执行? 里面的ele直接读取当前函数的形参?
-            } else if (!/loading/.test(ele.classList)) // 避免重复加载?
+                eval(func);
+            } else if (!/loading/.test(ele.classList))
                 loadContent(ele, target);
         }, 1000);
     },
@@ -68,7 +68,7 @@ const Utils = {
         return ele => {
             if (/\/search/i.test(document.URL)) {
                 const container = document.createElement("div");
-                container.style.cssText = "max-width: 100px !important; flex-shrink: 0"; // 防止被左边文字太多导致压缩变形?
+                container.style.cssText = "max-width: 100px !important; flex-shrink: 0";
                 if (/img/i.test(type))
                     container.innerHTML = `<img src="${ele.poster || ele.src}" style="width: auto; max-height: 100px"/>
                         <span style="position: absolute; top: 0; right: 20px; font-size: 10px !important">${ele.tagName}</span>`;
@@ -84,7 +84,7 @@ const Utils = {
             const arr = "vLinks";
             const link = ele.href || ele.textContent;
             if (ss.contains(arr, link))
-                ele.classList.add("visited"); // 扫描到链接就置灰?
+                ele.classList.add("visited");
             else
                 ele.onclick = () => ss.add(arr, link);
         };
@@ -96,7 +96,7 @@ const Utils = {
         link.classList.add("loading");
         const iframe = document.createElement("iframe");
         if (/club.kdslife/.test(host))
-            iframe.style.cssText = "width: 1080px"; // 防止傻逼kds跳转h5页面?
+            iframe.style.cssText = "width: 1080px";
         else
             iframe.style.cssText = "display: none";
         iframe.src = link.href;
@@ -111,7 +111,7 @@ const Utils = {
                     if (ss.size(key) < 5e6)
                         ss.hashSet(key, link.href, content.outerHTML);
                     else
-                        pageCache[link.href] = content.outerHTML; // localStorage超限时存入页面缓存?
+                        pageCache[link.href] = content.outerHTML;
                     link.classList.remove("loading");
                     this.iframeCnt--;
                     iframe.remove();
@@ -134,28 +134,28 @@ const Utils = {
         node.onclick = () => menuAction(action);
         return node;
     },
-    moveImg: function (e) { // 绑定onclick事件的回调函数自带event参数?
+    moveImg: function (e) {
         const img = e.target;
-        if (img.classList.contains("video_play") || img.getBoundingClientRect().height < 150) // 放行zhibo8的视频封面图片播放按钮? 和高度不足100的链接图片?
+        if (img.classList.contains("video_play") || img.getBoundingClientRect().height < 150)
             return;
         e.preventDefault();
-        e.stopPropagation(); // 防止触发div的contentClick事件?
+        e.stopPropagation();
         let pos = 0;
         if (!img.classList.contains("zoomed")) {
             img.classList.add("zoomed");
             pos = calcScrollPos(img, true);
         } else {
-            zoomNext(img); // 上面图片放大后当前图片的top和bottom要重新获取?其实是scrollTop增大了,要重新获取scrollTop?
+            zoomNext(img);
             pos = calcScrollPos(img, false);
         }
         scroll2Pos(pos);
     },
     calcScrollPos: function (img, firstClick) {
         const scrollTop = scroller.scrollTop;
-        const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0; // 两个问号将null或undefined转成默认值0?
+        const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
         if (firstClick)
-            return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom); // 向下滚动则顶部平齐,否则底部平齐
+            return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
         return this.isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
     },
     menuAction: (action) => {
@@ -209,12 +209,12 @@ const Utils = {
             const timer = setInterval(() => {
                 if (document.querySelectorAll(selector).length > 0) {
                     if (typeof func == "string")
-                        document.querySelectorAll(selector).forEach(new Function("ele", func)); // 定义函数对象: 第一个参数是入参名称?第二个参数是函数体? reddit禁用Function?
+                        document.querySelectorAll(selector).forEach(new Function("ele", func));
                     else
                         document.querySelectorAll(selector).forEach(func);
                     if (!infiniteFlag)
                         clearInterval(timer);
-                } else if (!infiniteFlag && Date.now() - timerMap[selector] > 10000) // 不循环且超时未命中,清除timer?
+                } else if (!infiniteFlag && Date.now() - timerMap[selector] > 10000)
                     clearInterval(timer);
             }, 1000);
             timerMap[selector] = Date.now();
@@ -250,14 +250,14 @@ const Utils = {
     resetPos: function () {
         scroll2Pos(0);
         this.isScrollDown = true;
-        contextMenu.replaceChildren(liBottom); // 用参数替换所有子元素?
+        contextMenu.replaceChildren(liBottom);
     },
     toggleButton: function () {
         this.isScrollDown = !this.isScrollDown;
         this.isScrollDown ? contextMenu.replaceChildren(liBottom) : contextMenu.replaceChildren(liTop);
     },
     zoomNext: function (img) {
-        const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150); // 隐藏图片的getBoundingClientRect返回的height为0?
+        const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
         const index = Number(imgs.map((item, index) => {
             item.setAttribute("data-index", index);
             return item;
@@ -276,5 +276,4 @@ const Utils = {
     }
 };
 
-// 一次性暴露
 window.Utils = Utils;
