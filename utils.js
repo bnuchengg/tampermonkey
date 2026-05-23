@@ -1,4 +1,6 @@
 const Utils = {
+    isScrollDown: true,
+    iframeCnt: 0,
     observer: new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting && !entry.target.paused && entry.target.controls)
@@ -111,16 +113,14 @@ const Utils = {
                     else
                         pageCache[link.href] = content.outerHTML; // localStorage超限时存入页面缓存?
                     link.classList.remove("loading");
-                    console.log(`iframeCnt: ${iframeCnt}, ${link.textContent.replace(/\s/g, '')} loaded.`)
-                    iframeCnt--;
+                    this.iframeCnt--;
                     iframe.remove();
                 }
             }, 1000);
         };
         const timer = setInterval(() => {
-            if (iframeCnt < 3) {
-                iframeCnt++;
-                console.log(`iframeCnt: ${iframeCnt}, loading ${link.textContent.replace(/\s/g, '')}`)
+            if (this.iframeCnt < 3) {
+                this.iframeCnt++;
                 clearInterval(timer);
                 document.body.append(iframe);
             }
@@ -155,8 +155,8 @@ const Utils = {
         const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0; // 两个问号将null或undefined转成默认值0?
         const rect = img.getBoundingClientRect();
         if (firstClick)
-            return isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom); // 向下滚动则顶部平齐,否则底部平齐
-        return isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
+            return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom); // 向下滚动则顶部平齐,否则底部平齐
+        return this.isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
     },
     menuAction: (action) => {
         const scrollMax = scroller.scrollTopMax;
@@ -249,12 +249,12 @@ const Utils = {
     },
     resetPos: function () {
         scroll2Pos(0);
-        isScrollDown = true;
+        this.isScrollDown = true;
         contextMenu.replaceChildren(liBottom); // 用参数替换所有子元素?
     },
     toggleButton: function () {
-        isScrollDown = !isScrollDown;
-        isScrollDown ? contextMenu.replaceChildren(liBottom) : contextMenu.replaceChildren(liTop);
+        this.isScrollDown = !this.isScrollDown;
+        this.isScrollDown ? contextMenu.replaceChildren(liBottom) : contextMenu.replaceChildren(liTop);
     },
     zoomNext: function (img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150); // 隐藏图片的getBoundingClientRect返回的height为0?
@@ -262,7 +262,7 @@ const Utils = {
             item.setAttribute("data-index", index);
             return item;
         }).filter(item => item == img)[0]?.getAttribute("data-index"));
-        const next = isScrollDown ? index + 1 : index - 1;
+        const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
     },
     isTouchScreen: function () {
