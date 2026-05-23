@@ -1,4 +1,164 @@
 const Utils = {
+    ss: {
+        set(key, value) {
+            if (typeof value == "object")
+                value = JSON.stringify(value);
+            localStorage.setItem(key, value);
+        },
+        hashSet(key, field, value) {
+            const map = this.getJson(key);
+            map[field] = value;
+            this.set(key, map); // 由set方法统一将对象转成字符串?
+        },
+        hashGet(key, field) {
+            return this.getJson(key)[field]; // get方法已经将字符串转成对象,获取field的value无需再转?
+        },
+        add(arr, item) { // 集合添加去重元素?
+            const _arr = this.getArray(arr);
+            if (!_arr.includes(item))
+                _arr.push(item);
+            this.set(arr, _arr);
+        },
+        contains(arr, item) {
+            return this.getArray(arr).includes(item);
+        },
+        get(key) {
+            const item = localStorage.getItem(key);
+            return item ? JSON.parse(item) : null;
+        },
+        getJson(key) {
+            if (!this.get(key)) // 要通过this调用同一对象的其他方法?
+                this.set(key, {});
+            return this.get(key);
+        },
+        getArray(key) {
+            if (!this.get(key))
+                this.set(key, []);
+            return this.get(key);
+        },
+        size(key) {
+            return localStorage.getItem(key)?.length ?? 0; // ss.get会返回对象,localStorage.getItem返回的是字符串?
+        },
+        remove(key) {
+            localStorage.removeItem(key);
+        },
+        clear() {
+            localStorage.clear();
+        }
+    },
+    moveImg: function (e) { // 绑定onclick事件的回调函数自带event参数?
+        const img = e.target;
+        if (img.classList.contains("video_play") || img.getBoundingClientRect().height < 150) // 放行zhibo8的视频封面图片播放按钮? 和高度不足100的链接图片?
+            return;
+        e.preventDefault();
+        e.stopPropagation(); // 防止触发div的contentClick事件?
+        let pos = 0;
+        if (!img.classList.contains("zoomed")) {
+            img.classList.add("zoomed");
+            pos = calcScrollPos(img, true);
+        } else {
+            zoomNext(img); // 上面图片放大后当前图片的top和bottom要重新获取?其实是scrollTop增大了,要重新获取scrollTop?
+            pos = calcScrollPos(img, false);
+        }
+        scroll2Pos(pos);
+    },
+    calcScrollPos: function (img, firstClick) {
+        const scrollTop = scroller.scrollTop;
+        const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0; // 两个问号将null或undefined转成默认值0?
+        const rect = img.getBoundingClientRect();
+        if (firstClick)
+            return isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom); // 向下滚动则顶部平齐,否则底部平齐
+        return isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
+    },
+    menuAction: (action) => {
+        const scrollMax = scroller.scrollTopMax;
+        const handlerMap = {
+            "top": () => scroll2Pos(0, scroller),
+            "bottom": () => scroll2Pos(scrollMax, scroller),
+            "back": () => window.history.back()
+        }
+        handlerMap[action]();
+        toggleButton();
+    },
+    replaceHTML: function (selector) {
+        return ele => ele.closest(selector).innerHTML = ele.innerHTML;
+    },
+    truncText: function (pEle, selector, limit) {
+        if (selector)
+            pEle.querySelectorAll(selector).forEach(ele => ele.textContent = ele.textContent.slice(0, limit) + "…");
+        else
+            pEle.textContent = pEle.textContent.slice(0, limit) + "…";
+    },
+    replaceImg: function (tagName, src, rmSelector) {
+        return img => {
+            const node = createImg(img, tagName, src);
+            if (rmSelector)
+                img = img.closest(rmSelector) || img.parentElement;
+            img.after(node);
+            img.remove();
+        };
+    },
+    createImg: function (img, tagName, src) {
+        const node = document.createElement(tagName);
+        if (/a/i.test(tagName)) {
+            node.href = img.href;
+            node.style.cssText = "text-decoration: none";
+            node.textContent = img.textContent;
+        } else {
+            node.src = img.getAttribute(src) || img.src;
+            if (/video/i.test(tagName)) {
+                node.controls = true;
+                let maxHeight = "360px";
+                if (/\/p\/\d+/.test(document.URL))
+                    maxHeight = "80vh";
+                node.style.cssText += `max-height: ${maxHeight}; max-width: 100%`;
+            }
+        }
+        return node;
+    },
+    iCss: function (actionMap, infiniteFlag) {
+        Object.entries(actionMap).forEach(([selector, func]) => {
+            const timer = setInterval(() => {
+                if (document.querySelectorAll(selector).length > 0) {
+                    if (typeof func == "string")
+                        document.querySelectorAll(selector).forEach(new Function("ele", func)); // 定义函数对象: 第一个参数是入参名称?第二个参数是函数体? reddit禁用Function?
+                    else
+                        document.querySelectorAll(selector).forEach(func);
+                    if (!infiniteFlag)
+                        clearInterval(timer);
+                } else if (!infiniteFlag && Date.now() - timerMap[selector] > 10000) // 不循环且超时未命中,清除timer?
+                    clearInterval(timer);
+            }, 1000);
+            timerMap[selector] = Date.now();
+        });
+    },
+    appendCss: function (cssText) {
+        return ele => {
+            const style = ele.style || ele.target.style;
+            style.cssText += cssText;
+        };
+    },
+    rmElement: function (condition) {
+        if (condition && !/reddit/i.test(host))
+            return ele => {
+                if (eval(condition))
+                    ele.remove();
+            };
+        return ele => ele.remove();
+    },
+    postLink: function (func) {
+        return ele => {
+            if (/visited/.test(ele.classList) && !/processed/.test(ele.classList)) {
+                ele.classList.add("processed");
+                func(ele);
+            }
+        };
+    },
+    html2Element: function (htmlString) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlString, 'text/html');
+        return doc.body.firstElementChild;
+    },
     resetPos: function () {
         scroll2Pos(0);
         isScrollDown = true;
