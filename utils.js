@@ -5,16 +5,19 @@ class Scheduler {
         this.maxRunning = cnt;
         this.loadingNum = 0;
     }
+
     add(link, selector) {
         this.remove(link);
         this.destMap[link] = selector;
         this.waitingList.push(link);
     }
+
     remove(link) {
         const index = this.waitingList.indexOf(link);
         if (index > -1)
             this.waitingList.splice(index, 1);
     }
+
     run() {
         setInterval(() => {
             if (this.waitingList.length > 0 && this.loadingNum < this.maxRunning) {
@@ -82,6 +85,49 @@ const Utils = {
         },
         clear() {
             localStorage.clear();
+        }
+    },
+    init: function () {
+        let startY = 0;
+        let sTime = 0;
+        let isPulling = false; // 用于区分非页面顶部的触摸动作?
+        scroller.addEventListener('touchstart', e => {
+            if (scroller.scrollTop == 0) {  // 只有在页面顶部才触发
+                startY = e.touches[0].pageY;
+                sTime = Date.now();
+                isPulling = true;
+            }
+        }, {passive: true});
+        scroller.addEventListener('touchend', (e) => {
+            if (!isPulling) return;
+            const diff = e.changedTouches[0].pageY - startY;
+            if (diff > 100 && Date.now() - sTime > 500)  // 下拉超过阈值且超过0.5秒?
+                window.location.reload();
+            isPulling = false;
+        });
+
+        if (!/^x.com|google.com|youtube.com/i.test(host))
+            iCss({"img,video": img => img.onclick = moveImg}, true);
+
+        window.contextMenu = document.createElement('ul');
+        contextMenu.draggable = true;
+        contextMenu.ondragend = (event) => contextMenu.style.cssText += `left: ${event.clientX}px; top: ${event.clientY}px`;
+        contextMenu.ontouchmove = (event) => {
+            event.preventDefault();
+            contextMenu.style.cssText += `left: ${event.touches[0].clientX}px; top: ${event.touches[0].clientY}px`;
+        };
+
+        window.liBottom = createNode("li", "text-align: center; cursor: pointer", "bottom");
+        window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
+        contextMenu.appendChild(liBottom);
+        contextMenu.style.cssText = `left: 3vw; bottom: 25vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
+        document.body.append(contextMenu);
+
+        console.log(`cacheMap: ${ss.size("cacheMap") / 1e6} MB`)
+        console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB`)
+        if (JSON.stringify(localStorage).length > 5e6 && !/(html|htm)$|thread/.test(document.URL)) { // 整个localStorage的上限就是5.6M?不能清空vLinks,否则全部页面重新缓存?防止iframe清空缓存?
+            console.log(`document.URL:${document.URL}`)
+            ss.remove("cacheMap");
         }
     },
     lazyLoad: function (ele, target, func) {
