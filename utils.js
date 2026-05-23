@@ -306,6 +306,7 @@ const Utils = {
     },
     resetPos: function () {
         scroll2Pos(0);
+        scroll2HPos(document.querySelector(".sticky"), 0);
         this.isScrollDown = true;
         contextMenu.replaceChildren(liBottom);
     },
@@ -328,6 +329,12 @@ const Utils = {
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
+            behavior: 'smooth'
+        });
+    },
+    scroll2HPos: function (container, pos) {
+        container.scrollTo({
+            left: pos,
             behavior: 'smooth'
         });
     }
