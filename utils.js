@@ -54,6 +54,15 @@ const Utils = {
             localStorage.clear();
         }
     },
+    mergeLink: function (div) {
+        if (div.querySelectorAll("a").length > 1) {
+            const img = div.querySelector("a img");
+            const parent = div == img.closest("div") ? img.closest("a") : img.closest("div");
+            div.prepend(img);
+            parent?.remove();
+        }
+        return div;
+    },
     lazyLoad: function (ele, target, func) {
         const timer = setInterval(() => {
             const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
