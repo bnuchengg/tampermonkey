@@ -84,34 +84,6 @@ const Utils = {
             localStorage.clear();
         }
     },
-    loadContent: function (link, selector) {
-        const key = "cacheMap";
-        if (ss.hashGet(key, link.href) || pageCache[link.href]) {
-            scheduler.loadingNum--;
-            return;
-        }
-        link.classList.add("loading");
-        const iframe = document.createElement("iframe");
-        if (/club.kdslife/.test(host))
-            iframe.style.cssText = "width: 1080px";
-        else
-            iframe.style.cssText = "display: none";
-        iframe.src = link.href;
-        iframe.onload = (e) => {
-            const iframe = e.target;
-            const content = iframe.contentDocument?.querySelector(selector);
-            if (link.getAttribute("cloneLink"))
-                content?.prepend(link.cloneNode(true));
-            if (ss.size(key) < 5e6)
-                ss.hashSet(key, link.href, content.outerHTML);
-            else
-                pageCache[link.href] = content.outerHTML;
-            scheduler.loadingNum--;
-            link.classList.remove("loading");
-            iframe.remove();
-        };
-        document.body.append(iframe);
-    },
     lazyLoad: function (ele, target, func) {
         const timer = setInterval(() => {
             const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
