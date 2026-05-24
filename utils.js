@@ -88,15 +88,6 @@ const Utils = {
         }
     },
     init: function () {
-        window.filterSubs = /DailySolitaire|korea|seoul|kpop|BlackPink|PlayGame/i;
-        window.destMap = {
-            "www.wenxuecity.com": "main",
-            "newmitbbs.com": "#wrap",
-            "news.zhibo8.com": "#main,.wrap .tzhanbao",
-            "botanwang.com": "#content",
-            "club.kdslife.com": ".post-details",
-            "h5.kdslife.com": ".detail-page"
-        };
         let startY = 0;
         let sTime = 0;
         let isPulling = false;
@@ -145,8 +136,10 @@ const Utils = {
             if (content) {
                 clearInterval(timer);
                 eval(func);
-            } else if (!/loading/.test(ele.classList))
+            } else if (!/loading|queued/.test(ele.classList)) {
+                ele.classList.add("queued");
                 scheduler.add(ele, target);
+            }
         }, 1000);
     },
     mergeLink: function (div) {
