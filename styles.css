@@ -14,6 +14,27 @@ img {
     max-height: unset !important;
 }
 
+.loading {
+    position: unset !important;
+    border: 3px dashed black;
+    animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+    0% {
+        scale: 1;
+        border-color: red;
+    }
+    50% {
+        scale: 2;
+        border-color: lime;
+    }
+    100% {
+        scale: 1;
+        border-color: yellow;
+    }
+}
+
 .sticky {
     display: flex;
     height: 150px;
