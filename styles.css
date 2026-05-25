@@ -14,7 +14,7 @@ img {
     max-height: unset !important;
 }
 
-.loading {
+.sticky .loading {
     position: unset !important;
     border: 3px dashed black;
     animation: blink 1s linear infinite;
