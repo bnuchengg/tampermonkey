@@ -123,10 +123,9 @@ const Utils = {
         contextMenu.style.cssText = `left: 3vw; bottom: 25vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
         document.body.append(contextMenu);
 
-        console.log(`cacheMap: ${ss.size("cacheMap") / 1e6} MB`)
-        console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB`)
+        console.log(`cacheMap: ${ss.size("cacheMap") / 1e6} MB@${document.URL}`)
         if (JSON.stringify(localStorage).length > 5e6 && !/(html|htm)$|thread/.test(document.URL)) {
-            console.log(`document.URL:${document.URL}`)
+            console.log(`clear cacheMap@${document.URL}`)
             ss.remove("cacheMap");
         }
     },
