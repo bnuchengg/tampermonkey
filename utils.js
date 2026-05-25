@@ -6,10 +6,16 @@ class Scheduler {
         this.loadingNum = 0;
     }
 
-    add(link, selector) {
+    append(link, selector) {
         this.remove(link);
         this.destMap[link] = selector;
         this.waitingList.push(link);
+    }
+
+    prepend(link, selector) {
+        this.remove(link);
+        this.destMap[link] = selector;
+        this.waitingList.unshift(link);
     }
 
     remove(link) {
@@ -22,7 +28,7 @@ class Scheduler {
         setInterval(() => {
             if (this.waitingList.length > 0 && this.loadingNum < this.maxRunning) {
                 this.loadingNum++;
-                const link = this.waitingList.pop();
+                const link = this.waitingList.shift();
                 const selector = this.destMap[link];
                 delete this.destMap[link];
                 loadContent(link, selector);
@@ -137,7 +143,7 @@ const Utils = {
                 eval(func);
             } else if (!/loading|queued/.test(ele.classList)) {
                 ele.classList.add("queued");
-                scheduler.add(ele, target);
+                scheduler.prepend(ele, target);
             }
         }, 1000);
     },
