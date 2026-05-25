@@ -17,7 +17,7 @@ img {
 .loading {
     position: unset !important;
     border: 1px dashed black;
-    animation: blink 0.1s infinite;
+    animation: blink 0.1s linear infinite;
 }
 
 @keyframes blink {
