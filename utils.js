@@ -131,6 +131,7 @@ const Utils = {
                 delete scheduler.destMap[link];
                 loadContent(link, selector);
             }
+            return exec;
         })(), 1000);
     },
     lazyLoad: function (ele, target, func) {
