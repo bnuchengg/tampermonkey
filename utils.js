@@ -33,6 +33,7 @@ class Scheduler {
                 delete this.destMap[link];
                 loadContent(link, selector);
             }
+            return exec;
         })(), 1000);
     }
 }
