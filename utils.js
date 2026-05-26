@@ -136,13 +136,12 @@ const Utils = {
         }
     },
     lazyLoad: function (ele, target, func) {
-        const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
-        if (content) {
+        if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
             eval(func);
             return;
         }
         const timer = setInterval(() => {
-            if (content) {
+            if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
                 clearInterval(timer);
                 eval(func);
             } else if (!/loading|queued/.test(ele.classList)) {
