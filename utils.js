@@ -25,15 +25,15 @@ class Scheduler {
     }
 
     run() {
-        setInterval(() => {
-            if (this.waitingList.length > 0 && this.loadingNum < this.maxRunning) {
+        setInterval((function exec() {
+            while (this.waitingList.length > 0 && this.loadingNum < this.maxRunning) {
                 this.loadingNum++;
                 const link = this.waitingList.shift();
                 const selector = this.destMap[link];
                 delete this.destMap[link];
                 loadContent(link, selector);
             }
-        }, 1000);
+        })(), 1000);
     }
 }
 
@@ -136,8 +136,12 @@ const Utils = {
         }
     },
     lazyLoad: function (ele, target, func) {
+        const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
+        if (content) {
+            eval(func);
+            return;
+        }
         const timer = setInterval(() => {
-            const content = ss.hashGet("cacheMap", ele.href) || pageCache[ele.href];
             if (content) {
                 clearInterval(timer);
                 eval(func);
@@ -261,26 +265,34 @@ const Utils = {
     },
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
-            const timer = setInterval(() => {
                 if (document.querySelectorAll(selector).length > 0) {
-                    if (typeof func == "string")
-                        document.querySelectorAll(selector).forEach(new Function("ele", func));
-                    else
-                        document.querySelectorAll(selector).forEach(func);
+                    document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
                     if (!infiniteFlag)
+                        return;
+                }
+                const timer = setInterval(() => {
+                    if (document.querySelectorAll(selector).length > 0) {
+                        document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                        if (!infiniteFlag)
+                            clearInterval(timer);
+                    } else if (!infiniteFlag && Date.now() - timerMap[selector] > 6e4)
                         clearInterval(timer);
-                } else if (!infiniteFlag && Date.now() - timerMap[selector] > 10000)
-                    clearInterval(timer);
-            }, 1000);
-            timerMap[selector] = Date.now();
-        });
+                }, 1000);
+                timerMap[selector] = Date.now();
+            }
+        )
+        ;
     },
-    appendCss: function (cssText) {
-        return ele => {
-            const style = ele.style || ele.target.style;
-            style.cssText += cssText;
-        };
-    },
+    appendCss:
+
+        function (cssText) {
+            return ele => {
+                const style = ele.style || ele.target.style;
+                style.cssText += cssText;
+            };
+        }
+
+    ,
     rmElement: function (condition) {
         if (condition && !/reddit/i.test(host))
             return ele => {
@@ -288,7 +300,8 @@ const Utils = {
                     ele.remove();
             };
         return ele => ele.remove();
-    },
+    }
+    ,
     postLink: function (func) {
         return ele => {
             if (/visited/.test(ele.classList) && !/processed/.test(ele.classList)) {
@@ -296,22 +309,26 @@ const Utils = {
                 func(ele);
             }
         };
-    },
+    }
+    ,
     html2Element: function (htmlString) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlString, 'text/html');
         return doc.body.firstElementChild;
-    },
+    }
+    ,
     resetPos: function () {
         scroll2Pos(0);
         scroll2HPos(document.querySelector(".sticky"), 0);
         this.isScrollDown = true;
         contextMenu.replaceChildren(liBottom);
-    },
+    }
+    ,
     toggleButton: function () {
         this.isScrollDown = !this.isScrollDown;
         this.isScrollDown ? contextMenu.replaceChildren(liBottom) : contextMenu.replaceChildren(liTop);
-    },
+    }
+    ,
     zoomNext: function (img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
         const index = Number(imgs.map((item, index) => {
@@ -320,16 +337,19 @@ const Utils = {
         }).filter(item => item == img)[0]?.getAttribute("data-index"));
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
-    },
+    }
+    ,
     isTouchScreen: function () {
         return navigator.maxTouchPoints > 0;
-    },
+    }
+    ,
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
             behavior: 'smooth'
         });
-    },
+    }
+    ,
     scroll2HPos: function (container, pos) {
         container.scrollTo({
             left: pos,
