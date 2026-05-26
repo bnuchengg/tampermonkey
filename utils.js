@@ -123,6 +123,16 @@ const Utils = {
             ss.remove("cacheMap");
         }
         window.scheduler = new Scheduler(3);
+        setInterval((function exec() {
+            while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning) {
+                scheduler.loadingNum++;
+                const link = scheduler.waitingList.shift();
+                const selector = scheduler.destMap[link];
+                delete scheduler.destMap[link];
+                loadContent(link, selector);
+            }
+            return exec;
+        })(), 1000);
     },
     lazyLoad: function (ele, target, func) {
         if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
