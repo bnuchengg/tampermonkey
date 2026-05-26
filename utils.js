@@ -26,7 +26,7 @@ class Scheduler {
 
     run() {
         setInterval((function exec() {
-            while (this.waitingList.length > 0 && this.loadingNum < this.maxRunning) {
+            while (this?.waitingList?.length > 0 && this?.loadingNum < this?.maxRunning) {
                 this.loadingNum++;
                 const link = this.waitingList.shift();
                 const selector = this.destMap[link];
@@ -283,15 +283,12 @@ const Utils = {
         ;
     },
     appendCss:
-
         function (cssText) {
             return ele => {
                 const style = ele.style || ele.target.style;
                 style.cssText += cssText;
             };
-        }
-
-    ,
+        },
     rmElement: function (condition) {
         if (condition && !/reddit/i.test(host))
             return ele => {
@@ -299,8 +296,7 @@ const Utils = {
                     ele.remove();
             };
         return ele => ele.remove();
-    }
-    ,
+    },
     postLink: function (func) {
         return ele => {
             if (/visited/.test(ele.classList) && !/processed/.test(ele.classList)) {
@@ -308,26 +304,22 @@ const Utils = {
                 func(ele);
             }
         };
-    }
-    ,
+    },
     html2Element: function (htmlString) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlString, 'text/html');
         return doc.body.firstElementChild;
-    }
-    ,
+    },
     resetPos: function () {
         scroll2Pos(0);
         scroll2HPos(document.querySelector(".sticky"), 0);
         this.isScrollDown = true;
         contextMenu.replaceChildren(liBottom);
-    }
-    ,
+    },
     toggleButton: function () {
         this.isScrollDown = !this.isScrollDown;
         this.isScrollDown ? contextMenu.replaceChildren(liBottom) : contextMenu.replaceChildren(liTop);
-    }
-    ,
+    },
     zoomNext: function (img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
         const index = Number(imgs.map((item, index) => {
@@ -336,19 +328,16 @@ const Utils = {
         }).filter(item => item == img)[0]?.getAttribute("data-index"));
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
-    }
-    ,
+    },
     isTouchScreen: function () {
         return navigator.maxTouchPoints > 0;
-    }
-    ,
+    },
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
             behavior: 'smooth'
         });
-    }
-    ,
+    },
     scroll2HPos: function (container, pos) {
         container.scrollTo({
             left: pos,
