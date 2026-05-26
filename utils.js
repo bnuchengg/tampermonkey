@@ -1,3 +1,48 @@
+class Scheduler {
+    constructor(cnt) {
+        this.waitingList = [];
+        this.destMap = {};
+        this.maxRunning = cnt;
+        this.loadingNum = 0;
+    }
+
+    append(link, selector) {
+        this.remove(link);
+        this.destMap[link] = selector;
+        this.waitingList.push(link);
+    }
+
+    prepend(link, selector) {
+        this.remove(link);
+        this.destMap[link] = selector;
+        this.waitingList.unshift(link);
+    }
+
+    remove(link) {
+        const index = this.waitingList.indexOf(link);
+        if (index > -1)
+            this.waitingList.splice(index, 1);
+    }
+
+    run() {
+        while (this.waitingList?.length > 0 && this.loadingNum < this.maxRunning) {
+            this.loadingNum++;
+            const link = this.waitingList.shift();
+            const selector = this.destMap[link];
+            delete this.destMap[link];
+            loadContent(link, selector);
+        }
+        setInterval(() => {
+            while (this?.waitingList?.length > 0 && this?.loadingNum < this?.maxRunning) {
+                this.loadingNum++;
+                const link = this.waitingList.shift();
+                const selector = this.destMap[link];
+                delete this.destMap[link];
+                loadContent(link, selector);
+            }
+        }, 1000);
+    }
+}
 
 const Utils = {
     isScrollDown: true,
