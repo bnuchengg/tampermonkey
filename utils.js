@@ -34,7 +34,7 @@ class Scheduler {
                 loadContent(link, selector);
             }
             return exec;
-        })(), 1000);
+        }).bind(this)(), 1000);
     }
 }
 
