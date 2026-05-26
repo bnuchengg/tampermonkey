@@ -23,25 +23,6 @@ class Scheduler {
         if (index > -1)
             this.waitingList.splice(index, 1);
     }
-
-    run() {
-        while (this.waitingList?.length > 0 && this.loadingNum < this.maxRunning) {
-            this.loadingNum++;
-            const link = this.waitingList.shift();
-            const selector = this.destMap[link];
-            delete this.destMap[link];
-            loadContent(link, selector);
-        }
-        setInterval(() => {
-            while (this?.waitingList?.length > 0 && this?.loadingNum < this?.maxRunning) {
-                this.loadingNum++;
-                const link = this.waitingList.shift();
-                const selector = this.destMap[link];
-                delete this.destMap[link];
-                loadContent(link, selector);
-            }
-        }, 1000);
-    }
 }
 
 const Utils = {
@@ -141,6 +122,16 @@ const Utils = {
             console.log(`clear cacheMap@${document.URL}`)
             ss.remove("cacheMap");
         }
+        window.scheduler = new Scheduler(3);
+        setInterval((function exec() {
+            while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning) {
+                scheduler.loadingNum++;
+                const link = scheduler.waitingList.shift();
+                const selector = scheduler.destMap[link];
+                delete scheduler.destMap[link];
+                loadContent(link, selector);
+            }
+        })(), 1000);
     },
     lazyLoad: function (ele, target, func) {
         if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
