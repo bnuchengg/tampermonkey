@@ -149,6 +149,61 @@ const Utils = {
             }
         }, 1000);
     },
+    mergeLink: function (div) {
+        if (div.querySelectorAll("a").length > 1) {
+            const img = div.querySelector("a img");
+            const parent = div == img.closest("div") ? img.closest("a") : img.closest("div");
+            div.prepend(img);
+            parent?.remove();
+            img.addEventListener("click", (e) => div.querySelector("a").click());
+        }
+        return div;
+    },
+    convert2Link: function (ele) {
+        const reactKey = Object.keys(ele).filter(key => /__reactFiber/.test(key))[0];
+        let ret = ele[reactKey].return;
+        while (!ret.key) {
+            ret = ret.return;
+        }
+        const href = `https://h5.kdslife.com/detail/${ret.key}`;
+        const link = document.createElement("a");
+        link.href = href;
+        link.textContent = ele.textContent;
+        return link;
+    },
+    loadContent: function (link, selector) {
+        const key = "cacheMap";
+        if (ss.hashGet(key, link.href) || pageCache[link.href]) {
+            scheduler.loadingNum--;
+            return;
+        }
+        link.classList.add("loading");
+        const iframe = document.createElement("iframe");
+        if (/club.kdslife/.test(host))
+            iframe.style.cssText = "width: 1080px";
+        else
+            iframe.style.cssText = "display: none";
+        iframe.src = link.href;
+        iframe.onload = (e) => {
+            const iframe = e.target;
+            setTimeout(() => {
+                const content = iframe.contentDocument?.querySelector(selector);
+                content.querySelectorAll(".video_box").forEach(rmElement());
+                scheduler.loadingNum--;
+                link.classList.remove("loading");
+                if (link.getAttribute("cloneLink"))
+                    content?.prepend(link.cloneNode(true));
+                if (ss.size(key) < 5e6)
+                    ss.hashSet(key, link.href, content?.outerHTML);
+                else {
+                    pageCache[link.href] = content.outerHTML;
+                    console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB@${document.URL}`)
+                }
+                iframe.remove();
+            }, 1000);
+        };
+        document.body.append(iframe);
+    },
     appendDiv: function (type) {
         return ele => {
             if (/\/search/i.test(document.URL)) {
