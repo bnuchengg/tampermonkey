@@ -22,15 +22,12 @@ img {
 
 @keyframes blink {
     0% {
-        scale: 1;
         border-color: red;
     }
     50% {
-        scale: 2;
         border-color: lime;
     }
     100% {
-        scale: 1;
         border-color: yellow;
     }
 }
