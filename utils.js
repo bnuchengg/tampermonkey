@@ -155,6 +155,7 @@ const Utils = {
             const parent = div == img.closest("div") ? img.closest("a") : img.closest("div");
             div.prepend(img);
             parent?.remove();
+            img.onclick = div.querySelector("a").click();
         }
         return div;
     },
