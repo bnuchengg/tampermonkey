@@ -149,16 +149,6 @@ const Utils = {
             }
         }, 1000);
     },
-    mergeLink: function (div) {
-        if (div.querySelectorAll("a").length > 1) {
-            const img = div.querySelector("a img");
-            const parent = div == img.closest("div") ? img.closest("a") : img.closest("div");
-            div.prepend(img);
-            parent?.remove();
-            img.onclick = (e) => div.querySelector("a").click();
-        }
-        return div;
-    },
     appendDiv: function (type) {
         return ele => {
             if (/\/search/i.test(document.URL)) {
