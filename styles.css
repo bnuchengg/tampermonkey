@@ -61,7 +61,6 @@ img {
         max-width: 100% !important;
         min-width: unset !important;
         margin: unset !important;
-        overflow: unset !important;
         overflow-wrap: break-word;
         float: unset !important;
     }
