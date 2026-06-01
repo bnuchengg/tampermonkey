@@ -59,6 +59,7 @@ img {
     body, div, table, main, aside, a, img, video {
         box-sizing: border-box;
         max-width: 100% !important;
+        min-width: unset !important;
         margin: unset !important;
         overflow-wrap: break-word;
         float: unset !important;
