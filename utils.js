@@ -179,9 +179,11 @@ const Utils = {
         }
         link.classList.add("loading");
         const iframe = document.createElement("iframe");
-        if (/club.kdslife/.test(host))
-            iframe.style.cssText = "width: 1080px; height: 640px";
-        else
+        let timeout = 1000;
+        if (/club.kdslife/.test(host)) {
+            iframe.style.cssText = "width: 800px; height: 600px";
+            timeout = 3000;
+        } else
             iframe.style.cssText = "display: none";
         iframe.src = link.href;
         iframe.onload = (e) => {
@@ -200,7 +202,7 @@ const Utils = {
                     console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB@${document.URL}`)
                 }
                 iframe.remove();
-            }, 1000);
+            }, timeout);
         };
         document.body.append(iframe);
     },
