@@ -186,6 +186,7 @@ const Utils = {
         } else
             iframe.style.cssText = "display: none";
         iframe.src = link.href;
+        iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin');
         iframe.onload = (e) => {
             const iframe = e.target;
             setTimeout(() => {
