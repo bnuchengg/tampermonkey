@@ -180,7 +180,7 @@ const Utils = {
         link.classList.add("loading");
         const iframe = document.createElement("iframe");
         if (/club.kdslife/.test(host))
-            iframe.style.cssText = "width: 1080px";
+            iframe.style.cssText = "width: 1080px; height: 640px";
         else
             iframe.style.cssText = "display: none";
         iframe.src = link.href;
