@@ -192,14 +192,16 @@ const Utils = {
             setTimeout(() => {
                 const content = iframe.contentDocument?.querySelector(selector);
                 content.querySelectorAll(".video_box").forEach(rmElement());
+                const container = document.createElement("div");
+                container.append(content);
                 scheduler.loadingNum--;
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
-                    content?.prepend(link.cloneNode(true));
+                    container?.prepend(link.cloneNode(true));
                 if (ss.size(key) < 5e6)
-                    ss.hashSet(key, link.href, content?.outerHTML);
+                    ss.hashSet(key, link.href, container?.outerHTML);
                 else {
-                    pageCache[link.href] = content.outerHTML;
+                    pageCache[link.href] = container.outerHTML;
                     console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB@${document.URL}`)
                 }
                 iframe.remove();
