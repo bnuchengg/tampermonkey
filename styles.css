@@ -57,14 +57,14 @@ img {
 }
 
 @media (max-width: 1024px) {
-    body, div:not(.sticky,.styled-scrollbar), table, main, aside, section, a, img, video {
+    body, div:not(.sticky,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video {
         box-sizing: border-box;
         max-width: 100% !important;
         min-width: unset !important;
         margin: unset !important;
         overflow-wrap: break-word;
         float: unset !important;
-        overflow-y: unset !important;
+        overflow: unset !important;
     }
 }
 
