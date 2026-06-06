@@ -411,4 +411,3 @@ const Utils = {
 
 window.Scheduler = Scheduler;
 Object.keys(Utils).forEach(key => window[key] = Utils[key]);
-window.init();
