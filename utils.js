@@ -82,6 +82,19 @@ const Utils = {
         }
     },
     init: function () {
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.head.appendChild(meta);
+
+        window.host = window.location.host;
+        window.timerMap = {};
+        window.pageCache = {};
+        window.scroller = document.documentElement;
+        window.r9aeadS = () => {};
+        window.goUid = () => {};
+        window.open = () => {};
+
         let startY = 0;
         let sTime = 0;
         let isPulling = false;
@@ -281,9 +294,9 @@ const Utils = {
     },
     truncText: function (pEle, selector, limit) {
         if (selector)
-            pEle.querySelectorAll(selector).forEach(ele => ele.textContent = ele.textContent.replace(/\s/g,'').slice(0, limit) + "…");
+            pEle.querySelectorAll(selector).forEach(ele => ele.textContent = ele.textContent.replace(/\s/g, '').slice(0, limit) + "…");
         else
-            pEle.textContent = pEle.textContent.replace(/\s/g,'').slice(0, limit) + "…";
+            pEle.textContent = pEle.textContent.replace(/\s/g, '').slice(0, limit) + "…";
     },
     replaceImg: function (tagName, src, rmSelector) {
         return img => {
@@ -397,4 +410,5 @@ const Utils = {
 };
 
 window.Scheduler = Scheduler;
-window.Utils = Utils;
+Object.keys(Utils).forEach(key => window[key] = Utils[key]);
+window.init();
