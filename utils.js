@@ -87,7 +87,6 @@ const Utils = {
         meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
         document.head.appendChild(meta);
 
-        window.host = window.location.host;
         window.timerMap = {};
         window.pageCache = {};
         window.scroller = document.documentElement;
