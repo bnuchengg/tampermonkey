@@ -204,12 +204,11 @@ const Utils = {
         iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin');
         iframe.onload = (e) => {
             const iframe = e.target;
-            const content = iframe.contentDocument?.querySelector(selector);
             if (func)
                 eval(func);
             setTimeout(() => {
                 const container = document.createElement("div");
-                container.append(content);
+                container.append(iframe.contentDocument?.querySelector(selector));
                 scheduler.loadingNum--;
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
