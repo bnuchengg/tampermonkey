@@ -138,10 +138,6 @@ const Utils = {
             ss.remove("cacheMap");
         }
         window.scheduler = new Scheduler(3);
-        window.postFuncMap = {
-            "news.zhibo8.com": `content.querySelectorAll(".video_box").forEach(rmElement());
-                            content.querySelectorAll("#hotdiv .btn-reply-count a").forEach(ele => ele.click()); `
-        };
         setInterval((function exec() {
             while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning) {
                 scheduler.loadingNum++;
