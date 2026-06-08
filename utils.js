@@ -135,13 +135,17 @@ const Utils = {
             ss.remove("cacheMap");
         }
         window.scheduler = new Scheduler(3);
+        window.postFuncMap = {
+            "news.zhibo8.com": `content.querySelectorAll(".video_box").forEach(rmElement());
+                            content.querySelectorAll("#hotdiv .btn-reply-count a").forEach(ele => ele.click()); `
+        };
         setInterval((function exec() {
             while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning) {
                 scheduler.loadingNum++;
                 const link = scheduler.waitingList.shift();
                 const selector = scheduler.destMap[link];
                 delete scheduler.destMap[link];
-                loadContent(link, selector);
+                loadContent(link, selector, postFuncMap[host]);
             }
             return exec;
         })(), 1000);
@@ -183,7 +187,7 @@ const Utils = {
         link.textContent = ele.textContent;
         return link;
     },
-    loadContent: function (link, selector) {
+    loadContent: function (link, selector,func) {
         const key = "cacheMap";
         if (ss.hashGet(key, link.href) || pageCache[link.href]) {
             scheduler.loadingNum--;
@@ -203,7 +207,8 @@ const Utils = {
             const iframe = e.target;
             setTimeout(() => {
                 const content = iframe.contentDocument?.querySelector(selector);
-                content.querySelectorAll(".video_box").forEach(rmElement());
+                if(func)
+                    func();
                 const container = document.createElement("div");
                 container.append(content);
                 scheduler.loadingNum--;
