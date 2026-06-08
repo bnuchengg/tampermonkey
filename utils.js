@@ -208,7 +208,7 @@ const Utils = {
             setTimeout(() => {
                 const content = iframe.contentDocument?.querySelector(selector);
                 if(func)
-                    func();
+                    eval(func);
                 const container = document.createElement("div");
                 container.append(content);
                 scheduler.loadingNum--;
