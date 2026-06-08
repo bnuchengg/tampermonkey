@@ -90,9 +90,12 @@ const Utils = {
         window.timerMap = {};
         window.pageCache = {};
         window.scroller = document.documentElement;
-        window.r9aeadS = () => {};
-        window.goUid = () => {};
-        window.open = () => {};
+        window.r9aeadS = () => {
+        };
+        window.goUid = () => {
+        };
+        window.open = () => {
+        };
 
         let startY = 0;
         let sTime = 0;
@@ -187,7 +190,7 @@ const Utils = {
         link.textContent = ele.textContent;
         return link;
     },
-    loadContent: function (link, selector,func) {
+    loadContent: function (link, selector, func) {
         const key = "cacheMap";
         if (ss.hashGet(key, link.href) || pageCache[link.href]) {
             scheduler.loadingNum--;
@@ -205,10 +208,10 @@ const Utils = {
         iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin');
         iframe.onload = (e) => {
             const iframe = e.target;
+            const content = iframe.contentDocument?.querySelector(selector);
+            if (func)
+                eval(func);
             setTimeout(() => {
-                const content = iframe.contentDocument?.querySelector(selector);
-                if(func)
-                    eval(func);
                 const container = document.createElement("div");
                 container.append(content);
                 scheduler.loadingNum--;
