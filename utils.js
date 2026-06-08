@@ -196,8 +196,8 @@ const Utils = {
         const iframe = document.createElement("iframe");
         let timeout = 1000;
         if (/club.kdslife|news.zhibo8.com/.test(host)) {
-            iframe.style.cssText = "width: 800px; height: 600px";
-            timeout = 3000;
+            iframe.style.cssText = "width: 100%; height: 1px";
+            timeout = 3500;
         } else
             iframe.style.cssText = "display: none";
         iframe.src = link.href;
