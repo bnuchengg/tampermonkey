@@ -199,7 +199,7 @@ const Utils = {
         link.classList.add("loading");
         const iframe = document.createElement("iframe");
         let timeout = 1000;
-        if (/club.kdslife/.test(host)) {
+        if (/club.kdslife|news.zhibo8.com/.test(host)) {
             iframe.style.cssText = "width: 800px; height: 600px";
             timeout = 3000;
         } else
