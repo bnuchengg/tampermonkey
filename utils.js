@@ -327,7 +327,7 @@ const Utils = {
         }
         return node;
     },
-    iCss: function (actionMap, infiniteFlag) {
+    iCss: async function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
                     document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
