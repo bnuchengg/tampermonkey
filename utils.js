@@ -195,7 +195,7 @@ const Utils = {
         link.classList.add("loading");
         const iframe = document.createElement("iframe");
         let timeout = 1000;
-        iframe.style.cssText = "width: 100%; height: 1px";
+        iframe.style.cssText = "width: 100%; height: 1px; border: none";
         if (/club.kdslife|news.zhibo8.com/.test(host)) {
             timeout = 3500;
         }
