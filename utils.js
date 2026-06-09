@@ -205,17 +205,18 @@ const Utils = {
             const iframe = e.target;
             if (func)
                 eval(func);
-            setTimeout(() => {
+            setTimeout(async () => {
                 const container = document.createElement("div");
                 container.append(iframe.contentDocument?.querySelector(selector) ?? '');
                 scheduler.loadingNum--;
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     container?.prepend(link.cloneNode(true));
+                const encoded = await htmlToGzipBase64(container);
                 if (ss.size(key) < 5e6)
-                    ss.hashSet(key, link.href, htmlToGzipBase64(container));
+                    ss.hashSet(key, link.href, encoded);
                 else {
-                    pageCache[link.href] = htmlToGzipBase64(container);
+                    pageCache[link.href] = encoded;
                     console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB@${document.URL}`)
                 }
                 iframe.remove();
