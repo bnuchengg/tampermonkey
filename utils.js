@@ -212,7 +212,7 @@ const Utils = {
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     container?.prepend(link.cloneNode(true));
-                const encoded = await htmlToGzipBase64(container);
+                const encoded = await htmlToGzipBase64(container.outerHTML);
                 if (ss.size(key) < 5e6)
                     ss.hashSet(key, link.href, encoded);
                 else {
@@ -375,8 +375,7 @@ const Utils = {
         const doc = parser.parseFromString(htmlString, 'text/html');
         return doc.body.firstElementChild;
     },
-    htmlToGzipBase64: async function (element) {
-        const html = element.innerHTML;
+    htmlToGzipBase64: async function (html) {
         const encoder = new TextEncoder();
         const data = encoder.encode(html);
         const compressedStream = new Response(data)
