@@ -154,10 +154,10 @@ const Utils = {
             await eval(func);
             return;
         }
-        const timer = setInterval(() => {
+        const timer = setInterval(async () => {
             if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
                 clearInterval(timer);
-                eval(func);
+                await eval(func);
             } else if (!/loading|queued/.test(ele.classList)) {
                 ele.classList.add("queued");
                 scheduler.prepend(ele, target);
