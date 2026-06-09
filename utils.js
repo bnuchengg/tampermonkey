@@ -149,7 +149,7 @@ const Utils = {
             return exec;
         })(), 1000);
     },
-    lazyLoad: function (ele, target, func) {
+    lazyLoad: async function (ele, target, func) {
         if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
             eval(func);
             return;
