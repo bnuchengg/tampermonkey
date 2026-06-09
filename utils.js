@@ -151,7 +151,7 @@ const Utils = {
     },
     lazyLoad: async function (ele, target, func) {
         if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
-            eval(func);
+            await eval(func);
             return;
         }
         const timer = setInterval(() => {
