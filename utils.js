@@ -212,7 +212,7 @@ const Utils = {
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     container?.prepend(link.cloneNode(true));
-                const encoded = await htmlToGzipBase64(container);
+                const encoded = await html2Gzip(container);
                 if (ss.size(key) < 5e6)
                     ss.hashSet(key, link.href, encoded);
                 else {
@@ -375,32 +375,16 @@ const Utils = {
         const doc = parser.parseFromString(htmlString, 'text/html');
         return doc.body.firstElementChild;
     },
-    htmlToGzipBase64: async function (element) {
+    html2Gzip: async function (element) {
         const html = element.innerHTML;
         const encoder = new TextEncoder();
         const data = encoder.encode(html);
         const compressedStream = new Response(data)
             .body
             .pipeThrough(new CompressionStream('gzip'));
-        const compressedData = await new Response(compressedStream).arrayBuffer();
-
-        function arrayBufferToBase64(buffer) {
-            let binary = '';
-            const bytes = new Uint8Array(buffer);
-            for (let i = 0; i < bytes.byteLength; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            return btoa(binary);
-        }
-
-        return arrayBufferToBase64(compressedData);
+        return await new Response(compressedStream).arrayBuffer();
     },
-    gzipBase64ToHTML: async function (base64) {
-        const binary = atob(base64);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-        }
+    gzip2HTML: async function (bytes) {
         const decompressedStream = new Response(bytes)
             .body
             .pipeThrough(new DecompressionStream('gzip'));
