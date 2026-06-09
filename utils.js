@@ -125,14 +125,12 @@ const Utils = {
             event.preventDefault();
             contextMenu.style.cssText += `left: ${event.touches[0].clientX}px; top: ${event.touches[0].clientY}px`;
         };
-
         window.liBottom = createNode("li", "text-align: center; cursor: pointer", "bottom");
         window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
         contextMenu.appendChild(liBottom);
         contextMenu.style.cssText = `left: 3vw; bottom: 25vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
         document.body.append(contextMenu);
 
-        console.log(`cacheMap: ${ss.size("cacheMap") / 1e6} MB@${document.URL}`)
         if (JSON.stringify(localStorage).length > 5e6 && !/(html|htm)$|thread/.test(document.URL)) {
             console.log(`clear cacheMap@${document.URL}`)
             ss.remove("cacheMap");
@@ -149,15 +147,15 @@ const Utils = {
             return exec;
         })(), 1000);
     },
-    lazyLoad: async function (ele, target, func) {
+    lazyLoad: function (ele, target, func) {
         if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
-            await eval(func);
+            eval(func);
             return;
         }
-        const timer = setInterval(async () => {
+        const timer = setInterval(() => {
             if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
                 clearInterval(timer);
-                await eval(func);
+                eval(func);
             } else if (!/loading|queued/.test(ele.classList)) {
                 ele.classList.add("queued");
                 scheduler.prepend(ele, target);
@@ -206,18 +204,17 @@ const Utils = {
             if (func)
                 eval(func);
             setTimeout(async () => {
-                const container = document.createElement("div");
-                container.append(iframe.contentDocument?.querySelector(selector) ?? '');
+                let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 scheduler.loadingNum--;
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
-                    container?.prepend(link.cloneNode(true));
-                const encoded = await htmlToGzipBase64(container.outerHTML);
+                    html = link.cloneNode(true).outerHTML + html;
+                const encoded = await htmlToGzipBase64(html);
                 if (ss.size(key) < 5e6)
                     ss.hashSet(key, link.href, encoded);
                 else {
                     pageCache[link.href] = encoded;
-                    console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6} MB@${document.URL}`)
+                    console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6}MB@${document.URL}`)
                 }
                 iframe.remove();
             }, timeout);
@@ -327,7 +324,7 @@ const Utils = {
         }
         return node;
     },
-    iCss: async function (actionMap, infiniteFlag) {
+    iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
                     document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
