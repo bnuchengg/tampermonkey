@@ -202,7 +202,7 @@ const Utils = {
         iframe.onload = (e) => {
             const iframe = e.target;
             if (func)
-                eval(func);
+                func();
             setTimeout(async () => {
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 scheduler.loadingNum--;
