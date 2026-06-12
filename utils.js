@@ -149,13 +149,13 @@ const Utils = {
     },
     lazyLoad: function (ele, target, func) {
         if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
-            eval(func);
+            func(ele);
             return;
         }
         const timer = setInterval(() => {
             if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
                 clearInterval(timer);
-                eval(func);
+                func(ele);
             } else if (!/loading|queued/.test(ele.classList)) {
                 ele.classList.add("queued");
                 scheduler.prepend(ele, target);
