@@ -194,11 +194,12 @@ const Utils = {
         const iframe = document.createElement("iframe");
         let timeout = 1000;
         iframe.style.cssText = "width: 100%; height: 1px; border: none";
-        if (/club.kdslife|news.zhibo8.com/.test(host)) {
+        if (/club.kdslife|news.zhibo8.com/.test(host))
             timeout = 3500;
-        }
         iframe.src = link.href;
-        iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-same-origin');
+        iframe.setAttribute('sandbox', 'allow-same-origin');
+        if (/news.zhibo8.com/.test(host))
+            iframe.sandbox.add('allow-scripts');
         iframe.onload = (e) => {
             const iframe = e.target;
             if (func)
@@ -341,16 +342,14 @@ const Utils = {
                 }, 1000);
                 timerMap[selector] = Date.now();
             }
-        )
-        ;
+        );
     },
-    appendCss:
-        function (cssText) {
-            return ele => {
-                const style = ele.style || ele.target.style;
-                style.cssText += cssText;
-            };
-        },
+    appendCss: function (cssText) {
+        return ele => {
+            const style = ele.style || ele.target.style;
+            style.cssText += cssText;
+        };
+    },
     rmElement: function (condition) {
         if (condition && !/reddit/i.test(host))
             return ele => {
@@ -371,37 +370,6 @@ const Utils = {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlString, 'text/html');
         return doc.body.firstElementChild;
-    },
-    htmlToGzipBase64: async function (html) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(html);
-        const compressedStream = new Response(data)
-            .body
-            .pipeThrough(new CompressionStream('gzip'));
-        const compressedData = await new Response(compressedStream).arrayBuffer();
-
-        function arrayBufferToBase64(buffer) {
-            let binary = '';
-            const bytes = new Uint8Array(buffer);
-            for (let i = 0; i < bytes.byteLength; i++) {
-                binary += String.fromCharCode(bytes[i]);
-            }
-            return btoa(binary);
-        }
-
-        return arrayBufferToBase64(compressedData);
-    },
-    gzipBase64ToHTML: async function (base64) {
-        const binary = atob(base64);
-        const bytes = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            bytes[i] = binary.charCodeAt(i);
-        }
-        const decompressedStream = new Response(bytes)
-            .body
-            .pipeThrough(new DecompressionStream('gzip'));
-        const decompressedData = await new Response(decompressedStream).arrayBuffer();
-        return new TextDecoder().decode(decompressedData);
     },
     resetPos: function () {
         scroll2Pos(0);
