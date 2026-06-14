@@ -203,17 +203,16 @@ const Utils = {
             const iframe = e.target;
             if (func)
                 eval(func);
-            setTimeout(async () => {
+            setTimeout(() => {
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 scheduler.loadingNum--;
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
-                const encoded = await htmlToGzipBase64(html);
                 if (ss.size(key) < 5e6)
-                    ss.hashSet(key, link.href, encoded);
+                    ss.hashSet(key, link.href, html);
                 else {
-                    pageCache[link.href] = encoded;
+                    pageCache[link.href] = html;
                     console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6}MB@${document.URL}`)
                 }
                 iframe.remove();
