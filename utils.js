@@ -316,6 +316,7 @@ const Utils = {
             node.src = img.getAttribute(src) || img.src;
             if (/video/i.test(tagName)) {
                 node.controls = true;
+                node.muted = true;
                 let maxHeight = "360px";
                 if (/\/p\/\d+/.test(document.URL))
                     maxHeight = "80vh";
