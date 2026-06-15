@@ -198,7 +198,7 @@ const Utils = {
             timeout = 3500;
         iframe.src = link.href;
         iframe.setAttribute('sandbox', 'allow-same-origin');
-        if (/kdslife.com|news.zhibo8.com|t66y/.test(host))
+        if (/kdslife.com|news.zhibo8.com/.test(host))
             iframe.sandbox.add('allow-scripts');
         iframe.onload = (e) => {
             const iframe = e.target;
