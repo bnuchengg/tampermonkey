@@ -1,3 +1,57 @@
+const ss = {
+    set(key, value) {
+        if (typeof value == "object")
+            value = JSON.stringify(value);
+        localStorage.setItem(key, value);
+    },
+    hashSet(key, field, value) {
+        const map = this.getJson(key);
+        if (value)
+            map[field] = value;
+        else
+            delete map[field];
+        this.set(key, map);
+    },
+    hashRemove(key, field) {
+        this.hashSet(key, field, null);
+    },
+    hashGet(key, field) {
+        return this.getJson(key)[field];
+    },
+    add(arr, item) {
+        const _arr = this.getArray(arr);
+        if (!_arr.includes(item))
+            _arr.push(item);
+        this.set(arr, _arr);
+    },
+    contains(arr, item) {
+        return this.getArray(arr).includes(item);
+    },
+    get(key) {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+    },
+    getJson(key) {
+        if (!this.get(key))
+            this.set(key, {});
+        return this.get(key);
+    },
+    getArray(key) {
+        if (!this.get(key))
+            this.set(key, []);
+        return this.get(key);
+    },
+    size(key) {
+        return localStorage.getItem(key)?.length ?? 0;
+    },
+    remove(key) {
+        localStorage.removeItem(key);
+    },
+    clear() {
+        localStorage.clear();
+    }
+}
+
 class Scheduler {
     constructor(cnt) {
         this.waitingList = [];
@@ -34,53 +88,6 @@ const Utils = {
                 entry.target.pause();
         });
     }, {threshold: 0.5}),
-    ss: {
-        set(key, value) {
-            if (typeof value == "object")
-                value = JSON.stringify(value);
-            localStorage.setItem(key, value);
-        },
-        hashSet(key, field, value) {
-            const map = this.getJson(key);
-            map[field] = value;
-            this.set(key, map);
-        },
-        hashGet(key, field) {
-            return this.getJson(key)[field];
-        },
-        add(arr, item) {
-            const _arr = this.getArray(arr);
-            if (!_arr.includes(item))
-                _arr.push(item);
-            this.set(arr, _arr);
-        },
-        contains(arr, item) {
-            return this.getArray(arr).includes(item);
-        },
-        get(key) {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
-        },
-        getJson(key) {
-            if (!this.get(key))
-                this.set(key, {});
-            return this.get(key);
-        },
-        getArray(key) {
-            if (!this.get(key))
-                this.set(key, []);
-            return this.get(key);
-        },
-        size(key) {
-            return localStorage.getItem(key)?.length ?? 0;
-        },
-        remove(key) {
-            localStorage.removeItem(key);
-        },
-        clear() {
-            localStorage.clear();
-        }
-    },
     init: function () {
         const meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -90,12 +97,16 @@ const Utils = {
         window.timerMap = {};
         window.pageCache = {};
         window.scroller = document.documentElement;
-        window.r9aeadS = () => {
-        };
-        window.goUid = () => {
-        };
-        window.open = () => {
-        };
+        window.r9aeadS = () => {        };
+        window.goUid = () => {        };
+        window.open = () => {        };
+
+        console.log(`cacheMap before: ${Object.keys(ss.get("cacheMap")).length}`)
+        Object.keys(ss.get("cacheMap")).forEach(link => {
+            if (ss.contains("vLinks", link))
+                ss.hashRemove("cacheMap",link);
+        });
+        console.log(`cacheMap after: ${Object.keys(ss.get("cacheMap")).length}`)
 
         let startY = 0;
         let sTime = 0;
@@ -404,4 +415,5 @@ const Utils = {
 };
 
 window.Scheduler = Scheduler;
+window.ss = ss;
 Object.keys(Utils).forEach(key => window[key] = Utils[key]);
