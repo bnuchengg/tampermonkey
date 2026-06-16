@@ -107,6 +107,9 @@ const Utils = {
             console.log(`cacheMap after: ${Object.keys(ss.get("cacheMap"))?.length}`)
         }
 
+        if (ss.size("vLinks") > 1e6)
+            ss.remove("vLinks");
+
         let startY = 0;
         let sTime = 0;
         let isPulling = false;
@@ -154,12 +157,13 @@ const Utils = {
         })(), 1000);
     },
     lazyLoad: function (ele, target, func) {
-        if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
+        const href = this.truncHref(ele.href);
+        if (ss.hashGet("cacheMap", href) || pageCache[href]) {
             func(ele);
             return;
         }
         const timer = setInterval(() => {
-            if (ss.hashGet("cacheMap", ele.href) || pageCache[ele.href]) {
+            if (ss.hashGet("cacheMap", href) || pageCache[href]) {
                 clearInterval(timer);
                 func(ele);
             } else if (!/loading|queued/.test(ele.classList)) {
@@ -184,15 +188,15 @@ const Utils = {
         while (!ret.key) {
             ret = ret.return;
         }
-        const href = `https://h5.kdslife.com/detail/${ret.key}`;
         const link = document.createElement("a");
-        link.href = href;
+        link.href = `/detail/${ret.key}`;
         link.textContent = ele.textContent;
         return link;
     },
     loadContent: function (link, selector, func) {
         const key = "cacheMap";
-        if (ss.hashGet(key, link.href) || pageCache[link.href]) {
+        const href = this.truncHref(link.href);
+        if (ss.hashGet(key, href) || pageCache[href]) {
             scheduler.loadingNum--;
             return;
         }
@@ -202,7 +206,7 @@ const Utils = {
         iframe.style.cssText = "width: 100%; height: 1px; border: none";
         if (/club.kdslife|news.zhibo8.com/.test(host))
             timeout = 3500;
-        iframe.src = link.href;
+        iframe.src = href;
         iframe.setAttribute('sandbox', 'allow-same-origin');
         if (/kdslife.com|news.zhibo8.com/.test(host))
             iframe.sandbox.add('allow-scripts');
@@ -217,9 +221,9 @@ const Utils = {
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
                 if (ss.size(key) < 5e6)
-                    ss.hashSet(key, link.href, html);
+                    ss.hashSet(key, href, html);
                 else {
-                    pageCache[link.href] = html;
+                    pageCache[href] = html;
                     console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6}MB@${document.URL}`)
                 }
                 iframe.remove();
@@ -245,7 +249,7 @@ const Utils = {
     visitLink: function () {
         return ele => {
             const arr = "vLinks";
-            const link = ele.href || ele.textContent;
+            const link = this.truncHref(ele.href) || ele.textContent;
             if (ss.contains(arr, link))
                 ele.classList.add("visited");
             else
@@ -296,6 +300,10 @@ const Utils = {
     },
     replaceHTML: function (selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
+    },
+    truncHref: function (href) {
+        const url = new URL(href);
+        return url.pathname + url.search;
     },
     truncText: function (pEle, selector, limit) {
         if (selector)
