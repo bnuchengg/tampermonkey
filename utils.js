@@ -131,10 +131,6 @@ const Utils = {
         contextMenu.style.cssText = `left: 3vw; bottom: 25vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
         document.body.append(contextMenu);
 
-        if (JSON.stringify(localStorage).length > 5e6 && !/(html|htm)$|thread/.test(document.URL)) {
-            console.log(`clear cacheMap@${document.URL}`)
-            ss.remove("cacheMap");
-        }
         window.scheduler = new Scheduler(3);
         setInterval((function exec() {
             while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning) {
