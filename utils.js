@@ -220,9 +220,9 @@ const Utils = {
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
-                if (ss.size(key) < 5e6)
+                try {
                     ss.hashSet(key, href, html);
-                else {
+                } catch (e) {
                     pageCache[href] = html;
                     console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6}MB@${document.URL}`)
                 }
