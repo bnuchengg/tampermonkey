@@ -249,7 +249,7 @@ const Utils = {
     visitLink: function () {
         return ele => {
             const arr = "vLinks";
-            const link = this.truncHref(ele.href) || ele.textContent;
+            const link = ele.href ? this.truncHref(ele.href) : ele.textContent;
             if (ss.contains(arr, link))
                 ele.classList.add("visited");
             else
