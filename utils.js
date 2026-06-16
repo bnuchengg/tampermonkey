@@ -97,16 +97,15 @@ const Utils = {
         window.timerMap = {};
         window.pageCache = {};
         window.scroller = document.documentElement;
-        window.r9aeadS = () => {        };
-        window.goUid = () => {        };
-        window.open = () => {        };
 
-        console.log(`cacheMap before: ${Object.keys(ss.get("cacheMap"))?.length}`)
-        Object.keys(ss.get("cacheMap")).forEach(link => {
-            if (ss.contains("vLinks", link))
-                ss.hashRemove("cacheMap",link);
-        });
-        console.log(`cacheMap after: ${Object.keys(ss.get("cacheMap"))?.length}`)
+        if (ss.get("cacheMap")) {
+            console.log(`cacheMap before: ${Object.keys(ss.get("cacheMap"))?.length}`)
+            Object.keys(ss.get("cacheMap")).forEach(link => {
+                if (ss.contains("vLinks", link))
+                    ss.hashRemove("cacheMap", link);
+            });
+            console.log(`cacheMap after: ${Object.keys(ss.get("cacheMap"))?.length}`)
+        }
 
         let startY = 0;
         let sTime = 0;
