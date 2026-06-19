@@ -256,6 +256,14 @@ const Utils = {
                 ele.onclick = () => ss.add(arr, link);
         };
     },
+    postLink: function (func) {
+        return ele => {
+            if (/visited/.test(ele.classList) && !/processed/.test(ele.classList)) {
+                ele.classList.add("processed");
+                func(ele);
+            }
+        };
+    },
     createNode: function (tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬"};
         const node = document.createElement(tagName);
@@ -303,7 +311,7 @@ const Utils = {
     },
     truncHref: function (href) {
         const url = new URL(href);
-        return url.pathname + url.search;
+        return url.pathname + url.hash + url.search;
     },
     truncText: function (pEle, selector, limit) {
         if (selector)
@@ -371,14 +379,6 @@ const Utils = {
                     ele.remove();
             };
         return ele => ele.remove();
-    },
-    postLink: function (func) {
-        return ele => {
-            if (/visited/.test(ele.classList) && !/processed/.test(ele.classList)) {
-                ele.classList.add("processed");
-                func(ele);
-            }
-        };
     },
     html2Element: function (htmlString) {
         const parser = new DOMParser();
