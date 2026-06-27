@@ -24,7 +24,7 @@ const ss = {
             _arr.push(item);
         this.set(arr, _arr);
     },
-    arrayRemove(arr, item): {
+    arrayRemove(arr, item) {
         let _arr = this.getArray(arr);
         _arr = _arr.filter(item => item != item);
         this.set(arr, _arr);
