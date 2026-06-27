@@ -24,6 +24,11 @@ const ss = {
             _arr.push(item);
         this.set(arr, _arr);
     },
+    arrayRemove(arr, item): {
+        let _arr = this.getArray(arr);
+        _arr = _arr.filter(item => item != item);
+        this.set(arr, _arr);
+    },
     contains(arr, item) {
         return this.getArray(arr).includes(item);
     },
