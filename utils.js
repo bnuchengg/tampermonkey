@@ -255,11 +255,10 @@ const Utils = {
         return ele => {
             const arr = "vLinks";
             const link = ele.href ? this.truncHref(ele.href) : ele.textContent;
-            if (!/visitLink/.test(ele.classList)) {
-                ele.classList.add("visitLink");
+            if (!/visited/.test(ele.classList)) {
                 if (ss.contains(arr, link))
                     ele.classList.add("visited");
-                else
+                else if (!ele.onclick)
                     ele.onclick = () => ss.add(arr, link);
             }
         };
