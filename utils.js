@@ -255,16 +255,19 @@ const Utils = {
         return ele => {
             const arr = "vLinks";
             const link = ele.href ? this.truncHref(ele.href) : ele.textContent;
-            if (ss.contains(arr, link))
-                ele.classList.add("visited");
-            else
-                ele.onclick = () => ss.add(arr, link);
+            if (!/visitLink/.test(ele.classList)) {
+                ele.classList.add("visitLink");
+                if (ss.contains(arr, link))
+                    ele.classList.add("visited");
+                else
+                    ele.onclick = () => ss.add(arr, link);
+            }
         };
     },
     postLink: function (func) {
         return ele => {
-            if (/visited/.test(ele.classList) && !/processed/.test(ele.classList)) {
-                ele.classList.add("processed");
+            if (/visited/.test(ele.classList) && !/postLink/.test(ele.classList)) {
+                ele.classList.add("postLink");
                 func(ele);
             }
         };
