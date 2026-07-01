@@ -357,13 +357,21 @@ const Utils = {
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
-                    document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                    try {
+                        document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                    } catch (e) {
+                        console.log(e);
+                    }
                     if (!infiniteFlag)
                         return;
                 }
                 const timer = setInterval(() => {
                     if (document.querySelectorAll(selector).length > 0) {
-                        document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                        try {
+                            document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                        } catch (e) {
+                            console.log(e);
+                        }
                         if (!infiniteFlag)
                             clearInterval(timer);
                     } else if (!infiniteFlag && Date.now() - timerMap[selector] > 6e4)
