@@ -146,7 +146,7 @@ const Utils = {
         window.liBottom = createNode("li", "text-align: center; cursor: pointer", "bottom");
         window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
         contextMenu.appendChild(liBottom);
-        contextMenu.style.cssText = `left: 3vw; bottom: 25vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
+        contextMenu.style.cssText = `left: 3vw; top: 49vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
         document.body.append(contextMenu);
 
         window.scheduler = new Scheduler(3);
