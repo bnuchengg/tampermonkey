@@ -21,7 +21,7 @@ const ss = {
     add(arr, item) {
         const _arr = this.getArray(arr);
         if (!_arr.includes(item)) {
-            if (_arr.length >= 1024)
+            if (_arr.length >= 99)
                 _arr.splice(0, 1);
             _arr.push(item);
         }
