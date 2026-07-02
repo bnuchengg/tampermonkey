@@ -20,8 +20,11 @@ const ss = {
     },
     add(arr, item) {
         const _arr = this.getArray(arr);
-        if (!_arr.includes(item))
+        if (!_arr.includes(item)) {
+            if (_arr.length >= 1024)
+                _arr.splice(0, 1);
             _arr.push(item);
+        }
         this.set(arr, _arr);
     },
     arrayRemove(arr, item) {
@@ -111,9 +114,6 @@ const Utils = {
             });
             console.log(`cacheMap after: ${Object.keys(ss.get("cacheMap"))?.length}`)
         }
-
-        if (ss.size("vLinks") > 1e6)
-            ss.remove("vLinks");
 
         let startY = 0;
         let sTime = 0;
