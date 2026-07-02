@@ -105,15 +105,6 @@ const Utils = {
         window.pageCache = {};
         window.scroller = document.documentElement;
 
-        if (ss.get("cacheMap")) {
-            console.log(`cacheMap before: ${Object.keys(ss.get("cacheMap"))?.length}`)
-            Object.keys(ss.get("cacheMap")).forEach(link => {
-                if (ss.contains("vLinks", link))
-                    ss.hashRemove("cacheMap", link);
-            });
-            console.log(`cacheMap after: ${Object.keys(ss.get("cacheMap"))?.length}`)
-        }
-
         let startY = 0;
         let sTime = 0;
         let isPulling = false;
