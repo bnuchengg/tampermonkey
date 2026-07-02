@@ -359,7 +359,7 @@ const Utils = {
                     try {
                         document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
                     } catch (e) {
-                        console.log(e);
+                        console.error(e);
                     }
                     if (!infiniteFlag)
                         return;
@@ -369,7 +369,7 @@ const Utils = {
                         try {
                             document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                         if (!infiniteFlag)
                             clearInterval(timer);
