@@ -378,9 +378,9 @@ const Utils = {
         };
     },
     rmElement: function (condition) {
-        if (condition && !/reddit/i.test(host))
+        if (condition)
             return ele => {
-                if (eval(condition))
+                if (!/reddit/i.test(host) && eval(condition))
                     ele.remove();
             };
         return ele => ele.remove();
