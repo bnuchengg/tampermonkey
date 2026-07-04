@@ -132,7 +132,7 @@ const Utils = {
             if (event.clientX < window.innerWidth / 2)
                 contextMenu.style.cssText += `left: 3vw; top: ${event.clientY}px`;
             else
-                contextMenu.style.cssText += `right: 3vw; top: ${event.clientY}px`;
+                contextMenu.style.cssText += `left: 95vw; top: ${event.clientY}px`;
         }
         contextMenu.ontouchmove = (event) => {
             event.preventDefault();
