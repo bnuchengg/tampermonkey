@@ -128,7 +128,12 @@ const Utils = {
 
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
-        contextMenu.ondragend = (event) => contextMenu.style.cssText += `left: ${event.clientX}px; top: ${event.clientY}px`;
+        contextMenu.ondragend = (event) => {
+            if (event.clientX < window.innerWidth / 2)
+                contextMenu.style.cssText += `left: 3vw; top: ${event.clientY}px`;
+            else
+                contextMenu.style.cssText += `right: 3vw; top: ${event.clientY}px`;
+        }
         contextMenu.ontouchmove = (event) => {
             event.preventDefault();
             contextMenu.style.cssText += `left: ${event.touches[0].clientX}px; top: ${event.touches[0].clientY}px`;
