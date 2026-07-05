@@ -128,12 +128,11 @@ const Utils = {
 
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
-        contextMenu.ondragend = (event) => {
-            if (event.clientX < window.innerWidth / 2)
-                contextMenu.style.cssText += `left: 3vw; top: ${event.clientY}px`;
-            else
-                contextMenu.style.cssText += `left: 95vw; top: ${event.clientY}px`;
-        }
+        contextMenu.ondragend = (event) => contextMenu.style.cssText += `left: ${event.clientX < window.innerWidth / 2 ? '3vw' : '95vw'}; top: ${event.clientY}px`;
+        contextMenu.ontouchmove = (event) => {
+            event.preventDefault();
+            contextMenu.style.cssText += `left: ${event.touches[0].clientX < window.innerWidth / 2 ? '3vw' : '95vw'}; top: ${event.touches[0].clientY}px`;
+        };
         window.liBottom = createNode("li", "text-align: center; cursor: pointer", "bottom");
         window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
         contextMenu.appendChild(liBottom);
