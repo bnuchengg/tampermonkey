@@ -269,6 +269,20 @@ const Utils = {
         node.onclick = () => menuAction(action);
         return node;
     },
+    hideTweet: function (ele) {
+        const content = ele.closest("article");
+        if (!/processed/.test(ele.classList)) {
+            ele.classList.add("processed");
+            const button = document.createElement("button");
+            button.textContent = "显示";
+            button.onclick = () => {
+                content.style.cssText += "display: block";
+                button.remove();
+            };
+            content.before(button);
+            content.style.cssText += "display: none";
+        }
+    },
     moveImg: function (e) {
         const img = e.target;
         if (img.classList.contains("video_play") || img.getBoundingClientRect().height < 150)
@@ -409,9 +423,7 @@ const Utils = {
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
     },
-    isTouchScreen: function () {
-        return navigator.maxTouchPoints > 0;
-    },
+    isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
