@@ -103,7 +103,6 @@ const Utils = {
 
         window.timerMap = {};
         window.pageCache = {};
-        window.scroller = document.documentElement;
 
         let startY = 0;
         let sTime = 0;
