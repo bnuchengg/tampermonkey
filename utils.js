@@ -104,24 +104,6 @@ const Utils = {
         window.timerMap = {};
         window.pageCache = {};
 
-        let startY = 0;
-        let sTime = 0;
-        let isPulling = false;
-        scroller.addEventListener('touchstart', e => {
-            if (scroller.scrollTop == 0) {
-                startY = e.touches[0].pageY;
-                sTime = Date.now();
-                isPulling = true;
-            }
-        }, {passive: true});
-        scroller.addEventListener('touchend', (e) => {
-            if (!isPulling) return;
-            const diff = e.changedTouches[0].pageY - startY;
-            if (diff > 100 && Date.now() - sTime > 500)
-                window.location.reload();
-            isPulling = false;
-        });
-
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
 
