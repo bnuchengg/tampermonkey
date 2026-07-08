@@ -253,8 +253,10 @@ const Utils = {
     },
     hideTweet: function (ele) {
         const content = ele.closest("article");
-        if (!/processed/.test(ele.classList) && content.getBoundingClientRect().height) {
+        if (!/processed/.test(ele.classList)) {
             ele.classList.add("processed");
+            if(!content.getBoundingClientRect().height)
+                return;
             const button = document.createElement("button");
             button.textContent = "显示";
             button.onclick = () => {
