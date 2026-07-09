@@ -122,8 +122,9 @@ const Utils = {
             document.body.append(contextMenu);
 
         window.scheduler = new Scheduler(3);
+        window.unreadCnt = 0;
         setInterval((function exec() {
-            while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning) {
+            while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning && (unreadCnt + scheduler.loadingNum) < 5) {
                 scheduler.loadingNum++;
                 const link = scheduler.waitingList.shift();
                 const selector = scheduler.destMap[link];
@@ -134,18 +135,12 @@ const Utils = {
         })(), 1000);
     },
     lazyLoad: function (ele, target, func) {
+        scheduler.prepend(ele, target);
         const href = this.truncHref(ele.href);
-        if (pageCache[href]) {
-            func(ele);
-            return;
-        }
         const timer = setInterval(() => {
             if (pageCache[href]) {
-                clearInterval(timer);
                 func(ele);
-            } else if (!/loading|queued/.test(ele.classList)) {
-                ele.classList.add("queued");
-                scheduler.prepend(ele, target);
+                clearInterval(timer);
             }
         }, 1000);
     },
@@ -197,6 +192,7 @@ const Utils = {
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
                 pageCache[href] = html;
+                unreadCnt++;
                 iframe.remove();
             }, timeout);
         };
