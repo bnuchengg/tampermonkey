@@ -135,8 +135,12 @@ const Utils = {
         })(), 1000);
     },
     lazyLoad: function (ele, target, func) {
-        scheduler.prepend(ele, target);
         const href = this.truncHref(ele.href);
+        if (pageCache[href]) {
+            func(ele);
+            return;
+        }
+        scheduler.prepend(ele, target);
         const timer = setInterval(() => {
             if (pageCache[href]) {
                 func(ele);
@@ -245,7 +249,7 @@ const Utils = {
         const content = ele.closest("article");
         if (!/processed/.test(ele.classList)) {
             ele.classList.add("processed");
-            if(!content.getBoundingClientRect().height)
+            if (!content.getBoundingClientRect().height)
                 return;
             const button = document.createElement("button");
             button.textContent = "显示";
