@@ -135,12 +135,12 @@ const Utils = {
     },
     lazyLoad: function (ele, target, func) {
         const href = this.truncHref(ele.href);
-        if (ss.hashGet("cacheMap", href) || pageCache[href]) {
+        if (pageCache[href]) {
             func(ele);
             return;
         }
         const timer = setInterval(() => {
-            if (ss.hashGet("cacheMap", href) || pageCache[href]) {
+            if (pageCache[href]) {
                 clearInterval(timer);
                 func(ele);
             } else if (!/loading|queued/.test(ele.classList)) {
@@ -171,9 +171,8 @@ const Utils = {
         return link;
     },
     loadContent: function (link, selector, func) {
-        const key = "cacheMap";
         const href = this.truncHref(link.href);
-        if (ss.hashGet(key, href) || pageCache[href]) {
+        if (pageCache[href]) {
             scheduler.loadingNum--;
             return;
         }
@@ -197,12 +196,7 @@ const Utils = {
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
-                try {
-                    ss.hashSet(key, href, html);
-                } catch (e) {
-                    pageCache[href] = html;
-                    console.log(`pageCache: ${JSON.stringify(pageCache).length / 1e6}MB@${document.URL}`)
-                }
+                pageCache[href] = html;
                 iframe.remove();
             }, timeout);
         };
