@@ -60,11 +60,13 @@ const ss = {
 }
 
 class Scheduler {
-    constructor(cnt) {
+    constructor(maxRunning, maxCache) {
         this.waitingList = [];
         this.destMap = {};
-        this.maxRunning = cnt;
+        this.maxRunning = maxRunning;
+        this.maxCache = maxCache;
         this.loadingNum = 0;
+        this.cacheNum = 0;
     }
 
     append(link, selector) {
@@ -83,6 +85,15 @@ class Scheduler {
         const index = this.waitingList.indexOf(link);
         if (index > -1)
             this.waitingList.splice(index, 1);
+    }
+
+    run() {
+        while (this.waitingList?.length > 0 && this.loadingNum < this.maxRunning && (this.cacheNum + this.loadingNum) < this.maxCache) {
+            const link = this.waitingList.shift();
+            const selector = this.destMap[link];
+            delete this.destMap[link];
+            loadContent(link, selector, postFuncMap[host]);
+        }
     }
 }
 
@@ -119,27 +130,21 @@ const Utils = {
         contextMenu.appendChild(liBottom);
         contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
 
-        window.scheduler = new Scheduler(3);
-        window.unreadCnt = 0;
+        window.scheduler = new Scheduler(3, 5);
         setInterval((function exec() {
-            while (scheduler.waitingList?.length > 0 && scheduler.loadingNum < scheduler.maxRunning && (unreadCnt + scheduler.loadingNum) < 5) {
-                scheduler.loadingNum++;
-                const link = scheduler.waitingList.shift();
-                const selector = scheduler.destMap[link];
-                delete scheduler.destMap[link];
-                loadContent(link, selector, postFuncMap[host]);
-            }
+            scheduler.run();
             return exec;
         })(), 1000);
     },
-    emptyFunc: () => {},
+    emptyFunc: () => {
+    },
     lazyLoad: function (ele, target, func) {
-        const href = this.truncHref(ele.href);
+        const href = ele.href;
         if (pageCache[href]) {
             func(ele);
             return;
         }
-        scheduler.prepend(ele, target);
+        loadContent(ele, target, postFuncMap[host]);
         const timer = setInterval(() => {
             if (pageCache[href]) {
                 func(ele);
@@ -169,7 +174,8 @@ const Utils = {
         return link;
     },
     loadContent: function (link, selector, func) {
-        const href = this.truncHref(link.href);
+        scheduler.loadingNum++;
+        const href = link.href;
         if (pageCache[href]) {
             scheduler.loadingNum--;
             return;
@@ -195,7 +201,7 @@ const Utils = {
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
                 pageCache[href] = html;
-                unreadCnt++;
+                scheduler.cacheNum++;
                 iframe.remove();
             }, timeout);
         };
@@ -219,7 +225,7 @@ const Utils = {
     visitLink: function () {
         return ele => {
             const arr = "vLinks";
-            const link = ele.href ? this.truncHref(ele.href) : ele.textContent;
+            const link = ele.href ? ele.href : ele.textContent;
             if (!/visited/.test(ele.classList)) {
                 if (ss.contains(arr, link))
                     ele.classList.add("visited");
