@@ -132,6 +132,7 @@ const Utils = {
             return exec;
         })(), 1000);
     },
+    emptyFunc: () => {},
     lazyLoad: function (ele, target, func) {
         const href = this.truncHref(ele.href);
         if (pageCache[href]) {
