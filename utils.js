@@ -118,8 +118,6 @@ const Utils = {
         window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
         contextMenu.appendChild(liBottom);
         contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
-        if (window.self == window.top)
-            document.body.append(contextMenu);
 
         window.scheduler = new Scheduler(3);
         window.unreadCnt = 0;
