@@ -12,7 +12,7 @@ const ss = {
             delete map[field];
         this.set(key, map);
     },
-    hashRemove(key, field) {
+    hashRm(key, field) {
         this.hashSet(key, field, null);
     },
     hashGet(key, field) {
@@ -26,7 +26,7 @@ const ss = {
             _arr.push(item);
         this.set(arr, _arr);
     },
-    arrayRemove(arr, item) {
+    arrayRm(arr, item) {
         let _arr = this.getArray(arr);
         _arr = _arr.filter(item => item != item);
         this.set(arr, _arr);
@@ -60,13 +60,13 @@ const ss = {
 }
 
 class Scheduler {
-    constructor(maxRunning, maxCache) {
+    constructor(maxRunning,maxCache) {
         this.waitingList = [];
         this.destMap = {};
         this.maxRunning = maxRunning;
         this.maxCache = maxCache;
         this.loadingNum = 0;
-        this.cacheNum = 0;
+        this.cacheNum = Object.keys(ss.get("pageCache") ?? {}).length;
     }
 
     append(link, selector) {
@@ -87,7 +87,17 @@ class Scheduler {
             this.waitingList.splice(index, 1);
     }
 
-    run() {
+    addCache(href, html){
+        ss.hashSet("pageCache",href,html);
+        this.cacheNum++;
+    }
+
+    rmCache(href){
+        ss.hashRm("pageCache",href);
+        this.cacheNum--;
+    }
+
+    run(){
         while (this.waitingList?.length > 0 && this.loadingNum < this.maxRunning && (this.cacheNum + this.loadingNum) < this.maxCache) {
             const link = this.waitingList.shift();
             const selector = this.destMap[link];
@@ -113,7 +123,6 @@ const Utils = {
         document.head.appendChild(meta);
 
         window.timerMap = {};
-        window.pageCache = {};
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
@@ -130,23 +139,22 @@ const Utils = {
         contextMenu.appendChild(liBottom);
         contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
 
-        window.scheduler = new Scheduler(3, 5);
+        window.scheduler = new Scheduler(3,5);
         setInterval((function exec() {
             scheduler.run();
             return exec;
         })(), 1000);
     },
-    emptyFunc: () => {
-    },
+    emptyFunc: () => {},
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
-        if (pageCache[href]) {
+        if (ss.hashGet("pageCache",href)){
             func(ele);
             return;
         }
         loadContent(ele, target, postFuncMap[host]);
         const timer = setInterval(() => {
-            if (pageCache[href]) {
+            if (ss.hashGet("pageCache",href)){
                 func(ele);
                 clearInterval(timer);
             }
@@ -176,7 +184,7 @@ const Utils = {
     loadContent: function (link, selector, func) {
         scheduler.loadingNum++;
         const href = link.href;
-        if (pageCache[href]) {
+        if (ss.hashGet("pageCache",href)){
             scheduler.loadingNum--;
             return;
         }
@@ -195,13 +203,12 @@ const Utils = {
             if (func)
                 eval(func);
             setTimeout(() => {
-                let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 scheduler.loadingNum--;
+                let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
-                pageCache[href] = html;
-                scheduler.cacheNum++;
+                scheduler.addCache(href, html);
                 iframe.remove();
             }, timeout);
         };
