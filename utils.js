@@ -66,7 +66,7 @@ class Scheduler {
         this.maxRunning = maxRunning;
         this.maxCache = maxCache;
         this.loadingNum = 0;
-        this.cacheNum = Object.keys(ss.get("pageCache") ?? {}).length;
+        this.cacheNum = 0;
     }
 
     append(link, selector) {
@@ -87,14 +87,15 @@ class Scheduler {
             this.waitingList.splice(index, 1);
     }
 
-    addCache(href, html){
-        ss.hashSet("pageCache",href,html);
+    addCache(link, html){
+        pageCache[link.href] = html;
+        link.classList.add("cached");
         this.cacheNum++;
     }
 
     rmCache(link){
         link.classList.remove("cached");
-        ss.hashRm("pageCache",link.href);
+        delete pageCache[link.href];
         this.cacheNum--;
     }
 
@@ -124,6 +125,7 @@ const Utils = {
         document.head.appendChild(meta);
 
         window.timerMap = {};
+        window.pageCache = {};
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
@@ -149,13 +151,13 @@ const Utils = {
     emptyFunc: () => {},
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
-        if (ss.hashGet("pageCache",href)){
+        if (pageCache[href]){
             func(ele);
             return;
         }
         loadContent(ele, target, postFuncMap[host]);
         const timer = setInterval(() => {
-            if (ss.hashGet("pageCache",href)){
+            if (pageCache[href]){
                 func(ele);
                 clearInterval(timer);
             }
@@ -184,7 +186,7 @@ const Utils = {
     },
     loadContent: function (link, selector, func) {
         const href = link.href;
-        if (ss.hashGet("pageCache",href)){
+        if (pageCache[href]){
             return;
         }
         scheduler.loadingNum++;
@@ -208,8 +210,7 @@ const Utils = {
                 link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
-                scheduler.addCache(href, html);
-                link.classList.add("cached");
+                scheduler.addCache(link, html);
                 iframe.remove();
             }, timeout);
         };
