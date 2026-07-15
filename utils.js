@@ -87,6 +87,16 @@ class Scheduler {
             this.waitingList.splice(index, 1);
     }
 
+    loading(link){
+        this.loadingNum++;
+        link.classList.add("loading");
+    }
+
+    loaded(link){
+        this.loadingNum--;
+        link.classList.remove("loading");
+    }
+
     addCache(link, html){
         pageCache[link.href] = html;
         link.classList.add("cached");
@@ -189,8 +199,9 @@ const Utils = {
         if (pageCache[href]){
             return;
         }
-        scheduler.loadingNum++;
-        link.classList.add("loading");
+        if(/loading/.test(link.classList))
+            return;
+        scheduler.loading(link);
         const iframe = document.createElement("iframe");
         let timeout = 1000;
         iframe.style.cssText = "width: 100%; height: 1px; border: none";
@@ -205,9 +216,8 @@ const Utils = {
             if (func)
                 eval(func);
             setTimeout(() => {
-                scheduler.loadingNum--;
+                scheduler.loaded(link);
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
-                link.classList.remove("loading");
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
                 scheduler.addCache(link, html);
