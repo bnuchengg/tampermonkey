@@ -92,8 +92,9 @@ class Scheduler {
         this.cacheNum++;
     }
 
-    rmCache(href){
-        ss.hashRm("pageCache",href);
+    rmCache(link){
+        link.classList.remove("cached");
+        ss.hashRm("pageCache",link.href);
         this.cacheNum--;
     }
 
@@ -182,12 +183,11 @@ const Utils = {
         return link;
     },
     loadContent: function (link, selector, func) {
-        scheduler.loadingNum++;
         const href = link.href;
         if (ss.hashGet("pageCache",href)){
-            scheduler.loadingNum--;
             return;
         }
+        scheduler.loadingNum++;
         link.classList.add("loading");
         const iframe = document.createElement("iframe");
         let timeout = 1000;
@@ -209,6 +209,7 @@ const Utils = {
                 if (link.getAttribute("cloneLink"))
                     html = link.cloneNode(true).outerHTML + html;
                 scheduler.addCache(href, html);
+                link.classList.add("cached");
                 iframe.remove();
             }, timeout);
         };
