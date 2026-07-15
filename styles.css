@@ -2,6 +2,10 @@
     color: gray !important;
 }
 
+.cached {
+    background-color: blue;
+}
+
 img {
     max-height: 360px;
     width: auto;
