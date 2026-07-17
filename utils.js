@@ -69,16 +69,23 @@ class Scheduler {
         this.cacheNum = 0;
     }
 
-    append(link, selector) {
+    insert(link, selector, pos){
+        if(this.waitingList.filter(e => e!= link && e.href == link.href).length > 0)
+            return;
         this.remove(link);
         this.destMap[link] = selector;
-        this.waitingList.push(link);
+        if(pos != 0)
+            this.waitingList.push(link);
+        else
+            this.waitingList.unshift(link);
+    }
+
+    append(link, selector) {
+        this.insert(link, selector);
     }
 
     prepend(link, selector) {
-        this.remove(link);
-        this.destMap[link] = selector;
-        this.waitingList.unshift(link);
+        this.insert(link, selector, 0);
     }
 
     remove(link) {
