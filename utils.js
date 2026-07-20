@@ -318,12 +318,11 @@ const Utils = {
         return this.isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
     },
     menuAction: (action) => {
-        const scrollMax = scroller.scrollTopMax;
         const handlerMap = {
-            "top": () => scroll2Pos(0, scroller),
-            "bottom": () => scroll2Pos(scrollMax, scroller),
+            "top": () => scroll2Pos(0),
+            "bottom": () => scroll2Pos(scroller.scrollTopMax),
             "refresh": () => { window.location.reload();
-                scroll2Pos(0, scroller) },
+                scroll2Pos(0) },
             "back": () => window.history.back()
         }
         handlerMap[action]();
