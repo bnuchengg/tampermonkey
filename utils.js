@@ -423,7 +423,7 @@ const Utils = {
     },
     toggleButton: function () {
         this.isScrollDown = !this.isScrollDown;
-        this.isScrollDown ? contextMenu.replaceChildren(liBottom) : contextMenu.replaceChildren(liTop);
+        this.isScrollDown ? contextMenu.replaceChild(liBottom, liTop) : contextMenu.replaceChild(liTop, liBottom);
     },
     zoomNext: function (img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
