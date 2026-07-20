@@ -156,6 +156,7 @@ const Utils = {
         };
         window.liBottom = createNode("li", "text-align: center; cursor: pointer", "bottom");
         window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
+        window.liRefresh = createNode("li", "text-align: center; cursor: pointer", "refresh");
         contextMenu.appendChild(liBottom);
         contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
 
@@ -269,7 +270,7 @@ const Utils = {
         };
     },
     createNode: function (tagName, cssText, action) {
-        const map = {"top": "⏫", "bottom": "⏬"};
+        const map = {"top": "⏫", "bottom": "⏬", "refresh": "🔄️"};
         const node = document.createElement(tagName);
         node.textContent = map[action];
         node.style.cssText = `${cssText}`;
@@ -321,6 +322,7 @@ const Utils = {
         const handlerMap = {
             "top": () => scroll2Pos(0, scroller),
             "bottom": () => scroll2Pos(scrollMax, scroller),
+            "refresh": () => window.location.reload(),
             "back": () => window.history.back()
         }
         handlerMap[action]();
