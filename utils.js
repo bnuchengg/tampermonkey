@@ -322,7 +322,8 @@ const Utils = {
         const handlerMap = {
             "top": () => scroll2Pos(0, scroller),
             "bottom": () => scroll2Pos(scrollMax, scroller),
-            "refresh": () => window.location.reload(),
+            "refresh": () => { window.location.reload();
+                scroll2Pos(0, scroller) },
             "back": () => window.history.back()
         }
         handlerMap[action]();
