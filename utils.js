@@ -326,7 +326,8 @@ const Utils = {
             "back": () => window.history.back()
         }
         handlerMap[action]();
-        toggleButton();
+        if(!nonToggleHosts.test(host))
+            toggleButton();
     },
     replaceHTML: function (selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
