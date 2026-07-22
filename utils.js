@@ -20,8 +20,8 @@ const ss = {
     },
     add(arr, item) {
         const _arr = this.getArray(arr);
-        while (_arr.length >= 256)
-            _arr.splice(0, 1);
+        if(_arr.length >= 1024)
+            _arr.splice(0, 256);
         if (!_arr.includes(item))
             _arr.push(item);
         this.set(arr, _arr);
