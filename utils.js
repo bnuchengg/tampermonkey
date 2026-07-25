@@ -154,11 +154,12 @@ const Utils = {
             event.preventDefault();
             contextMenu.style.cssText += `left: ${event.touches[0].clientX < window.innerWidth / 2 ? 5 : 90}vw; top: ${event.touches[0].clientY}px`;
         };
-        window.liBottom = createNode("li", "text-align: center; cursor: pointer", "bottom");
-        window.liTop = createNode("li", "text-align: center; cursor: pointer", "top");
-        window.liRefresh = createNode("li", "text-align: center; cursor: pointer", "refresh");
+        const liCssText = "text-align: center; cursor: pointer; font-size: 36px !important";
+        window.liBottom = createNode("li", liCssText, "bottom");
+        window.liTop = createNode("li", liCssText, "top");
+        window.liRefresh = createNode("li", liCssText, "refresh");
         contextMenu.appendChild(liBottom);
-        contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; scale: 2.5; opacity: 0.3; list-style: none; padding: 0`;
+        contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; opacity: 0.3; list-style: none; padding: 0`;
 
         window.scheduler = new Scheduler(3,5);
         setInterval((function exec() {
