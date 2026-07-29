@@ -374,6 +374,13 @@ const Utils = {
         }
         return node;
     },
+    createTxt: function(text,cssText) {
+        const node = document.createElement("span");
+        node.textContent = text;
+        if(cssText)
+            node.style.cssText = cssText;
+        return node;
+    },
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
