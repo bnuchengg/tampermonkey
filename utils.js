@@ -322,8 +322,11 @@ const Utils = {
         const handlerMap = {
             "top": () => scroll2Pos(0),
             "bottom": () => scroll2Pos(scroller.scrollTopMax),
-            "refresh": () => { window.location.reload();
-                scroll2Pos(0) },
+            "refresh": () => {
+                if(confirm("是否刷新页面?"))
+                    window.location.reload();
+                scroll2Pos(0);
+            },
             "back": () => window.history.back()
         }
         handlerMap[action]();
