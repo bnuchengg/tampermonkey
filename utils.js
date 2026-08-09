@@ -415,12 +415,13 @@ const Utils = {
         };
     },
     rmElement: function (condition) {
-        if (condition)
-            return ele => {
-                if (!/reddit/i.test(host) && eval(condition))
-                    ele.remove();
-            };
-        return ele => ele.remove();
+        return ele => rmElements([ele],condition);
+    },
+    rmElements: function (arr, condition) {
+        arr.forEach(ele => {
+            if (!condition || !/reddit/i.test(host) && eval(condition))
+                setTimeout(() => ele?.remove(),3000);
+        })
     },
     html2Element: function (htmlString) {
         const parser = new DOMParser();
