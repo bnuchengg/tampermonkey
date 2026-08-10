@@ -417,14 +417,12 @@ const Utils = {
                 ele?.remove();
         };
     },
-    rmElements: async function (arr) {
-        let flag = false;
-        while(!flag)
+    rmElements: function (arr) {
+        const timer = setInterval(() => {
             if(Date.now() - this.lastDelTime > 1000 && casLastTime(this.lastDelTime)){
-                flag = true;
+                clearInterval(timer)
                 arr.forEach(ele => ele?.remove());
-            } else
-                await sleep(1000);
+            }},1000);
     },
     sleep : function(ms){
         return new Promise(r => setTimeout(r, ms));
