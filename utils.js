@@ -412,19 +412,18 @@ const Utils = {
         };
     },
     rmElement: function (condition) {
-        return ele => rmElements([ele],condition);
+        return ele => {
+            if (!condition || !/reddit/i.test(host) && eval(condition))
+                ele?.remove();
+        };
     },
-    rmElements: async function (arr, condition) {
+    rmElements: async function (arr) {
         let flag = false;
         while(!flag)
             if(Date.now() - this.lastDelTime > 3000 && casLastTime(this.lastDelTime)){
                 flag = true;
-                arr.forEach(ele => {
-                    if (!condition || !/reddit/i.test(host) && eval(condition))
-                        ele?.remove();
-                });
-            }
-            else
+                arr.forEach(ele => ele?.remove());
+            } else
                 await sleep(1000);
     },
     sleep : function(ms){
