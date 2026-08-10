@@ -420,7 +420,7 @@ const Utils = {
     rmElements: async function (arr) {
         let flag = false;
         while(!flag)
-            if(Date.now() - this.lastDelTime > 3000 && casLastTime(this.lastDelTime)){
+            if(Date.now() - this.lastDelTime > 1000 && casLastTime(this.lastDelTime)){
                 flag = true;
                 arr.forEach(ele => ele?.remove());
             } else
