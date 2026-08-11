@@ -300,20 +300,19 @@ const Utils = {
             return;
         e.preventDefault();
         e.stopPropagation();
-        let pos = 0;
+        let firstClick = false;
         if (!img.classList.contains("zoomed")) {
             img.classList.add("zoomed");
-        } else {
+            firstClick = true;
+        } else
             zoomNext(img);
-        }
-        scroll2Pos(calcScrollPos(img));
-        img.classList.add("clicked");
+        setTimeout(() => scroll2Pos(calcScrollPos(img, firstClick)),150);
     },
-    calcScrollPos: function (img) {
+    calcScrollPos: function (img, firstClick) {
         const scrollTop = scroller.scrollTop;
         const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
-        if (!img.classList.contains("clicked") || rect.bottom < 0)
+        if (firstClick || rect.bottom <= 0 || rect.top >= window.innerHeight)
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
         return this.isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
     },
@@ -484,7 +483,7 @@ const Utils = {
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
-            behavior: 'instant'
+            behavior: 'auto'
         });
     },
     scroll2HPos: function (container, pos) {
