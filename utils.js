@@ -145,12 +145,7 @@ const Utils = {
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
-
-        setTimeout(() => {
-            const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-            if(imgs.length > 10 && confirm(`Allow auto scroll ${imgs.length} imgs?`))
-                autoScroll(imgs);
-        },3000);
+        autoScroll();
 
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
@@ -464,21 +459,26 @@ const Utils = {
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
     },
-    autoScroll: function(imgs) {
-        let index = 0;
-        this.isScrollDown = true;
-        const timer = setInterval(() => {
-            imgs[index++].click();
-            if(index == imgs.length){
-                clearInterval(timer);
-                this.isScrollDown = false;
-                const reverseTimer = setInterval(() => {
-                    imgs[index--].click();
-                    if(index == -1)
-                        clearInterval(reverseTimer);
+    autoScroll: function() {
+        setTimeout(() => {
+            const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
+            if(imgs.length > 10 && confirm(`Allow auto scroll ${imgs.length} imgs?`)){
+                let index = 0;
+                this.isScrollDown = true;
+                const timer = setInterval(() => {
+                    imgs[index++].click();
+                    if(index == imgs.length){
+                        clearInterval(timer);
+                        this.isScrollDown = false;
+                        const reverseTimer = setInterval(() => {
+                            imgs[index--].click();
+                            if(index == -1)
+                                clearInterval(reverseTimer);
+                        },1000);
+                    }
                 },1000);
             }
-        },1000);
+        },3000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos: function (pos) {
