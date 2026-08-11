@@ -145,6 +145,9 @@ const Utils = {
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
+        const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
+        if(imgs.length > 10 && confirm("Allow auto scroll?"))
+            autoScroll(imgs);
 
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
@@ -458,6 +461,14 @@ const Utils = {
         }).filter(item => item == img)[0]?.getAttribute("data-index"));
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
+    },
+    autoScroll: function(imgs) {
+        let index = 0;
+        const timer = setInterval(() => {
+            imgs[index++].click();
+            if(index == imgs.length)
+                clearInterval(timer);
+        },1000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos: function (pos) {
