@@ -419,7 +419,8 @@ const Utils = {
     },
     rmElements: function (arr) {
         const timer = setInterval(() => {
-            if(Date.now() - this.lastDelTime > 1000 && casLastTime(this.lastDelTime)){
+            if(Date.now() - this.lastDelTime >= 1000){
+                this.lastDelTime = Date.now();
                 clearInterval(timer)
                 arr.forEach(ele => ele?.remove());
             }},1000);
