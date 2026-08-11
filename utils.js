@@ -145,9 +145,12 @@ const Utils = {
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
-        const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-        if(imgs.length > 10 && confirm("Allow auto scroll?"))
-            autoScroll(imgs);
+
+        setTimeout(() => {
+            const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
+            if(imgs.length > 10 && confirm(`Allow auto scroll ${imgs.length} imgs?`))
+                autoScroll(imgs);
+        },3000);
 
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
@@ -305,18 +308,17 @@ const Utils = {
         let pos = 0;
         if (!img.classList.contains("zoomed")) {
             img.classList.add("zoomed");
-            pos = calcScrollPos(img, true);
         } else {
             zoomNext(img);
-            pos = calcScrollPos(img, false);
         }
-        scroll2Pos(pos);
+        scroll2Pos(calcScrollPos(img));
+        img.classList.add("clicked");
     },
-    calcScrollPos: function (img, firstClick) {
+    calcScrollPos: function (img) {
         const scrollTop = scroller.scrollTop;
         const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
-        if (firstClick)
+        if (!img.classList.contains("clicked") || rect.bottom < 0)
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
         return this.isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
     },
@@ -464,17 +466,25 @@ const Utils = {
     },
     autoScroll: function(imgs) {
         let index = 0;
+        this.isScrollDown = true;
         const timer = setInterval(() => {
             imgs[index++].click();
-            if(index == imgs.length)
+            if(index == imgs.length){
                 clearInterval(timer);
+                this.isScrollDown = false;
+                const reverseTimer = setInterval(() => {
+                    imgs[index--].click();
+                    if(index == -1)
+                        clearInterval(reverseTimer);
+                },1000);
+            }
         },1000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
-            behavior: 'smooth'
+            behavior: 'instant'
         });
     },
     scroll2HPos: function (container, pos) {
