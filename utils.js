@@ -461,7 +461,7 @@ const Utils = {
     autoScroll: function() {
         setTimeout(() => {
             const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-            if(imgs.length > 10 && confirm(`Allow auto scroll ${imgs.length} imgs?`)){
+            if(imgs.length > 10 && confirm(`Auto scroll ${imgs.length} images?`)){
                 let index = 0;
                 this.isScrollDown = true;
                 const timer = setInterval(() => {
@@ -483,7 +483,7 @@ const Utils = {
     scroll2Pos: function (pos) {
         scroller.scrollTo({
             top: pos,
-            behavior: 'auto'
+            behavior: 'smooth'
         });
     },
     scroll2HPos: function (container, pos) {
