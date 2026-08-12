@@ -306,7 +306,7 @@ const Utils = {
             firstClick = true;
         } else
             zoomNext(img);
-        setTimeout(() => scroll2Pos(calcScrollPos(img, firstClick)),150);
+        setTimeout(() => scroll2Pos({ top: calcScrollPos(img, firstClick) }),150);
     },
     calcScrollPos: function (img, firstClick) {
         const scrollTop = scroller.scrollTop;
@@ -318,12 +318,12 @@ const Utils = {
     },
     menuAction: (action) => {
         const handlerMap = {
-            "top": () => scroll2Pos(0),
-            "bottom": () => scroll2Pos(scroller.scrollTopMax),
+            "top": () => scroll2Pos({ top: 0 }),
+            "bottom": () => scroll2Pos({ top: scroller.scrollTopMax }),
             "refresh": () => {
                 if(confirm("是否刷新页面?"))
                     window.location.reload();
-                scroll2Pos(0);
+                scroll2Pos({ top: 0 });
             },
             "back": () => window.history.back()
         }
@@ -440,8 +440,8 @@ const Utils = {
         return doc.body.firstElementChild;
     },
     resetPos: function () {
-        scroll2Pos(0);
-        scroll2HPos(document.querySelector(".sticky"), 0);
+        scroll2Pos({ top: 0 });
+        scroll2Pos({ left : 0 },document.querySelector(".sticky"));
         this.isScrollDown = true;
         contextMenu.replaceChildren(liBottom);
     },
@@ -480,17 +480,9 @@ const Utils = {
         },3000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
-    scroll2Pos: function (pos) {
-        scroller.scrollTo({
-            top: pos,
-            behavior: 'smooth'
-        });
-    },
-    scroll2HPos: function (container, pos) {
-        container.scrollTo({
-            left: pos,
-            behavior: 'smooth'
-        });
+    scroll2Pos: function (option, container) {
+        option.behavior = "smooth";
+        (container ?? scroller).scrollTo(option);
     }
 };
 
