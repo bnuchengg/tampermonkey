@@ -416,11 +416,13 @@ const Utils = {
                 ele?.remove();
         };
     },
-    rmElements: function (arr) {
+    rmElements: function (arr, func) {
         const timer = setInterval(() => {
             if(Date.now() - this.lastDelTime >= 1000){
                 this.lastDelTime = Date.now();
                 clearInterval(timer)
+                if(func)
+                    func();
                 arr.forEach(ele => ele?.remove());
             }},1000);
     },
