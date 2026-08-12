@@ -470,12 +470,7 @@ const Utils = {
                     imgs[index++].click();
                     if(index == imgs.length){
                         clearInterval(timer);
-                        this.isScrollDown = false;
-                        const reverseTimer = setInterval(() => {
-                            imgs[index--].click();
-                            if(index == -1)
-                                clearInterval(reverseTimer);
-                        },1000);
+                        setTimeout(() => resetPos(),1000);
                     }
                 },1000);
             }
