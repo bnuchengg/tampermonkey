@@ -198,10 +198,7 @@ const Utils = {
         while (!ret.key) {
             ret = ret.return;
         }
-        const link = document.createElement("a");
-        link.href = `/detail/${ret.key}`;
-        link.textContent = ele.textContent;
-        return link;
+        return createLink(`/detail/${ret.key}`, ele.textContent);
     },
     loadContent: function (link, selector, func) {
         const href = link.href;
@@ -362,12 +359,10 @@ const Utils = {
         };
     },
     createImg: function (img, tagName, src) {
-        const node = document.createElement(tagName);
-        if (/a/i.test(tagName)) {
-            node.href = img.href;
-            node.style.cssText = "text-decoration: none";
-            node.textContent = img.textContent;
-        } else {
+        if (/a/i.test(tagName))
+            return createLink(img.href, img.textContent, "text-decoration: none");
+        else {
+            const node = document.createElement(tagName);
             node.src = img.getAttribute(src) || img.src;
             if (/video/i.test(tagName)) {
                 node.controls = true;
@@ -377,8 +372,16 @@ const Utils = {
                     maxHeight = "80vh";
                 node.style.cssText += `max-height: ${maxHeight}; max-width: 100%`;
             }
+            return node;
         }
-        return node;
+    },
+    createLink: function(href, text, cssText) {
+        const link = document.createElement("a");
+        link.href = href;
+        link.textContent = text;
+        if(cssText)
+            link.style.cssText = cssText;
+        return link;
     },
     createTxt: function(text,cssText) {
         const node = document.createElement("span");
