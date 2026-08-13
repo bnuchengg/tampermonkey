@@ -221,7 +221,16 @@ const Utils = {
         if (/kdslife.com|news.zhibo8.com/.test(host))
             iframe.sandbox.add('allow-scripts');
         iframe.onload = (e) => {
-            const iframe = e.target;
+            clearTimeout(timer);
+            postLoaded();
+        };
+        document.body.append(iframe);
+        const timer = lazyExec(() => {
+            console.log(`${iframe.src} load overtime...`)
+            iframe.onload = null;
+            postLoaded();
+        }, 5000);
+        function postLoaded(){
             if (func)
                 eval(func);
             lazyExec(() => {
@@ -232,8 +241,7 @@ const Utils = {
                 scheduler.addCache(link, html);
                 iframe.remove();
             }, timeout);
-        };
-        document.body.append(iframe);
+        }
     },
     appendDiv: function (type) {
         return ele => {
@@ -461,7 +469,7 @@ const Utils = {
         imgs[next]?.classList.add("zoomed");
     },
     lazyExec: function(func, timeout = 1000, ...args) {
-        setTimeout(func, timeout, ...args);
+        return setTimeout(func, timeout, ...args);
     },
     loopExec: function(func, timeout = 1000, ...args) {
         return setInterval(func, timeout, ...args);
