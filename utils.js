@@ -162,10 +162,10 @@ const Utils = {
         contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; opacity: 0.3; list-style: none; padding: 0`;
 
         window.scheduler = new Scheduler(3,5);
-        setInterval((function exec() {
+        loopExec((function exec() {
             scheduler.run();
             return exec;
-        })(), 1000);
+        })());
     },
     emptyFunc: () => {},
     lazyLoad: function (ele, target, func) {
@@ -175,12 +175,12 @@ const Utils = {
             return;
         }
         loadContent(ele, target, postFuncMap[host]);
-        const timer = setInterval(() => {
+        const timer = loopExec(() => {
             if (pageCache[href]){
                 func(ele);
                 clearInterval(timer);
             }
-        }, 1000);
+        });
     },
     mergeLink: function (div) {
         if (div.querySelectorAll("a").length > 1) {
@@ -224,7 +224,7 @@ const Utils = {
             const iframe = e.target;
             if (func)
                 eval(func);
-            setTimeout(() => {
+            lazyExec(() => {
                 scheduler.loaded(link);
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 if (link.getAttribute("cloneLink"))
@@ -306,7 +306,7 @@ const Utils = {
             firstClick = true;
         } else
             zoomNext(img);
-        setTimeout(() => scroll2Pos({ top: calcScrollPos(img, firstClick) }),150);
+        lazyExec(scroll2Pos,150, { top: calcScrollPos(img, firstClick) });
     },
     calcScrollPos: function (img, firstClick) {
         const scrollTop = scroller.scrollTop;
@@ -390,7 +390,7 @@ const Utils = {
                     if (!infiniteFlag)
                         return;
                 }
-                const timer = setInterval(() => {
+                const timer = loopExec(() => {
                     if (document.querySelectorAll(selector).length > 0) {
                         try {
                             document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
@@ -400,7 +400,7 @@ const Utils = {
                         if (!infiniteFlag)
                             clearInterval(timer);
                     }
-                }, 1000);
+                });
             }
         );
     },
@@ -417,14 +417,14 @@ const Utils = {
         };
     },
     rmElements: function (arr, func) {
-        const timer = setInterval(() => {
+        const timer = loopExec(() => {
             if(Date.now() - this.lastDelTime >= 1000){
                 this.lastDelTime = Date.now();
                 clearInterval(timer)
                 if(func)
                     func();
                 arr.forEach(ele => ele?.remove());
-            }},1000);
+            }});
     },
     sleep : function(ms){
         return new Promise(r => setTimeout(r, ms));
@@ -453,26 +453,32 @@ const Utils = {
     },
     zoomNext: function (img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-        const index = Number(imgs.map((item, index) => {
+        const index = Number(img.getAttribute("data-index") ?? imgs.map((item, index) => {
             item.setAttribute("data-index", index);
             return item;
         }).filter(item => item == img)[0]?.getAttribute("data-index"));
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
     },
+    lazyExec: function(func, timeout = 1000, ...args) {
+        setTimeout(func, timeout, ...args);
+    },
+    loopExec: function(func, timeout = 1000, ...args) {
+        return setInterval(func, timeout, ...args);
+    },
     autoScroll: function() {
-        setTimeout(() => {
+        lazyExec(() => {
             const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
             if(imgs.length > 10 && confirm(`Auto scroll ${imgs.length} images?`)){
                 let index = 0;
                 this.isScrollDown = true;
-                const timer = setInterval(() => {
+                const timer = loopExec(() => {
                     imgs[index++].click();
                     if(index == imgs.length){
                         clearInterval(timer);
-                        setTimeout(() => resetPos(),1000);
+                        lazyExec(resetPos);
                     }
-                },1000);
+                });
             }
         },3000);
     },
