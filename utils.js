@@ -143,7 +143,7 @@ const Utils = {
         document.head.appendChild(meta);
         window.pageCache = {};
 
-        if (!/google.com|youtube.com/i.test(host))
+        if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
         autoScroll();
 
