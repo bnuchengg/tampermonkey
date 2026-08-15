@@ -143,7 +143,7 @@ const Utils = {
         document.head.appendChild(meta);
         window.pageCache = {};
 
-        if (!/^x.com|google.com|youtube.com/i.test(host))
+        if (!/google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
         autoScroll();
 
@@ -423,7 +423,7 @@ const Utils = {
     },
     rmElement: function (condition) {
         return ele => {
-            if (!condition || !/reddit/i.test(host) && eval(condition))
+            if (!condition || !/reddit|^x.com/i.test(host) && eval(condition))
                 ele?.remove();
         };
     },
