@@ -233,8 +233,11 @@ const Utils = {
             lazyExec(() => {
                 scheduler.loaded(link);
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
-                if (link.getAttribute("cloneLink"))
-                    html = link.cloneNode(true).outerHTML + html;
+                if (link.getAttribute("cloneLink")){
+                    const a = link.cloneNode(true);
+                    a.textContent = link.title;
+                    html = a.outerHTML + html;
+                }
                 scheduler.addCache(link, html);
                 iframe.remove();
             }, timeout);
