@@ -259,25 +259,25 @@ const Utils = {
             }
         };
     },
-    visitLink: function () {
-        return ele => {
-            const arr = "vLinks";
-            const link = ele.href ? ele.href : ele.textContent;
-            if (!/visited/.test(ele.classList)) {
-                if (ss.contains(arr, link))
-                    ele.classList.add("visited");
-                else if (!ele.onclick)
-                    ele.onclick = () => ss.add(arr, link);
+    visitLink: function (ele) {
+        const arr = "vLinks";
+        const link = ele.href ? ele.href : ele.textContent;
+        if (ss.contains(arr, link)){
+            ele.classList.add("visited");
+            return true;
+        } else
+            ele.onclick = () => {
+                ss.add(arr, link);
+                ele.classList.add("visited");
             }
-        };
     },
-    postLink: function (func) {
-        return ele => {
-            if (/visited/.test(ele.classList) && !/postLink/.test(ele.classList)) {
-                ele.classList.add("postLink");
+    postLink: function (ele, func) {
+        const timer = loopExec(() => {
+            if (/visited/.test(ele.classList) && !/loading/.test(ele.classList)) {
+                clearInterval(timer);
                 func(ele);
             }
-        };
+        },3000);
     },
     createNode: function (tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬", "refresh": "🔄️"};
