@@ -1,14 +1,14 @@
 .visited {
-    color: gray;
+    color: gray !important;
 }
 
 .cached {
-    color: blue;
+    color: blue !important;
     background-color: gold;
 }
 
 .title {
-    color: gold;
+    color: gold !important;
 }
 
 img {
