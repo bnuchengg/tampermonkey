@@ -3,12 +3,13 @@
 }
 
 .cached {
-    color: blue !important;
+    color: royalblue !important;
     background-color: gold;
 }
 
 .title {
     color: gold !important;
+    font-size: large !important;
 }
 
 img {
