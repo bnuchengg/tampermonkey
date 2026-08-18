@@ -236,6 +236,7 @@ const Utils = {
                 if (link.getAttribute("cloneLink")){
                     const a = link.cloneNode(true);
                     a.textContent = link.title;
+                    a.classList.add("title");
                     html = a.outerHTML + html;
                 }
                 scheduler.addCache(link, html);
