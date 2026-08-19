@@ -98,6 +98,7 @@ class Scheduler {
     }
 
     loading(link){
+        this.remove(link);
         this.loadingNum++;
         link.classList.add("loading");
     }
