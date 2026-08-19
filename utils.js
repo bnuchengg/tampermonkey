@@ -71,7 +71,10 @@ class Scheduler {
 
     insert(link, selector, pos){
         if(this.waitingList.filter(e => e!= link && e.href == link.href).length > 0)
+        {
+            link.remove();
             return;
+        }
         this.remove(link);
         this.destMap[link] = selector;
         if(pos != 0)
@@ -264,12 +267,14 @@ const Utils = {
         const link = ele.href ? ele.href : ele.textContent;
         if (ss.contains(arr, link)){
             ele.classList.add("visited");
-            const timer = loopExec(() => {
-                if (!/loading/.test(ele.classList)) {
-                    clearInterval(timer);
-                    func(ele);
-                }
-            },3000);
+            if(func){
+                const timer = loopExec(() => {
+                    if (!/loading/.test(ele.classList)) {
+                        clearInterval(timer);
+                        func(ele);
+                    }
+                });
+            }
             return true;
         } else
             ele.onclick = () => {
