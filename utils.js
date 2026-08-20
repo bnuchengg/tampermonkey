@@ -437,13 +437,13 @@ const Utils = {
     },
     rmElements: function (arr, func) {
         const timer = loopExec(() => {
-            if(Date.now() - this.lastDelTime >= 1000){
+            if(Date.now() - this.lastDelTime >= 500){
                 this.lastDelTime = Date.now();
                 clearInterval(timer)
                 if(func)
                     func();
                 arr.forEach(ele => ele?.remove());
-            }});
+            }}, 100);
     },
     sleep : function(ms){
         return new Promise(r => setTimeout(r, ms));
