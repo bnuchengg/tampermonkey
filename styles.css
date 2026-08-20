@@ -27,7 +27,7 @@ img {
     text-decoration: overline underline wavy red;
 }
 
-.sticky .loading {
+.stickynav .loading {
     position: unset !important;
     border: 3px dashed black;
     animation: blink 1s linear infinite;
@@ -45,7 +45,7 @@ img {
     }
 }
 
-.sticky {
+.stickynav {
     display: flex;
     height: 150px;
     width: unset !important;
@@ -60,17 +60,17 @@ img {
     z-index: 999;
 }
 
-.sticky > div, .sticky > a {
+.stickynav > div, .stickynav > a {
     flex: 0 0 80px;
 }
 
-.sticky img {
+.stickynav img {
     max-height: 80px !important;
     display: block;
 }
 
 @media (max-width: 1024px) {
-    body, div:not(.sticky,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video, iframe {
+    body, div:not(.stickynav,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video, iframe {
         box-sizing: border-box;
         max-width: 100% !important;
         min-width: unset !important;

@@ -323,7 +323,7 @@ const Utils = {
     },
     calcScrollPos: function (img, firstClick) {
         const scrollTop = scroller.scrollTop;
-        const fixedHeight = document.querySelector(".sticky")?.getBoundingClientRect().height ?? 0;
+        const fixedHeight = document.querySelector(".stickynav")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
         if (firstClick || rect.bottom <= 0 || rect.top >= window.innerHeight)
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
@@ -462,7 +462,7 @@ const Utils = {
     },
     resetPos: function () {
         scroll2Pos({ top: 0 });
-        scroll2Pos({ left : 0 },document.querySelector(".sticky"));
+        scroll2Pos({ left : 0 },document.querySelector(".stickynav"));
         this.isScrollDown = true;
         contextMenu.replaceChildren(liBottom);
     },
