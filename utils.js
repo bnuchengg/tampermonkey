@@ -472,7 +472,7 @@ const Utils = {
     },
     zoomNext: function (img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-        const index = Number(img.getAttribute("data-index") ?? imgs.map((item, index) => {
+        const index = Number(imgs.map((item, index) => {
             item.setAttribute("data-index", index);
             return item;
         }).filter(item => item == img)[0]?.getAttribute("data-index"));
