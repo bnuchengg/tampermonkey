@@ -162,6 +162,7 @@ const Utils = {
         window.liBottom = createNode("li", liCssText, "bottom");
         window.liTop = createNode("li", liCssText, "top");
         window.liRefresh = createNode("li", liCssText, "refresh");
+        contextMenu.prepend(liRefresh);
         contextMenu.appendChild(liBottom);
         contextMenu.style.cssText = `left: 5vw; top: 64vh; position: fixed; opacity: 0.3; list-style: none; padding: 0`;
 
@@ -341,8 +342,6 @@ const Utils = {
             "back": () => window.history.back()
         }
         handlerMap[action]();
-        if(!nonToggleHosts.test(host))
-            toggleButton();
     },
     replaceHTML: function (selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
