@@ -462,8 +462,6 @@ const Utils = {
     resetPos: function () {
         scroll2Pos({ top: 0 });
         scroll2Pos({ left : 0 },document.querySelector(".stickynav"));
-        this.isScrollDown = true;
-        contextMenu.replaceChildren(liBottom);
     },
     toggleButton: function () {
         this.isScrollDown = !this.isScrollDown;
