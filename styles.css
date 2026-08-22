@@ -12,6 +12,18 @@
     font-size: large !important;
 }
 
+.contextmenu {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    left: 5vw;
+    top: 64vh;
+    position: fixed;
+    opacity: 0.5;
+    list-style: none;
+    padding: 0;
+}
+
 img {
     max-height: 360px;
     width: auto;
