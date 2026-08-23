@@ -239,13 +239,15 @@ const Utils = {
             lazyExec(() => {
                 scheduler.loaded(link);
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
-                if (link.getAttribute("cloneLink")){
+                if(/player.bilibili.com/i.test(html))
+                    link.remove();
+                else if (link.getAttribute("cloneLink")){
                     const a = link.cloneNode(true);
                     a.textContent = link.title;
                     a.classList.add("title");
                     html = a.outerHTML + html;
+                    scheduler.addCache(link, html);
                 }
-                scheduler.addCache(link, html);
                 iframe.remove();
             }, timeout);
         }
@@ -495,7 +497,7 @@ const Utils = {
                         clearInterval(timer);
                         lazyExec(resetPos);
                     }
-                }, 3000);
+                }, 1500);
             }
         }, 3000);
     },
