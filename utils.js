@@ -241,14 +241,17 @@ const Utils = {
                 let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
                 if(/player.bilibili.com/i.test(html))
                     link.remove();
-                else if (link.getAttribute("cloneLink")){
+                else {
+                    link.getAttribute("cloneLink") ? decorate() : null;
+                    scheduler.addCache(link, html);
+                }
+                iframe.remove();
+                function decorate(){
                     const a = link.cloneNode(true);
                     a.textContent = link.title;
                     a.classList.add("title");
                     html = a.outerHTML + html;
-                    scheduler.addCache(link, html);
                 }
-                iframe.remove();
             }, timeout);
         }
     },
