@@ -162,8 +162,9 @@ const Utils = {
         window.liBottom = createNode("li", liCssText, "bottom");
         window.liTop = createNode("li", liCssText, "top");
         window.liRefresh = createNode("li", liCssText, "refresh");
-        contextMenu.prepend(liRefresh);
+        liRefresh.style.cssText += "font-size: 36px !important";
         contextMenu.appendChild(liBottom);
+        contextMenu.appendChild(liRefresh);
         contextMenu.classList.add("contextmenu");
 
         window.scheduler = new Scheduler(3,5);
