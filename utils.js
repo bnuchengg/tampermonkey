@@ -336,7 +336,7 @@ const Utils = {
             "top": () => scroll2Pos({ top: 0 }),
             "bottom": () => scroll2Pos({ top: scroller.scrollTopMax }),
             "refresh": () => {
-                if(confirm("是否刷新页面?"))
+                if(confirm("Refresh the page ?"))
                     window.location.reload();
                 scroll2Pos({ top: 0 });
             },
@@ -495,9 +495,9 @@ const Utils = {
                         clearInterval(timer);
                         lazyExec(resetPos);
                     }
-                });
+                }, 3000);
             }
-        },3000);
+        }, 3000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos: function (option, container) {
