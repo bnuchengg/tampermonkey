@@ -90,6 +90,7 @@ img {
         overflow-wrap: break-word;
         float: unset !important;
         overflow: unset !important;
+        padding-bottom: unset !important;
     }
 }
 
