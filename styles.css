@@ -81,6 +81,10 @@ img {
     display: block;
 }
 
+body {
+    padding-bottom: unset !important;
+}
+
 @media (max-width: 1024px) {
     body, div:not(.stickynav,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video, iframe {
         box-sizing: border-box;
@@ -90,7 +94,6 @@ img {
         overflow-wrap: break-word;
         float: unset !important;
         overflow: unset !important;
-        padding-bottom: unset !important;
     }
 }
 
