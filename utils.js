@@ -500,7 +500,7 @@ const Utils = {
                         clearInterval(timer);
                         lazyExec(resetPos);
                     }
-                }, 1500);
+                });
             }
         }, 3000);
     },
