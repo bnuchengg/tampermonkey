@@ -81,11 +81,6 @@ img {
     display: block;
 }
 
-#comment {
-    display: grid;
-    row-gap: 10px;
-}
-
 body {
     padding-bottom: unset !important;
 }
