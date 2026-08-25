@@ -35,10 +35,6 @@ img {
     max-height: unset !important;
 }
 
-.morecomment {
-    text-decoration: overline underline wavy red;
-}
-
 .stickynav .loading {
     position: unset !important;
     border: 3px dashed black;
