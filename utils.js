@@ -358,7 +358,7 @@ const Utils = {
     },
     truncText: function (pEle, selector, limit) {
         if (selector)
-            pEle.querySelectorAll(selector).forEach(ele => ele.textContent = ele.textContent.replace(/\s/g, '').slice(0, limit) + "…");
+            iExec(selector, ele => ele.textContent = ele.textContent.replace(/\s/g, '').slice(0, limit) + "…", pEle);
         else
             pEle.textContent = pEle.textContent.replace(/\s/g, '').slice(0, limit) + "…";
     },
@@ -407,7 +407,7 @@ const Utils = {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
                     try {
-                        document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                        iExec(selector, func);
                     } catch (e) {
                         console.error(e);
                     }
@@ -417,7 +417,7 @@ const Utils = {
                 const timer = loopExec(() => {
                     if (document.querySelectorAll(selector).length > 0) {
                         try {
-                            document.querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
+                            iExec(selector, func);
                         } catch (e) {
                             console.error(e);
                         }
@@ -427,6 +427,9 @@ const Utils = {
                 });
             }
         );
+    },
+    iExec: function(selector, func, parent) {
+        (parent ?? document).querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
     },
     appendCss: function (cssText) {
         return ele => {
