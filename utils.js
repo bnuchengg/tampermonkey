@@ -153,10 +153,10 @@ const Utils = {
 
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
-        contextMenu.ondragend = (event) => contextMenu.style.cssText += `left: ${event.clientX < window.innerWidth / 2 ? 5 : 90}vw; top: ${event.clientY}px`;
+        contextMenu.ondragend = (event) => contextMenu.style.cssText += `top: ${event.clientY}px`;
         contextMenu.ontouchmove = (event) => {
             event.preventDefault();
-            contextMenu.style.cssText += `left: ${event.touches[0].clientX < window.innerWidth / 2 ? 5 : 90}vw; top: ${event.touches[0].clientY}px`;
+            contextMenu.style.cssText += `top: ${event.touches[0].clientY}px`;
         };
         const liCssText = "text-align: center; cursor: pointer; font-size: 42px !important";
         window.liBottom = createNode("li", liCssText, "bottom");
@@ -166,6 +166,17 @@ const Utils = {
         contextMenu.appendChild(liBottom);
         contextMenu.appendChild(liRefresh);
         contextMenu.classList.add("contextmenu");
+        hide(contextMenu);
+
+        let lastShowtime = 0;
+        window.onscroll = () => {
+            lastShowtime = Date.now();
+            show(contextMenu, "flex");
+            lazyExec(() => {
+                if(Date.now() - lastShowtime > 2950)
+                    hide(contextMenu);
+            }, 3000);
+        };
 
         window.scheduler = new Scheduler(3,5);
         loopExec((function exec() {
@@ -174,6 +185,8 @@ const Utils = {
         })());
     },
     emptyFunc: () => {},
+    show: (ele, type = '') => ele.style.display = type,
+    hide: (ele) => ele.style.display = 'none',
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
         if (pageCache[href]){
