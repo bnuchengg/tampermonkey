@@ -166,7 +166,7 @@ const Utils = {
         contextMenu.appendChild(liBottom);
         contextMenu.appendChild(liRefresh);
         contextMenu.classList.add("contextmenu");
-        hide(contextMenu);
+        document.body.append(contextMenu);
 
         let lastShowtime = 0;
         window.onscroll = () => {
