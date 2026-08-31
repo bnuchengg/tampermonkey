@@ -167,16 +167,8 @@ const Utils = {
         contextMenu.appendChild(liRefresh);
         contextMenu.classList.add("contextmenu");
         document.body.append(contextMenu);
-
-        let lastShowtime = 0;
-        window.onscroll = () => {
-            lastShowtime = Date.now();
-            show(contextMenu, "flex");
-            lazyExec(() => {
-                if(Date.now() - lastShowtime > 2950)
-                    hide(contextMenu);
-            }, 3000);
-        };
+        window.countDown = lazyExec(() => hide(contextMenu), 3000);
+        window.onscroll = onScroll;
 
         window.scheduler = new Scheduler(3,5);
         loopExec((function exec() {
@@ -187,6 +179,11 @@ const Utils = {
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
     hide: (ele) => ele.style.display = 'none',
+    onScroll: () => {
+        show(contextMenu, "flex");
+        clearTimeout(countDown);
+        countDown = lazyExec(() => hide(contextMenu), 3000);
+    },
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
         if (pageCache[href]){
