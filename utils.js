@@ -285,6 +285,7 @@ const Utils = {
         const link = ele.href ? ele.href : ele.textContent;
         if (ss.contains(arr, link)){
             ele.classList.add("visited");
+            refreshUnreadCnt();
             if(func){
                 const timer = loopExec(() => {
                     if (!/loading/.test(ele.classList)) {
@@ -298,7 +299,17 @@ const Utils = {
             ele.onclick = () => {
                 ss.add(arr, link);
                 visitLink(ele, func);
-            }
+            };
+
+        function refreshUnreadCnt(){
+            const unreadCnt = document.querySelectorAll("div.stickynav a:not(.visited)").length;
+            if(!document.querySelector("div.stickynav span.count")){
+                const span = createTxt(`${ unreadCnt } unread`, "position: absolute; top: 10px; left: 30px; color: green; scale: 1.5");
+                span.classList.add("count");
+                document.querySelector("div.stickynav")?.prepend(span);
+            } else
+                document.querySelector("div.stickynav span.count").textContent = `${ unreadCnt } unread`;
+        }
     },
     createNode: function (tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬", "refresh": "🔄️"};
