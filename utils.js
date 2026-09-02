@@ -303,8 +303,12 @@ const Utils = {
 
         function refreshUnreadCnt(){
             const unreadCnt = document.querySelectorAll("div.stickynav a:not(.visited)").length;
+            if(unreadCnt < 5){
+                document.querySelector("div.stickynav span.count")?.remove();
+                return;
+            }
             if(!document.querySelector("div.stickynav span.count")){
-                const span = createTxt(`${ unreadCnt } unread`, "position: absolute; top: 10px; left: 30px; color: green; scale: 1.5");
+                const span = createTxt(`${ unreadCnt } unread`, "position: absolute; top: 10px; left: 30px; color: green; scale: 1.5; z-index: 999");
                 span.classList.add("count");
                 document.querySelector("div.stickynav")?.prepend(span);
             } else
