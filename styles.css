@@ -35,7 +35,7 @@ img {
     max-height: unset !important;
 }
 
-.grid {
+.gapgrid {
     display: grid;
     row-gap: 10px;
 }
@@ -110,10 +110,6 @@ body {
         margin-left: 0 !important;
         max-width: 89vw;
         float: unset !important;
-    }
-
-    .grid-container {
-        display: unset;
     }
 }
 
