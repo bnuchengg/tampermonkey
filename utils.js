@@ -303,7 +303,7 @@ const Utils = {
 
         function refreshUnreadCnt(){
             const unreadCnt = document.querySelectorAll("div.stickynav a:not(.visited)").length;
-            if(unreadCnt < 5){
+            if(unreadCnt < 10){
                 document.querySelector("div.stickynav span.count")?.remove();
                 return;
             }
@@ -428,6 +428,7 @@ const Utils = {
             node.style.cssText = cssText;
         return node;
     },
+    countEmoji: str => str.length - [...str].length,
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
@@ -453,13 +454,11 @@ const Utils = {
             }
         );
     },
-    iExec: function(selector, func, parent) {
-        (parent ?? document).querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func);
-    },
+    iExec: (selector, func, parent) => (parent ?? document).querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func),
     appendCss: function (cssText) {
         return ele => {
             const style = ele.style || ele.target.style;
-            style.cssText += cssText;
+            style ? style.cssText += cssText : null;
         };
     },
     rmElement: function (condition) {
@@ -478,9 +477,7 @@ const Utils = {
                 arr.forEach(ele => ele?.remove());
             }}, 100);
     },
-    sleep : function(ms){
-        return new Promise(r => setTimeout(r, ms));
-    },
+    sleep : ms => new Promise(r => setTimeout(r, ms)),
     casLastTime: function (oldValue){
         if(this.lastDelTime == oldValue){
             this.lastDelTime = Date.now();
@@ -510,12 +507,8 @@ const Utils = {
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
     },
-    lazyExec: function(func, timeout = 1000, ...args) {
-        return setTimeout(func, timeout, ...args);
-    },
-    loopExec: function(func, timeout = 1000, ...args) {
-        return setInterval(func, timeout, ...args);
-    },
+    lazyExec: (func, timeout = 1000, ...args) => setTimeout(func, timeout, ...args),
+    loopExec: (func, timeout = 1000, ...args) => setInterval(func, timeout, ...args),
     autoScroll: function() {
         lazyExec(() => {
             const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
