@@ -267,18 +267,17 @@ const Utils = {
     },
     appendDiv: function (type) {
         return ele => {
-            if (/\/search/i.test(document.URL)) {
+            if(ele){
                 const container = document.createElement("div");
                 container.style.cssText = "max-width: 100px !important; flex-shrink: 0";
                 if (/img/i.test(type))
                     container.innerHTML = `<img src="${ele.poster || ele.src}" style="width: auto; max-height: 100px"/>
                         <span style="position: absolute; top: 0; right: 20px; font-size: 10px !important">${ele.tagName}</span>`;
                 else
-                    container.textContent = ele.textContent.slice(0, 35) + "…";
+                    container.textContent = ele?.textContent?.slice(0, 35) + "…";
                 ele.closest("article")?.append(container);
-                ele.closest("[aria-labelledby]")?.remove();
-            }
-        };
+                ele.closest("div[aria-labelledby]")?.remove();
+            }};
     },
     visitLink: function (ele, func) {
         const arr = "vLinks";
