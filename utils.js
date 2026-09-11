@@ -382,9 +382,9 @@ const Utils = {
     },
     truncText: function (pEle, selector, limit) {
         if (selector)
-            iExec(selector, ele => ele.textContent = ele.textContent.replace(/\s/g, '').slice(0, limit) + "…", pEle);
+            iExec(selector, ele => ele.textContent = ele.textContent.trim().slice(0, limit) + "…", pEle);
         else
-            pEle.textContent = pEle.textContent.replace(/\s/g, '').slice(0, limit) + "…";
+            pEle.textContent = pEle.textContent.trim().slice(0, limit) + "…";
     },
     replaceImg: function (tagName, src, rmSelector) {
         return img => {
