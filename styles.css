@@ -100,8 +100,7 @@ body {
 @media (min-width: 1024px) {
     body, div, table, main, aside, a, img, video {
         box-sizing: border-box;
-        margin-left: 0 !important;
-        max-width: 89vw !important;
+        max-width: 89.64vw !important;
         float: unset !important;
     }
 }
