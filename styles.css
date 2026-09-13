@@ -98,7 +98,11 @@ body {
 }
 
 @media (min-width: 1024px) {
-    body, div, table, main, aside, a, img, video {
+    body {
+        padding-left: 8.8vw;
+    }
+
+    div, table, main, aside, a, img, video {
         box-sizing: border-box;
         max-width: 89.64vw !important;
         float: unset !important;
