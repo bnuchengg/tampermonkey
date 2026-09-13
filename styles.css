@@ -98,16 +98,10 @@ body {
 }
 
 @media (min-width: 1024px) {
-    body {
-        margin-left: 0 !important;
-        padding-left: 9vw;
-        width: unset !important;
-    }
-
-    div, table, main, aside, a, img, video {
+    body, div, table, main, aside, a, img, video {
         box-sizing: border-box;
         margin-left: 0 !important;
-        max-width: 89vw;
+        max-width: 89vw !important;
         float: unset !important;
     }
 }
