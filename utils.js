@@ -190,7 +190,7 @@ const Utils = {
             func(ele);
             return;
         }
-        loadContent(ele, target, postFuncMap[host]);
+        scheduler.prepend(ele, target);
         const timer = loopExec(() => {
             if (pageCache[href]){
                 func(ele);
