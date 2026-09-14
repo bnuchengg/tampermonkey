@@ -309,7 +309,7 @@ const Utils = {
                 return;
             }
             if(!document.querySelector("div.stickynav span.count")){
-                const span = createTxt(`${ unreadCnt }`, "position: absolute; top: 10px; left: 10px; color: purple; scale: 1.5; z-index: 999");
+                const span = createTxt(`${ unreadCnt }`);
                 span.classList.add("count");
                 document.querySelector("div.stickynav")?.prepend(span);
             } else
