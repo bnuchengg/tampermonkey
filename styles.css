@@ -84,7 +84,7 @@ img {
 
 .stickynav .count {
     position: absolute;
-    top: 20px;
+    top: 5px;
     left: 5px;
     scale: 1.3;
     color: purple;
