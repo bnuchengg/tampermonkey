@@ -182,7 +182,7 @@ const Utils = {
     onScroll: () => {
         show(contextMenu, "flex");
         clearTimeout(countDown);
-        countDown = lazyExec(() => hide(contextMenu), 3000);
+        countDown = lazyExec(() => hide(contextMenu), 1989);
     },
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
