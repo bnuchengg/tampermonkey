@@ -73,7 +73,7 @@ class Scheduler {
         if(this.waitingList.filter(e => e!= link && e.href == link.href).length > 0)
         {
             link.remove();
-            return;
+            return false;
         }
         this.remove(link);
         this.destMap[link] = selector;
@@ -81,14 +81,15 @@ class Scheduler {
             this.waitingList.push(link);
         else
             this.waitingList.unshift(link);
+        return true;
     }
 
     append(link, selector) {
-        this.insert(link, selector);
+        return this.insert(link, selector);
     }
 
     prepend(link, selector) {
-        this.insert(link, selector, 0);
+        return this.insert(link, selector, 0);
     }
 
     remove(link) {
@@ -114,9 +115,10 @@ class Scheduler {
         this.cacheNum++;
     }
 
-    rmCache(link){
-        link.classList.remove("cached");
-        delete pageCache[link.href];
+    rmCache(link, flag){
+        link.classList?.remove("cached");
+        if(flag)
+            delete pageCache[link.href];
         this.cacheNum--;
     }
 
@@ -190,13 +192,16 @@ const Utils = {
             func(ele);
             return;
         }
-        scheduler.prepend(ele, target);
-        const timer = loopExec(() => {
-            if (pageCache[href]){
-                func(ele);
-                clearInterval(timer);
-            }
-        });
+        if(scheduler.prepend(ele, target)){
+            scheduler.maxCache++;
+            const timer = loopExec(() => {
+                if (pageCache[href]){
+                    func(ele);
+                    scheduler.maxCache--;
+                    clearInterval(timer);
+                }
+            });
+        }
     },
     mergeLink: function (div) {
         if (div.querySelectorAll("a").length > 1) {
@@ -218,17 +223,14 @@ const Utils = {
     },
     loadContent: function (link, selector, func) {
         const href = link.href;
-        if (pageCache[href]){
-            return;
-        }
-        if(/loading/.test(link.classList))
+        if (pageCache[href] || /loading/.test(link.classList))
             return;
         scheduler.loading(link);
         const iframe = document.createElement("iframe");
-        let timeout = 1000;
+        let timeout = 123;
         iframe.style.cssText = "width: 100%; height: 1px; border: none";
         if (/club.kdslife|news.zhibo8.com/.test(host))
-            timeout = 3500;
+            timeout = 3456;
         iframe.src = href;
         iframe.setAttribute('sandbox', 'allow-same-origin');
         if (/kdslife.com|news.zhibo8.com/.test(host))
