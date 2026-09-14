@@ -196,9 +196,9 @@ const Utils = {
             scheduler.maxCache++;
             const timer = loopExec(() => {
                 if (pageCache[href]){
-                    func(ele);
-                    scheduler.maxCache--;
                     clearInterval(timer);
+                    scheduler.maxCache--;
+                    func(ele);
                 }
             });
         }
@@ -227,7 +227,7 @@ const Utils = {
             return;
         scheduler.loading(link);
         const iframe = document.createElement("iframe");
-        let timeout = 123;
+        let timeout = 1234;
         iframe.style.cssText = "width: 100%; height: 1px; border: none";
         if (/club.kdslife|news.zhibo8.com/.test(host))
             timeout = 3456;
