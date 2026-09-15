@@ -188,19 +188,23 @@ const Utils = {
     },
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
-        if (pageCache[href]){
-            func(ele);
-            return;
-        }
-        if(scheduler.prepend(ele, target)){
+        if (pageCache[href])
+            postFunc();
+        else if(scheduler.prepend(ele, target)){
             scheduler.maxCache++;
             const timer = loopExec(() => {
                 if (pageCache[href]){
                     clearInterval(timer);
                     scheduler.maxCache--;
-                    func(ele);
+                    postFunc();
                 }
             });
+        }
+
+        function postFunc(){
+            func(ele);
+            if(/cached/.test(ele.classList))
+                scheduler.rmCache(ele);
         }
     },
     mergeLink: function (div) {
@@ -245,6 +249,7 @@ const Utils = {
             iframe.onload = null;
             postLoaded();
         }, 5000);
+
         function postLoaded(){
             if (func)
                 eval(func);
