@@ -393,6 +393,7 @@ const Utils = {
         else
             pEle.textContent = pEle.textContent.trim().slice(0, limit) + "…";
     },
+    txtLength: ele => ele?.textContent?.trim().replace(/\s/g,'').length ?? 0,
     replaceImg: function (tagName, src, rmSelector) {
         return img => {
             const node = createImg(img, tagName, src);
