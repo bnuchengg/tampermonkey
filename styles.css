@@ -93,6 +93,10 @@ body {
     padding-bottom: unset !important;
 }
 
+.simple-translate-result-wrapper {
+    width: fit-content !important;
+}
+
 @media (max-width: 1024px) {
     body, div:not(.stickynav,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video, iframe {
         box-sizing: border-box;
