@@ -107,6 +107,10 @@ body {
         float: unset !important;
         overflow: unset !important;
     }
+
+    .section-nav__list {
+        gap: unset;
+    }
 }
 
 @media (min-width: 1024px) {
