@@ -112,7 +112,7 @@ body {
 @media (min-width: 1024px) {
     body {
         margin: 0 !important;
-        padding-left: calc((100vw - 1024px)/4);
+        padding-left: calc((100vw - 1024px)/3);
     }
 
     div, table, main, aside, a, img, video {
