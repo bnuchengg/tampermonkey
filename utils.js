@@ -435,7 +435,7 @@ const Utils = {
             node.style.cssText = cssText;
         return node;
     },
-    countEmoji: str => str.length - [...str].length,
+    countEmoji: ele => ele.querySelectorAll("img[src^='https://abs.twimg.com/emoji']").length,
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
