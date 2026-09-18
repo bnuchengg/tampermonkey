@@ -435,7 +435,7 @@ const Utils = {
             node.style.cssText = cssText;
         return node;
     },
-    countEmoji: ele => ele.querySelectorAll("img[src^='https://abs.twimg.com/emoji']").length || (ele.textContent.length - [...ele.textContent].length),
+    countEmoji: ele => ele.querySelectorAll("img[src^='https://abs.twimg.com/emoji']").length || (ele.textContent.replace(/[\s\u200B-\u200D\u2060\uFEFF]/g,'').length - [...ele.textContent.replace(/[\s\u200B-\u200D\u2060\uFEFF]/g,'')].length),
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
                 if (document.querySelectorAll(selector).length > 0) {
