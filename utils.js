@@ -519,7 +519,7 @@ const Utils = {
     autoScroll: function() {
         lazyExec(() => {
             const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-            if(imgs.length > 10 && confirm(`Auto scroll ${imgs.length} images?`)){
+            if(imgs.length > 10){
                 let index = 0;
                 this.isScrollDown = true;
                 const timer = loopExec(() => {
