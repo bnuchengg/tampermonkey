@@ -89,8 +89,16 @@ img {
     z-index: 999;
 }
 
+.underline {
+    text-decoration: underline dashed lime;
+}
+
 body {
     padding-bottom: unset !important;
+}
+
+th {
+    white-space: nowrap;
 }
 
 .simple-translate-result-wrapper {
@@ -116,7 +124,7 @@ body {
 @media (min-width: 1024px) {
     body {
         margin: 0 !important;
-        padding-left: calc((100vw - 1024px)/3);
+        padding-left: calc((100vw - 1024px)/2);
     }
 
     div, table, main, aside, a, img, video {
