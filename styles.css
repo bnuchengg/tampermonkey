@@ -93,6 +93,12 @@ img {
     text-decoration: underline dashed lime;
 }
 
+.subtitle {
+    display: inline-block;
+    border: 2px dashed maroon;
+    margin-bottom: 5px !important;
+}
+
 body {
     padding-bottom: unset !important;
 }
