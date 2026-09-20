@@ -148,6 +148,7 @@ const Utils = {
         meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
         document.head.appendChild(meta);
         window.pageCache = {};
+        window.scannedElements = {};
 
         if (!/^x.com|google.com|youtube.com/i.test(host))
             iCss({"img,video": img => img.onclick = moveImg}, true);
@@ -394,6 +395,7 @@ const Utils = {
             pEle.textContent = pEle.textContent.trim().slice(0, limit) + "…";
     },
     txtLength: ele => ele?.textContent?.trim().replace(/\s/g,'').length ?? 0,
+    iRandom: num => Math.random() < num,
     replaceImg: function (tagName, src, rmSelector) {
         return img => {
             const node = createImg(img, tagName, src);
@@ -461,7 +463,12 @@ const Utils = {
             }
         );
     },
-    iExec: (selector, func, parent) => (parent ?? document).querySelectorAll(selector).forEach(typeof func == "string" ? new Function("ele", func) : func),
+    iExec: (selector, func, parent) => Array.from((parent ?? document).querySelectorAll(selector))
+        .filter(ele => !scannedElements[selector]?.includes(ele))
+        .map(ele => {
+            scannedElements[selector]? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
+            return ele; })
+        .forEach(typeof func == "string" ? new Function("ele", func) : func),
     appendCss: function (cssText) {
         return ele => {
             const style = ele.style || ele.target.style;
