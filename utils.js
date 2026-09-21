@@ -149,11 +149,6 @@ const Utils = {
         document.head.appendChild(meta);
         window.pageCache = {};
         window.scannedElements = {};
-
-        if (!/^x.com|google.com|youtube.com/i.test(host))
-            iCss({"img,video": img => img.onclick = moveImg}, true);
-        autoScroll();
-
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
         contextMenu.ondragend = (event) => contextMenu.style.cssText += `top: ${event.clientY}px`;
@@ -178,6 +173,7 @@ const Utils = {
             scheduler.run();
             return exec;
         })());
+        !/(\/|home)$/i.test(new URL(document.URL).pathname) ? autoScroll() : null;
     },
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
@@ -527,14 +523,16 @@ const Utils = {
     loopExec: (func, timeout = 1000, ...args) => setInterval(func, timeout, ...args),
     autoScroll: function() {
         lazyExec(() => {
-            const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-            if(!/\/$/.test(new URL(document.URL).pathname) && imgs.length > 10){
+            if(Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length > 10){
                 let index = 0;
                 this.isScrollDown = true;
                 const timer = loopExec(() => {
+                    const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
                     imgs[index++].click();
-                    if(index == imgs.length)
+                    if(index == imgs.length){
                         clearInterval(timer);
+                        lazyExec(resetPos);
+                    }
                 });
             }
         }, 3000);
