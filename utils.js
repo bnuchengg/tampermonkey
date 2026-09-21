@@ -184,7 +184,7 @@ const Utils = {
     },
     setScroller: ele => {
         window.scroller = ele;
-        scroller.onscroll = onScroll;
+        (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
     },
     lazyLoad: function (ele, target, func) {
         const href = ele.href;
