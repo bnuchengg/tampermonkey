@@ -487,11 +487,11 @@ const Utils = {
             return;
         }
         const timer = loopExec(() => {
-            if(Date.now() - this.lastDelTime >= 640){
+            if(Date.now() - this.lastDelTime >= 250){
                 this.lastDelTime = Date.now();
                 clearInterval(timer)
                 arr.forEach(ele => ele?.remove());
-            }}, 89 + 100*Math.random());
+            }}, 89.64 + 100*Math.random());
     },
     sleep : ms => new Promise(r => setTimeout(r, ms)),
     casLastTime: function (oldValue){
@@ -533,10 +533,8 @@ const Utils = {
                 this.isScrollDown = true;
                 const timer = loopExec(() => {
                     imgs[index++].click();
-                    if(index == imgs.length){
+                    if(index == imgs.length)
                         clearInterval(timer);
-                        lazyExec(resetPos);
-                    }
                 });
             }
         }, 3000);
