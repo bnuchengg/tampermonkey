@@ -416,7 +416,7 @@ const Utils = {
                 let maxHeight = "360px";
                 if (/\/p\/\d+/.test(document.URL))
                     maxHeight = "80vh";
-                node.style.cssText += `max-height: ${maxHeight}; max-width: 100%`;
+                appendCss(`max-height: ${maxHeight}; max-width: 100%`)(node);
             }
             return node;
         }
@@ -425,8 +425,7 @@ const Utils = {
         const link = document.createElement("a");
         link.href = href;
         link.textContent = text;
-        if(cssText)
-            link.style.cssText = cssText;
+        cssText ? link.style.cssText = cssText : null;
         return link;
     },
     createTxt: function(text,cssText) {
@@ -439,6 +438,16 @@ const Utils = {
     countEmoji: ele => ele.querySelectorAll("img[src^='https://abs.twimg.com/emoji']").length || (ele.textContent.replace(/[\s\u200B-\u200D\u2060\uFEFF\uFE0F]/g,'').length - [...ele.textContent.replace(/[\s\u200B-\u200D\u2060\uFEFF\uFE0F]/g,'')].length),
     iCss: function (actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
+            if (document.querySelectorAll(selector).length > 0) {
+                try {
+                    iExec(selector, func);
+                } catch (e) {
+                    console.error(e);
+                }
+                if (!infiniteFlag)
+                    return;
+            }
+            const timer = loopExec(() => {
                 if (document.querySelectorAll(selector).length > 0) {
                     try {
                         iExec(selector, func);
@@ -446,27 +455,17 @@ const Utils = {
                         console.error(e);
                     }
                     if (!infiniteFlag)
-                        return;
+                        clearInterval(timer);
                 }
-                const timer = loopExec(() => {
-                    if (document.querySelectorAll(selector).length > 0) {
-                        try {
-                            iExec(selector, func);
-                        } catch (e) {
-                            console.error(e);
-                        }
-                        if (!infiniteFlag)
-                            clearInterval(timer);
-                    }
-                });
-            }
-        );
+            });
+        });
     },
     iExec: (selector, func, parent) => Array.from((parent ?? document).querySelectorAll(selector))
-        .filter(ele => !scannedElements[selector]?.includes(ele))
-        .map(ele => {
+        .filter(ele => {
+            if(scannedElements[selector]?.includes(ele))
+                return false;
             scannedElements[selector]? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
-            return ele; })
+            return true; })
         .forEach(typeof func == "string" ? new Function("ele", func) : func),
     appendCss: function (cssText) {
         return ele => {

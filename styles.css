@@ -27,6 +27,7 @@
 img {
     max-height: 360px;
     width: unset !important;
+    pointer-events: auto;
 }
 
 .zoomed {
