@@ -487,11 +487,11 @@ const Utils = {
             return;
         }
         const timer = loopExec(() => {
-            if(Date.now() - this.lastDelTime >= 1000){
+            if(Date.now() - this.lastDelTime >= 640){
                 this.lastDelTime = Date.now();
                 clearInterval(timer)
                 arr.forEach(ele => ele?.remove());
-            }}, 1000 + 100*Math.random());
+            }}, 89 + 100*Math.random());
     },
     sleep : ms => new Promise(r => setTimeout(r, ms)),
     casLastTime: function (oldValue){
