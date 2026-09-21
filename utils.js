@@ -165,6 +165,8 @@ const Utils = {
         contextMenu.appendChild(liRefresh);
         contextMenu.classList.add("contextmenu");
         document.body.append(contextMenu);
+        window.countDown = lazyExec(() => hide(contextMenu), 1989.64);
+
         window.scheduler = new Scheduler(3,5);
         loopExec((function exec() {
             scheduler.run();
@@ -177,8 +179,8 @@ const Utils = {
     hide: (ele) => ele.style.display = 'none',
     onScroll: () => {
         show(contextMenu, "flex");
-        window.countDown ? clearTimeout(countDown) : null;
-        window.countDown = lazyExec(() => hide(contextMenu), 1989.64);
+        clearTimeout(countDown);
+        countDown = lazyExec(() => hide(contextMenu), 1989.64);
     },
     setScroller: ele => {
         window.scroller = ele;
