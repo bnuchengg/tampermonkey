@@ -157,9 +157,9 @@ const Utils = {
             contextMenu.style.cssText += `top: ${event.touches[0].clientY}px`;
         };
         const liCssText = "text-align: center; cursor: pointer; font-size: 42px !important";
-        window.liBottom = createNode("li", liCssText, "bottom");
-        window.liTop = createNode("li", liCssText, "top");
-        window.liRefresh = createNode("li", liCssText, "refresh");
+        window.liBottom = crNode("li", liCssText, "bottom");
+        window.liTop = crNode("li", liCssText, "top");
+        window.liRefresh = crNode("li", liCssText, "refresh");
         liRefresh.style.cssText += "font-size: 36px !important";
         contextMenu.appendChild(liBottom);
         contextMenu.appendChild(liRefresh);
@@ -172,6 +172,13 @@ const Utils = {
             scheduler.run();
             return exec;
         })());
+
+        window.rmList = [];
+        loopExec((function exec(){
+            rmList.shift()?.remove();
+            return exec;
+        })(), 404);
+
         !/(\/|home)$/i.test(new URL(document.URL).pathname) ? autoScroll() : null;
     },
     emptyFunc: () => {},
@@ -223,7 +230,7 @@ const Utils = {
         while (!ret.key) {
             ret = ret.return;
         }
-        return createLink(`/detail/${ret.key}`, ele.textContent);
+        return crLink(`/detail/${ret.key}`, ele.textContent);
     },
     loadContent: function (link, selector, func) {
         const href = link.href;
@@ -314,14 +321,14 @@ const Utils = {
                 return;
             }
             if(!document.querySelector("div.stickynav span.count")){
-                const span = createTxt(`${ unreadCnt }`);
+                const span = crTxt(`${ unreadCnt }`);
                 span.classList.add("count");
                 document.querySelector("div.stickynav")?.prepend(span);
             } else
                 document.querySelector("div.stickynav span.count").textContent = `${ unreadCnt }`;
         }
     },
-    createNode: function (tagName, cssText, action) {
+    crNode: function (tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬", "refresh": "🔄️"};
         const node = document.createElement(tagName);
         node.textContent = map[action];
@@ -380,7 +387,7 @@ const Utils = {
         }
         handlerMap[action]();
     },
-    replaceHTML: function (selector) {
+    rpHTML: function (selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
     },
     truncHref: function (href) {
@@ -395,18 +402,18 @@ const Utils = {
     },
     txtLength: ele => ele?.textContent?.trim().replace(/\s/g,'').length ?? 0,
     iRandom: num => Math.random() < num,
-    replaceImg: function (tagName, src, rmSelector) {
+    rpImg: function (tagName, src, rmSelector) {
         return img => {
-            const node = createImg(img, tagName, src);
+            const node = crImg(img, tagName, src);
             if (rmSelector)
                 img = img.closest(rmSelector) || img.parentElement;
             img.after(node);
             img.remove();
         };
     },
-    createImg: function (img, tagName, src) {
+    crImg: function (img, tagName, src) {
         if (/a/i.test(tagName))
-            return createLink(img.href, img.textContent, "text-decoration: none");
+            return crLink(img.href, img.textContent, "text-decoration: none");
         else {
             const node = document.createElement(tagName);
             node.src = img.getAttribute(src) || img.src;
@@ -421,14 +428,14 @@ const Utils = {
             return node;
         }
     },
-    createLink: function(href, text, cssText) {
+    crLink: function(href, text, cssText) {
         const link = document.createElement("a");
         link.href = href;
         link.textContent = text;
         cssText ? link.style.cssText = cssText : null;
         return link;
     },
-    createTxt: function(text,cssText) {
+    crTxt: function(text,cssText) {
         const node = document.createElement("span");
         node.textContent = text;
         if(cssText)
@@ -479,18 +486,7 @@ const Utils = {
                 ele?.remove();
         };
     },
-    rmElements: function (arr, instantFlag) {
-        if(instantFlag){
-            arr.forEach(ele => ele?.remove());
-            return;
-        }
-        const timer = loopExec(() => {
-            if(Date.now() - this.lastDelTime >= 250){
-                this.lastDelTime = Date.now();
-                clearInterval(timer)
-                arr.forEach(ele => ele?.remove());
-            }}, 89.64 + 100*Math.random());
-    },
+    rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : rmList.push(...arr),
     sleep : ms => new Promise(r => setTimeout(r, ms)),
     casLastTime: function (oldValue){
         if(this.lastDelTime == oldValue){
