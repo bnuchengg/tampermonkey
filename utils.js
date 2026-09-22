@@ -1,62 +1,38 @@
 const ss = {
     set(key, value) {
-        if (typeof value == "object")
-            value = JSON.stringify(value);
+        typeof value == "object" ? value = JSON.stringify(value) : null;
         localStorage.setItem(key, value);
     },
     hashSet(key, field, value) {
         const map = this.getJson(key);
-        if (value)
-            map[field] = value;
-        else
-            delete map[field];
+        value ? map[field] = value : delete map[field];
         this.set(key, map);
     },
-    hashRm(key, field) {
-        this.hashSet(key, field, null);
-    },
-    hashGet(key, field) {
-        return this.getJson(key)[field];
-    },
+    hashRm: (key, field) => ss.hashSet(key, field, null),
+    hashGet: (key, field) => ss.getJson(key)[field],
     add(arr, item) {
         const _arr = this.getArray(arr);
-        if(_arr.length >= 1024)
-            _arr.splice(0, 256);
-        if (!_arr.includes(item))
-            _arr.push(item);
+        _arr.length > 1024 ? _arr.splice(0, 256) : null;
+        !_arr.includes(item) ? _arr.push(item) : null;
         this.set(arr, _arr);
     },
-    arrayRm(arr, item) {
-        let _arr = this.getArray(arr);
-        _arr = _arr.filter(item => item != item);
-        this.set(arr, _arr);
-    },
-    contains(arr, item) {
-        return this.getArray(arr).includes(item);
-    },
+    arrayRm: (arr, item) => ss.set(arr, ss.getArray(arr).filter(item => item != item)),
+    contains: (arr, item) => ss.getArray(arr).includes(item),
     get(key) {
         const item = localStorage.getItem(key);
         return item ? JSON.parse(item) : null;
     },
     getJson(key) {
-        if (!this.get(key))
-            this.set(key, {});
+        !this.get(key) ? this.set(key, {}) : null;
         return this.get(key);
     },
     getArray(key) {
-        if (!this.get(key))
-            this.set(key, []);
+        !this.get(key) ? this.set(key, []) : null;
         return this.get(key);
     },
-    size(key) {
-        return localStorage.getItem(key)?.length ?? 0;
-    },
-    remove(key) {
-        localStorage.removeItem(key);
-    },
-    clear() {
-        localStorage.clear();
-    }
+    size: key => localStorage.getItem(key)?.length ?? 0,
+    remove: key => localStorage.removeItem(key),
+    clear: () => localStorage.clear()
 }
 
 class Scheduler {
@@ -133,15 +109,6 @@ class Scheduler {
 }
 
 const Utils = {
-    isScrollDown: true,
-    iframeCnt: 0,
-    lastDelTime: 0,
-    observer: new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting && !entry.target.paused && entry.target.controls)
-                entry.target.pause();
-        });
-    }, {threshold: 0.5}),
     init: function () {
         const meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -149,6 +116,8 @@ const Utils = {
         document.head.appendChild(meta);
         window.pageCache = {};
         window.scannedElements = {};
+        window.isScrollDown = true;
+
         window.contextMenu = document.createElement('ul');
         contextMenu.draggable = true;
         contextMenu.ondragend = (event) => contextMenu.style.cssText += `top: ${event.clientY}px`;
@@ -488,13 +457,6 @@ const Utils = {
     },
     rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : rmList.push(...arr),
     sleep : ms => new Promise(r => setTimeout(r, ms)),
-    casLastTime: function (oldValue){
-        if(this.lastDelTime == oldValue){
-            this.lastDelTime = Date.now();
-            return true;
-        }
-        return false;
-    },
     html2Element: function (htmlString) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlString, 'text/html');
