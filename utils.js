@@ -148,7 +148,7 @@ const Utils = {
             return exec;
         })(), 404);
 
-        !/(\/|home)$/i.test(new URL(document.URL).pathname) ? autoScroll() : null;
+        !/(\/|home|results)$/i.test(new URL(document.URL).pathname) ? autoScroll() : null;
     },
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
@@ -451,7 +451,7 @@ const Utils = {
     },
     rmElement: function (condition) {
         return ele => {
-            if (!condition || !/reddit|^x.com/i.test(host) && eval(condition))
+            if (!condition || !/youtube|reddit|^x.com/i.test(host) && eval(condition))
                 ele?.remove();
         };
     },
