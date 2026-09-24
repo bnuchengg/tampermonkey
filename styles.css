@@ -122,7 +122,7 @@ th {
     width: fit-content !important;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1080px) {
     body, div:not(.stickynav,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video, iframe {
         box-sizing: border-box;
         max-width: 100% !important;
@@ -138,7 +138,7 @@ th {
     }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1081px) {
     body {
         margin: 0 !important;
         padding-left: calc((100vw - 1024px)/2);
