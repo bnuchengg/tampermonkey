@@ -267,7 +267,7 @@ const Utils = {
         const link = ele.href ? ele.href : ele.textContent;
         if (ss.contains(arr, link)){
             ele.classList.add("visited");
-            refreshUnreadCnt();
+            rfUnreadCnt();
             if(func){
                 const timer = loopExec(() => {
                     if (!/loading/.test(ele.classList)) {
@@ -283,19 +283,22 @@ const Utils = {
                 visitLink(ele, func);
             };
 
-        function refreshUnreadCnt(){
+        function rfUnreadCnt(){
             const unreadCnt = document.querySelectorAll("div.stickynav a:not(.visited)").length;
-            if(unreadCnt < 10){
-                document.querySelector("div.stickynav span.count")?.remove();
-                return;
-            }
             if(!document.querySelector("div.stickynav span.count")){
                 const span = crTxt(`${ unreadCnt }`);
                 span.classList.add("count");
                 document.querySelector("div.stickynav")?.prepend(span);
             } else
                 document.querySelector("div.stickynav span.count").textContent = `${ unreadCnt }`;
+            const toast = document.querySelector("div.stickynav span.count");
+            toggleClass(toast,'big',"small");
+            lazyExec(() => toggleClass(toast,'small',"big"));
         }
+    },
+    toggleClass: (ele, cls1, cls2) => {
+        ele.classList.add(cls1);
+        ele.classList.remove(cls2);
     },
     crNode: function (tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬", "refresh": "🔄️"};
