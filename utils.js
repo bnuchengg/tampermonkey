@@ -148,7 +148,7 @@ const Utils = {
             return exec;
         })(), 404);
 
-        !/(\/|home|results)$/i.test(new URL(document.URL).pathname) ? autoScroll() : null;
+        !(/\/$/.test(new URL(document.URL).pathname) || /youtube|^x.com/i.test(host)) ? autoScroll() : null;
     },
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
