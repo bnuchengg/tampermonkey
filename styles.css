@@ -123,7 +123,7 @@ th {
 }
 
 @media (max-width: 1080px) {
-    body, div:not(.stickynav,.styled-scrollbar,.image-card-wrapper), table, main, aside, section, a, img, video, iframe {
+    .common-container {
         box-sizing: border-box;
         max-width: 100% !important;
         min-width: unset !important;
@@ -144,7 +144,7 @@ th {
         padding-left: calc((100vw - 1024px)/2);
     }
 
-    div, table, main, aside, a, img, video {
+    .common-container {
         box-sizing: border-box;
         max-width: 89.64vw !important;
         float: unset !important;
