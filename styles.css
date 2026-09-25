@@ -131,7 +131,6 @@ th {
         box-sizing: border-box;
         max-width: 100% !important;
         min-width: unset !important;
-        width: unset !important;
         margin: unset !important;
         overflow-wrap: break-word;
         float: unset !important;
