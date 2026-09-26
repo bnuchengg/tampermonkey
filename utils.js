@@ -249,6 +249,8 @@ const Utils = {
         }
     },
     appDiv: function (ele, type) {
+        if(!ele)
+            return;
         const container = document.createElement("div");
         container.style.cssText = "max-width: 100px !important; flex-shrink: 0";
         if (/img/i.test(type))
