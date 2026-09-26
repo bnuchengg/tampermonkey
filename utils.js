@@ -148,6 +148,7 @@ const Utils = {
             return exec;
         })(), 404);
 
+        window.scrollTimer = null;
         !(/\/$/.test(new URL(document.URL).pathname) || /youtube|^x.com/i.test(host)) ? autoScroll() : null;
     },
     emptyFunc: () => {},
@@ -364,6 +365,7 @@ const Utils = {
             },
             "back": () => window.history.back()
         }
+        clearInterval(scrollTimer);
         handlerMap[action]();
     },
     rpHTML(selector) {
@@ -498,11 +500,11 @@ const Utils = {
             if(Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length > 10){
                 let index = 0;
                 this.isScrollDown = true;
-                const timer = loopExec(() => {
+                window.scrollTimer = loopExec(() => {
                     const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
                     imgs[index++].click();
                     if(index == imgs.length){
-                        clearInterval(timer);
+                        clearInterval(scrollTimer);
                         lazyExec(resetPos);
                     }
                 });

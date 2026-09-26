@@ -136,6 +136,10 @@ th {
         float: unset !important;
         overflow: unset !important;
     }
+
+    table {
+        table-layout: fixed;
+    }
 }
 
 @media (min-width: 1081px) {
