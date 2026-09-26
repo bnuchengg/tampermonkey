@@ -450,7 +450,7 @@ const Utils = {
         .filter(ele => {
             if(scannedElements[selector]?.includes(ele))
                 return false;
-            if(!/reddit/.test(host))
+            if(!/reddit|^x.com/.test(host))
                 scannedElements[selector] ? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
             return true; })
         .forEach(typeof func == "string" ? new Function("ele", func) : func),
