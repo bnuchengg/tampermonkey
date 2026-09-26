@@ -109,7 +109,7 @@ class Scheduler {
 }
 
 const Utils = {
-    init: function () {
+    init() {
         const meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
@@ -162,7 +162,7 @@ const Utils = {
         window.scroller = ele;
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
     },
-    lazyLoad: function (ele, target, func) {
+    lazyLoad(ele, target, func) {
         const href = ele.href;
         if (pageCache[href])
             postFunc();
@@ -183,7 +183,7 @@ const Utils = {
                 scheduler.rmCache(ele);
         }
     },
-    mergeLink: function (div) {
+    mergeLink(div) {
         if (div.querySelectorAll("a").length > 1) {
             const img = div.querySelector("a img");
             const parent = div == img.closest("div") ? img.closest("a") : img.closest("div");
@@ -193,7 +193,7 @@ const Utils = {
         }
         return div;
     },
-    convert2Link: function (ele) {
+    convert2Link(ele) {
         const reactKey = Object.keys(ele).filter(key => /__reactFiber/.test(key))[0];
         let ret = ele[reactKey].return;
         while (!ret.key) {
@@ -201,7 +201,7 @@ const Utils = {
         }
         return crLink(`/detail/${ret.key}`, ele.textContent);
     },
-    loadContent: function (link, selector, func) {
+    loadContent(link, selector, func) {
         const href = link.href;
         if (pageCache[href] || /loading/.test(link.classList))
             return;
@@ -248,7 +248,7 @@ const Utils = {
             }, timeout);
         }
     },
-    appDiv: function (ele, type) {
+    appDiv(ele, type) {
         if(!ele)
             return;
         const container = document.createElement("div");
@@ -269,7 +269,7 @@ const Utils = {
             ele.remove();
         }
     },
-    visitLink: function (ele, func) {
+    visitLink(ele, func) {
         const arr = "vLinks";
         const link = ele.href ? ele.href : ele.textContent;
         if (ss.contains(arr, link)){
@@ -307,7 +307,7 @@ const Utils = {
         ele.classList.add(cls1);
         ele.classList.remove(cls2);
     },
-    crNode: function (tagName, cssText, action) {
+    crNode(tagName, cssText, action) {
         const map = {"top": "⏫", "bottom": "⏬", "refresh": "🔄️"};
         const node = document.createElement(tagName);
         node.textContent = map[action];
@@ -315,7 +315,7 @@ const Utils = {
         node.onclick = () => menuAction(action);
         return node;
     },
-    hideTweet: function (ele) {
+    hideTweet(ele) {
         const content = ele.closest("article");
         if (!/processed/.test(ele.classList)) {
             ele.classList.add("processed");
@@ -331,7 +331,7 @@ const Utils = {
             content.style.cssText += "display: none";
         }
     },
-    moveImg: function (e) {
+    moveImg(e) {
         const img = e.target;
         if (img.classList.contains("video_play") || img.getBoundingClientRect().height < 150)
             return;
@@ -345,7 +345,7 @@ const Utils = {
             zoomNext(img);
         lazyExec(scroll2Pos,150, { top: calcScrollPos(img, firstClick) });
     },
-    calcScrollPos: function (img, firstClick) {
+    calcScrollPos(img, firstClick) {
         const scrollTop = scroller.scrollTop;
         const fixedHeight = document.querySelector(".stickynav")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
@@ -353,7 +353,7 @@ const Utils = {
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
         return this.isScrollDown ? scrollTop + Math.min(rect.bottom, window.innerHeight) - fixedHeight : scrollTop - Math.min(window.innerHeight - rect.top, window.innerHeight);
     },
-    menuAction: (action) => {
+    menuAction: action => {
         const handlerMap = {
             "top": () => scroll2Pos({ top: 0 }),
             "bottom": () => scroll2Pos({ top: bottomMap[host] ? bottomMap[host]() : scroller.scrollTopMax }),
@@ -366,14 +366,14 @@ const Utils = {
         }
         handlerMap[action]();
     },
-    rpHTML: function (selector) {
+    rpHTML(selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
     },
-    truncHref: function (href) {
+    truncHref(href) {
         const url = new URL(href);
         return url.pathname + url.hash + url.search;
     },
-    truncText: function (pEle, selector, limit) {
+    truncText(pEle, selector, limit) {
         if (selector)
             iExec(selector, ele => ele.textContent = ele.textContent.trim().slice(0, limit) + "…", pEle);
         else
@@ -381,7 +381,7 @@ const Utils = {
     },
     txtLength: ele => ele?.textContent?.trim().replace(/\s/g,'').length ?? 0,
     iRandom: num => Math.random() < num,
-    rpImg: function (tagName, src, rmSelector) {
+    rpImg(tagName, src, rmSelector) {
         return img => {
             const node = crImg(img, tagName, src);
             if (rmSelector)
@@ -390,7 +390,7 @@ const Utils = {
             img.remove();
         };
     },
-    crImg: function (img, tagName, src) {
+    crImg(img, tagName, src) {
         if (/a/i.test(tagName))
             return crLink(img.href, img.textContent, "text-decoration: none");
         else {
@@ -407,14 +407,14 @@ const Utils = {
             return node;
         }
     },
-    crLink: function(href, text, cssText) {
+    crLink(href, text, cssText) {
         const link = document.createElement("a");
         link.href = href;
         link.textContent = text;
         cssText ? link.style.cssText = cssText : null;
         return link;
     },
-    crTxt: function(text,cssText) {
+    crTxt(text,cssText) {
         const node = document.createElement("span");
         node.textContent = text;
         if(cssText)
@@ -422,7 +422,7 @@ const Utils = {
         return node;
     },
     countEmoji: ele => ele.querySelectorAll("img[src^='https://abs.twimg.com/emoji']").length || (ele.textContent.replace(/[\s\u200B-\u200D\u2060\uFEFF\uFE0F]/g,'').length - [...ele.textContent.replace(/[\s\u200B-\u200D\u2060\uFEFF\uFE0F]/g,'')].length),
-    iCss: function (actionMap, infiniteFlag) {
+    iCss(actionMap, infiniteFlag) {
         Object.entries(actionMap).forEach(([selector, func]) => {
             if (document.querySelectorAll(selector).length > 0) {
                 try {
@@ -446,7 +446,7 @@ const Utils = {
             });
         });
     },
-    iExec: function (selector, func, parent) {
+    iExec(selector, func, parent) {
         Array.from((parent ?? document).querySelectorAll(selector))
             .filter(ele => /reddit|^x.com/.test(host) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
@@ -455,13 +455,13 @@ const Utils = {
             return true;
         }
     },
-    appendCss: function (cssText) {
+    appendCss(cssText) {
         return ele => {
             const style = ele.style || ele.target.style;
             style ? style.cssText += cssText : null;
         };
     },
-    rmElement: function (condition) {
+    rmElement(condition) {
         return ele => {
             if (!condition || !/youtube|reddit|^x.com/i.test(host) && eval(condition))
                 ele?.remove();
@@ -469,20 +469,20 @@ const Utils = {
     },
     rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : rmList.push(...arr),
     sleep : ms => new Promise(r => setTimeout(r, ms)),
-    html2Element: function (htmlString) {
+    html2Element(htmlString) {
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlString, 'text/html');
         return doc.body.firstElementChild;
     },
-    resetPos: function () {
+    resetPos() {
         scroll2Pos({ top: 0 });
         scroll2Pos({ left : 0 },document.querySelector(".stickynav"));
     },
-    toggleButton: function () {
+    toggleButton() {
         this.isScrollDown = !this.isScrollDown;
         this.isScrollDown ? contextMenu.replaceChild(liBottom, liTop) : contextMenu.replaceChild(liTop, liBottom);
     },
-    zoomNext: function (img) {
+    zoomNext(img) {
         const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
         const index = Number(imgs.map((item, index) => {
             item.setAttribute("data-index", index);
@@ -493,7 +493,7 @@ const Utils = {
     },
     lazyExec: (func, timeout = 1000, ...args) => setTimeout(func, timeout, ...args),
     loopExec: (func, timeout = 1000, ...args) => setInterval(func, timeout, ...args),
-    autoScroll: function() {
+    autoScroll() {
         lazyExec(() => {
             if(Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length > 10){
                 let index = 0;
@@ -510,7 +510,7 @@ const Utils = {
         }, 3000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
-    scroll2Pos: function (option, container) {
+    scroll2Pos(option, container) {
         option.behavior = "smooth";
         (container ?? scroller).scrollTo(option);
     }
