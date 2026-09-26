@@ -221,7 +221,7 @@ const Utils = {
         };
         document.body.append(iframe);
         const timer = lazyExec(() => {
-            console.log(`${iframe.src} load overtime...`)
+            console.log(`${iframe.src} load overtime…`)
             iframe.onload = null;
             postLoaded();
         }, 5000);
@@ -248,19 +248,22 @@ const Utils = {
             }, timeout);
         }
     },
-    rpDiv: function (type) {
-        return ele => {
-            if(ele){
-                const container = document.createElement("div");
-                container.style.cssText = "max-width: 100px !important; flex-shrink: 0";
-                if (/img/i.test(type))
-                    container.innerHTML = `<img src="${ele.poster || ele.src}" style="width: auto; max-height: 100px"/>
+    appDiv: function (ele, type) {
+        const container = document.createElement("div");
+        container.style.cssText = "max-width: 100px !important; flex-shrink: 0";
+        if (/img/i.test(type))
+            container.innerHTML = `<img src="${ele.poster || ele.src}" style="width: auto; max-height: 100px"/>
                         <span style="position: absolute; top: 0; right: 20px; font-size: 10px !important">${ele.tagName}</span>`;
-                else
-                    container.textContent = ele?.textContent?.slice(0, 35) + "…";
-                ele.closest("article")?.append(container);
-                ele.closest("div[aria-labelledby]")?.remove();
-            }};
+        else
+            container.textContent = ele?.textContent?.slice(0, 35) + "…";
+        ele.closest("article")?.append(container);
+        ele.closest("div[aria-labelledby]")?.remove();
+    },
+    rpElement: (ele, selector, func) => {
+        const div = document.createElement("div");
+        iExec(selector, ele => func(ele, div), ele);
+        ele.after(div);
+        ele.remove();
     },
     visitLink: function (ele, func) {
         const arr = "vLinks";
