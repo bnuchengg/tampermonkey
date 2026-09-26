@@ -248,7 +248,7 @@ const Utils = {
             }, timeout);
         }
     },
-    appendDiv: function (type) {
+    rpDiv: function (type) {
         return ele => {
             if(ele){
                 const container = document.createElement("div");
