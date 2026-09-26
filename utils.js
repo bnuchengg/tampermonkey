@@ -263,9 +263,11 @@ const Utils = {
     },
     rpElement: (ele, selector, func) => {
         const div = document.createElement("div");
-        iExec(selector, ele => func(ele, div), ele);
-        ele.after(div);
-        ele.remove();
+        if(ele.querySelector(selector)){
+            iExec(selector, ele => func(ele, div), ele);
+            ele.after(div);
+            ele.remove();
+        }
     },
     visitLink: function (ele, func) {
         const arr = "vLinks";
@@ -448,7 +450,8 @@ const Utils = {
         .filter(ele => {
             if(scannedElements[selector]?.includes(ele))
                 return false;
-            scannedElements[selector]? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
+            if(!/reddit/.test(host))
+                scannedElements[selector] ? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
             return true; })
         .forEach(typeof func == "string" ? new Function("ele", func) : func),
     appendCss: function (cssText) {
