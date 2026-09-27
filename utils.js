@@ -148,8 +148,6 @@ const Utils = {
             return exec;
         })(), 404);
 
-        window.recommendList = [];
-
         window.scrollTimer = null;
         !(/\/$/.test(new URL(document.URL).pathname) || /youtube|^x.com/i.test(host)) ? autoScroll() : null;
     },
@@ -471,6 +469,7 @@ const Utils = {
                 ele?.remove();
         };
     },
+    getURLParam: (href, param) => new URLSearchParams(new URL(href).search).get(param),
     rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : rmList.push(...arr),
     sleep : ms => new Promise(r => setTimeout(r, ms)),
     html2Element(htmlString) {
