@@ -148,6 +148,8 @@ const Utils = {
             return exec;
         })(), 404);
 
+        window.recommendList = [];
+
         window.scrollTimer = null;
         !(/\/$/.test(new URL(document.URL).pathname) || /youtube|^x.com/i.test(host)) ? autoScroll() : null;
     },
