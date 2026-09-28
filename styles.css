@@ -166,5 +166,6 @@ h1 {
 }
 
 div, p, td, th, li, span, a {
-    font: bold 16px/1.3 system-ui, diy !important
+    font-family: system-ui, diy !important;
+    font-weight: bold;
 }
