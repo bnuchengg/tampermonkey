@@ -450,7 +450,7 @@ const Utils = {
     },
     iExec(selector, func, parent) {
         Array.from((parent ?? document).querySelectorAll(selector))
-            .filter(ele => /reddit|^x.com/.test(host) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
+            .filter(ele => excludeHosts.test(host) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
         function pushElement(ele){
             scannedElements[selector] ? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
