@@ -469,8 +469,13 @@ const Utils = {
                 ele?.remove();
         };
     },
-    getURLParam: (href, param) => new URLSearchParams(new URL(href).search).get(param),
     rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : rmList.push(...arr),
+    cancelRmElement(ele) {
+        const index = rmList.indexOf(ele);
+        if (index > -1)
+            rmList.splice(index, 1);
+    },
+    getURLParam: (href, param) => new URLSearchParams(new URL(href).search).get(param),
     sleep : ms => new Promise(r => setTimeout(r, ms)),
     html2Element(htmlString) {
         const parser = new DOMParser();
