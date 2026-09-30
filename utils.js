@@ -469,7 +469,8 @@ const Utils = {
                 ele?.remove();
         };
     },
-    rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : rmList.push(...arr),
+    rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : insRmList(arr),
+    insRmList: arr => arr.filter(ele => !rmList.includes(ele)).forEach(ele => rmList.push(ele)),
     cancelRmElement(ele) {
         const index = rmList.indexOf(ele);
         if (index > -1)
