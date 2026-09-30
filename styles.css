@@ -27,6 +27,7 @@
 img {
     max-height: 360px;
     width: unset !important;
+    max-width: 100% !important;
     pointer-events: auto;
 }
 
@@ -122,6 +123,15 @@ th {
 
 .simple-translate-result-wrapper {
     width: fit-content !important;
+}
+
+.hide-button {
+    scale: 3;
+    height: 30px;
+    width: 30px;
+    margin-top: 10px;
+    border-radius: 50%;
+    padding-left: 5px;
 }
 
 @media (max-width: 1080px) {
