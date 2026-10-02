@@ -155,7 +155,7 @@ th {
 @media (min-width: 1081px) {
     body {
         margin: 0 !important;
-        padding-left: calc((100vw - 1080px)/2);
+        padding-left: calc((100vw - 1080px)/2.4);
     }
 
     .common-container {
@@ -166,11 +166,6 @@ th {
 @font-face {
     font-family: diy;
     src: url("https://cdn.jsdelivr.net/gh/genqiaolynn/fonts@master/%E6%96%B9%E6%AD%A3%E7%98%A6%E9%87%91%E4%B9%A6%E7%AE%80%E4%BD%93.ttf");
-}
-
-h1 {
-    font-size: 150%;
-    text-align: center;
 }
 
 .common-container {
