@@ -107,10 +107,6 @@ img {
     text-decoration: underline dashed lime;
 }
 
-.underline > p, .underline > div {
-    background-color: royalblue;
-}
-
 .subtitle {
     display: inline-block;
     border: 2px dashed maroon;
