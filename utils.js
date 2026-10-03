@@ -12,7 +12,7 @@ const ss = {
     hashGet: (key, field) => ss.getJson(key)[field],
     add(arr, item) {
         const _arr = this.getArray(arr);
-        _arr.length > 1024 ? _arr.splice(0, 256) : null;
+        _arr.length > 10240 ? _arr.splice(0, 1024) : null;
         !_arr.includes(item) ? _arr.push(item) : null;
         this.set(arr, _arr);
     },
@@ -125,11 +125,11 @@ const Utils = {
             event.preventDefault();
             contextMenu.style.cssText += `top: ${event.touches[0].clientY}px`;
         };
-        const liCssText = "text-align: center; cursor: pointer; font-size: 42px !important";
+        const liCssText = "text-align: center; cursor: pointer; font-size: 48px !important";
         window.liBottom = crNode("li", liCssText, "bottom");
         window.liTop = crNode("li", liCssText, "top");
         window.liRefresh = crNode("li", liCssText, "refresh");
-        liRefresh.style.cssText += "font-size: 36px !important";
+        liRefresh.style.cssText += "font-size: 32px !important";
         contextMenu.appendChild(liBottom);
         contextMenu.appendChild(liRefresh);
         contextMenu.classList.add("contextmenu");
