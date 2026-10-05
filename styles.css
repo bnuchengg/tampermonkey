@@ -12,6 +12,10 @@
     font-size: large !important;
 }
 
+.current {
+    text-shadow: 0 0 10px green;
+}
+
 .contextmenu {
     display: flex;
     flex-direction: column;

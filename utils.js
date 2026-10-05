@@ -279,7 +279,7 @@ const Utils = {
             rfUnreadCnt();
             if(func){
                 const timer = loopExec(() => {
-                    if (!/loading/.test(ele.classList)) {
+                    if (!/loading|current/.test(ele.classList)) {
                         clearInterval(timer);
                         func(ele);
                     }
