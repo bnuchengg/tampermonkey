@@ -144,7 +144,8 @@ const Utils = {
 
         window.rmList = [];
         loopExec((function exec(){
-            rmList.shift()?.remove();
+            if(rmList.length > 0)
+                rmList.shift()?.remove();
             return exec;
         })(), 404);
 
@@ -509,7 +510,7 @@ const Utils = {
                 this.isScrollDown = true;
                 window.scrollTimer = loopExec(() => {
                     const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-                    imgs[index++].click();
+                    imgs[index++]?.click();
                     if(index == imgs.length){
                         clearInterval(scrollTimer);
                         lazyExec(resetPos);
