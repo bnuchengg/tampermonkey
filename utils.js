@@ -164,6 +164,15 @@ const Utils = {
         window.scroller = ele;
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
     },
+    setCurrent(a) {
+        iExec("a.current", ele => {
+            ele.classList.remove("current"); });
+        a.classList.add("current");
+        document.querySelector(".stickynav").insertBefore(findParent(), document.querySelector(".stickynav").childNodes[4]);
+        function findParent(){
+            return Array.from(document.querySelector(".stickynav").childNodes).filter(itm => itm.contains(a))[0] ?? a;
+        }
+    },
     lazyLoad(ele, target, func) {
         const href = ele.href;
         if (pageCache[href])

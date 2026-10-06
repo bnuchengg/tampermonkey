@@ -13,7 +13,8 @@
 }
 
 .current {
-    text-shadow: 0 0 10px green;
+    color: green !important;
+    text-shadow: 0 0 10px red;
 }
 
 .contextmenu {
