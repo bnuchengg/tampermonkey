@@ -165,12 +165,16 @@ const Utils = {
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
     },
     setCurrent(a) {
+        const topEle = findParent();
+        document.querySelector(".stickynav").insertBefore(topEle, findPivot());
         iExec("a.current", ele => {
             ele.classList.remove("current"); });
         a.classList.add("current");
-        document.querySelector(".stickynav").insertBefore(findParent(), document.querySelector(".stickynav").childNodes[4]);
         function findParent(){
-            return Array.from(document.querySelector(".stickynav").childNodes).filter(itm => itm.contains(a))[0] ?? a;
+            return Array.from(document.querySelector(".stickynav").childNodes).filter(itm => itm.contains(a))[0];
+        }
+        function findPivot(){
+            return Array.from(document.querySelector(".stickynav").childNodes).filter(itm => !(itm == topEle || itm.contains(document.querySelector("a.current"))))[3];
         }
     },
     lazyLoad(ele, target, func) {
@@ -251,13 +255,17 @@ const Utils = {
                 }
                 iframe.remove();
                 function decorate(){
-                    const a = link.cloneNode(true);
-                    a.textContent = link.title;
-                    a.classList.add("title");
+                    const a = cloneLink(link);
                     html = a.outerHTML + html;
                 }
             }, timeout);
         }
+    },
+    cloneLink(link) {
+        const a = crLink(link.href);
+        a.textContent = link.title;
+        a.classList.add("title");
+        return a;
     },
     appDiv(ele, type) {
         if(!ele)

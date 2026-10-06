@@ -2,7 +2,7 @@
     color: gray !important;
 }
 
-.cached {
+.current {
     color: royalblue !important;
     background-color: gold;
 }
@@ -12,7 +12,7 @@
     font-size: large !important;
 }
 
-.current {
+.cached {
     color: green !important;
     text-shadow: 0 0 10px red;
 }
