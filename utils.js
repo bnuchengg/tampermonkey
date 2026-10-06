@@ -419,10 +419,7 @@ const Utils = {
             if (/video/i.test(tagName)) {
                 node.controls = true;
                 node.muted = true;
-                let maxHeight = "360px";
-                if (/\/p\/\d+/.test(document.URL))
-                    maxHeight = "80vh";
-                appendCss(`max-height: ${maxHeight}; max-width: 100%`)(node);
+                appendCss(`max-width: 100%`)(node);
             }
             return node;
         }
