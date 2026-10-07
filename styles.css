@@ -147,6 +147,7 @@ th {
     .common-container {
         max-width: 100% !important;
         min-width: unset !important;
+        width: unset !important;
         margin: unset !important;
     }
 
