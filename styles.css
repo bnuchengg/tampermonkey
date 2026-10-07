@@ -44,7 +44,7 @@ img {
 }
 
 .gapgrid {
-    display: grid;
+    display: grid !important;
     row-gap: 10px;
     padding: 5px;
     border: 2px dashed red;
@@ -111,7 +111,7 @@ img {
 }
 
 .underline {
-    text-decoration: 2px underline dashed lime;
+    text-decoration: 1px underline dashed lime;
 }
 
 .subtitle {
