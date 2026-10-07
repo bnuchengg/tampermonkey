@@ -46,11 +46,13 @@ img {
 .gapgrid {
     display: grid;
     row-gap: 10px;
+    padding: 5px;
+    border: 2px dashed red;
 }
 
 .stickynav .loading {
     position: unset !important;
-    border: 3px dashed black;
+    border: 2px dashed black;
     animation: blink 1s linear infinite;
 }
 
@@ -109,7 +111,7 @@ img {
 }
 
 .underline {
-    text-decoration: underline dashed lime;
+    text-decoration: 2px underline dashed lime;
 }
 
 .subtitle {
