@@ -109,6 +109,7 @@ class Scheduler {
 }
 
 const Utils = {
+    $: selector => document.querySelector(selector),
     init() {
         const meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -166,15 +167,15 @@ const Utils = {
     },
     setCurrent(a) {
         const topEle = findParent();
-        document.querySelector(".stickynav").insertBefore(topEle, findPivot());
+        $(".stickynav").insertBefore(topEle, findPivot());
         iExec("a.current", ele => {
             ele.classList.remove("current"); });
         a.classList.add("current");
         function findParent(){
-            return Array.from(document.querySelector(".stickynav").childNodes).filter(itm => itm.contains(a))[0];
+            return Array.from($(".stickynav").childNodes).filter(itm => itm.contains(a))[0];
         }
         function findPivot(){
-            return Array.from(document.querySelector(".stickynav").childNodes).filter(itm => !(itm == topEle || itm.contains(document.querySelector("a.current"))))[3];
+            return Array.from($(".stickynav").childNodes).filter(itm => !(itm == topEle || itm.contains($("a.current"))))[3];
         }
     },
     lazyLoad(ele, target, func) {
@@ -311,13 +312,13 @@ const Utils = {
 
         function rfUnreadCnt(){
             const unreadCnt = document.querySelectorAll("div.stickynav a:not(.visited)").length;
-            if(!document.querySelector("div.stickynav span.count")){
+            if(!$("div.stickynav span.count")){
                 const span = crTxt(`${ unreadCnt }`);
                 span.classList.add("count");
-                document.querySelector("div.stickynav")?.prepend(span);
+                $("div.stickynav")?.prepend(span);
             } else
-                document.querySelector("div.stickynav span.count").textContent = `${ unreadCnt }`;
-            const toast = document.querySelector("div.stickynav span.count");
+                $("div.stickynav span.count").textContent = `${ unreadCnt }`;
+            const toast = $("div.stickynav span.count");
             toggleClass(toast,'big',"small");
             lazyExec(() => toggleClass(toast,'small',"big"));
         }
@@ -366,7 +367,7 @@ const Utils = {
     },
     calcScrollPos(img, firstClick) {
         const scrollTop = scroller.scrollTop;
-        const fixedHeight = document.querySelector(".stickynav")?.getBoundingClientRect().height ?? 0;
+        const fixedHeight = $(".stickynav")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
         if (firstClick || rect.bottom <= 0 || rect.top >= window.innerHeight)
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
@@ -500,7 +501,7 @@ const Utils = {
     },
     resetPos() {
         scroll2Pos({ top: 0 });
-        scroll2Pos({ left : 0 },document.querySelector(".stickynav"));
+        scroll2Pos({ left : 0 },$(".stickynav"));
     },
     toggleButton() {
         this.isScrollDown = !this.isScrollDown;

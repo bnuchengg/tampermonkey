@@ -148,7 +148,6 @@ th {
     .common-container {
         max-width: 100% !important;
         min-width: unset !important;
-        width: unset !important;
         margin: unset !important;
     }
 
@@ -175,6 +174,7 @@ th {
 
 .common-container {
     box-sizing: border-box;
+    width: unset !important;
     float: unset !important;
     font: bold 16px/1.3 system-ui, diy !important;
 }
