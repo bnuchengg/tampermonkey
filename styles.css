@@ -46,6 +46,7 @@ img {
 .gapgrid {
     display: grid !important;
     row-gap: 10px;
+    margin-top: 20px;
     padding: 5px;
 }
 
