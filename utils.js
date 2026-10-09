@@ -1,115 +1,5 @@
-const ss = {
-    set(key, value) {
-        typeof value == "object" ? value = JSON.stringify(value) : null;
-        localStorage.setItem(key, value);
-    },
-    hashSet(key, field, value) {
-        const map = this.getJson(key);
-        value ? map[field] = value : delete map[field];
-        this.set(key, map);
-    },
-    hashRm: (key, field) => ss.hashSet(key, field, null),
-    hashGet: (key, field) => ss.getJson(key)[field],
-    add(arr, item) {
-        const _arr = this.getArray(arr);
-        _arr.length > 10240 ? _arr.splice(0, 1024) : null;
-        !_arr.includes(item) ? _arr.push(item) : null;
-        this.set(arr, _arr);
-    },
-    arrayRm: (arr, item) => ss.set(arr, ss.getArray(arr).filter(item => item != item)),
-    contains: (arr, item) => ss.getArray(arr).includes(item),
-    get(key) {
-        const item = localStorage.getItem(key);
-        return item ? JSON.parse(item) : null;
-    },
-    getJson(key) {
-        !this.get(key) ? this.set(key, {}) : null;
-        return this.get(key);
-    },
-    getArray(key) {
-        !this.get(key) ? this.set(key, []) : null;
-        return this.get(key);
-    },
-    size: key => localStorage.getItem(key)?.length ?? 0,
-    remove: key => localStorage.removeItem(key),
-    clear: () => localStorage.clear()
-}
-
-class Scheduler {
-    constructor(maxRunning,maxCache) {
-        this.waitingList = [];
-        this.destMap = {};
-        this.maxRunning = maxRunning;
-        this.maxCache = maxCache;
-        this.loadingNum = 0;
-        this.cacheNum = 0;
-    }
-
-    insert(link, selector, pos){
-        if(this.waitingList.filter(e => e!= link && e.href == link.href).length > 0)
-        {
-            link.remove();
-            return false;
-        }
-        this.remove(link);
-        this.destMap[link] = selector;
-        if(pos != 0)
-            this.waitingList.push(link);
-        else
-            this.waitingList.unshift(link);
-        return true;
-    }
-
-    append(link, selector) {
-        return this.insert(link, selector);
-    }
-
-    prepend(link, selector) {
-        return this.insert(link, selector, 0);
-    }
-
-    remove(link) {
-        const index = this.waitingList.indexOf(link);
-        if (index > -1)
-            this.waitingList.splice(index, 1);
-    }
-
-    loading(link){
-        this.remove(link);
-        this.loadingNum++;
-        link.classList.add("loading");
-    }
-
-    loaded(link){
-        this.loadingNum--;
-        link.classList.remove("loading");
-    }
-
-    addCache(link, html){
-        pageCache[link.href] = html;
-        link.classList.add("cached");
-        this.cacheNum++;
-    }
-
-    rmCache(link, flag){
-        link.classList?.remove("cached");
-        if(flag)
-            delete pageCache[link.href];
-        this.cacheNum--;
-    }
-
-    run(){
-        while (this.waitingList?.length > 0 && this.loadingNum < this.maxRunning && (this.cacheNum + this.loadingNum) < this.maxCache) {
-            const link = this.waitingList.shift();
-            const selector = this.destMap[link];
-            delete this.destMap[link];
-            loadContent(link, selector, postFuncMap[host]);
-        }
-    }
-}
-
 const Utils = {
-    $: selector => document.querySelector(selector),
+    __: selector => document.querySelector(selector),
     init() {
         const meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -167,15 +57,15 @@ const Utils = {
     },
     setCurrent(a) {
         const topEle = findParent();
-        $(".stickynav").insertBefore(topEle, findPivot());
+        __(".stickynav").insertBefore(topEle, findPivot());
         iExec("a.current", ele => {
             ele.classList.remove("current"); });
         a.classList.add("current");
         function findParent(){
-            return Array.from($(".stickynav").childNodes).filter(itm => itm.contains(a))[0];
+            return Array.from(__(".stickynav").childNodes).filter(itm => itm.contains(a))[0];
         }
         function findPivot(){
-            return Array.from($(".stickynav").childNodes).filter(itm => !(itm == topEle || itm.contains($("a.current"))))[3];
+            return Array.from(__(".stickynav").childNodes).filter(itm => !(itm == topEle || itm.contains(__("a.current"))))[3];
         }
     },
     lazyLoad(ele, target, func) {
@@ -312,13 +202,13 @@ const Utils = {
 
         function rfUnreadCnt(){
             const unreadCnt = document.querySelectorAll("div.stickynav a:not(.visited)").length;
-            if(!$("div.stickynav span.count")){
+            if(!__("div.stickynav span.count")){
                 const span = crTxt(`${ unreadCnt }`);
                 span.classList.add("count");
-                $("div.stickynav")?.prepend(span);
+                __("div.stickynav")?.prepend(span);
             } else
-                $("div.stickynav span.count").textContent = `${ unreadCnt }`;
-            const toast = $("div.stickynav span.count");
+                __("div.stickynav span.count").textContent = `${ unreadCnt }`;
+            const toast = __("div.stickynav span.count");
             toggleClass(toast,'big',"small");
             lazyExec(() => toggleClass(toast,'small',"big"));
         }
@@ -367,7 +257,7 @@ const Utils = {
     },
     calcScrollPos(img, firstClick) {
         const scrollTop = scroller.scrollTop;
-        const fixedHeight = $(".stickynav")?.getBoundingClientRect().height ?? 0;
+        const fixedHeight = __(".stickynav")?.getBoundingClientRect().height ?? 0;
         const rect = img.getBoundingClientRect();
         if (firstClick || rect.bottom <= 0 || rect.top >= window.innerHeight)
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
@@ -376,7 +266,7 @@ const Utils = {
     menuAction: action => {
         const handlerMap = {
             "top": () => scroll2Pos({ top: 0 }),
-            "bottom": () => scroll2Pos({ top: bottomMap[host] ? bottomMap[host]() : scroller.scrollTopMax }),
+            "bottom": () => scroll2Pos({ top: bottomMap[host] ? commentsTop(bottomMap[host]) : scroller.scrollTopMax }),
             "refresh": () => {
                 if(confirm("Refresh the page ?"))
                     window.location.reload();
@@ -386,6 +276,9 @@ const Utils = {
         }
         clearInterval(scrollTimer);
         handlerMap[action]();
+        function commentsTop(selector){
+            return scroller.scrollTop + __(selector).getBoundingClientRect().top - (__("div.stickynav")?.getBoundingClientRect()?.height ?? 0);
+        }
     },
     rpHTML(selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
@@ -501,7 +394,7 @@ const Utils = {
     },
     resetPos() {
         scroll2Pos({ top: 0 });
-        scroll2Pos({ left : 0 },$(".stickynav"));
+        scroll2Pos({ left : 0 },__(".stickynav"));
     },
     toggleButton() {
         this.isScrollDown = !this.isScrollDown;
@@ -540,6 +433,116 @@ const Utils = {
         (container ?? scroller).scrollTo(option);
     }
 };
+
+const ss = {
+    set(key, value) {
+        typeof value == "object" ? value = JSON.stringify(value) : null;
+        localStorage.setItem(key, value);
+    },
+    hashSet(key, field, value) {
+        const map = this.getJson(key);
+        value ? map[field] = value : delete map[field];
+        this.set(key, map);
+    },
+    hashRm: (key, field) => ss.hashSet(key, field, null),
+    hashGet: (key, field) => ss.getJson(key)[field],
+    add(arr, item) {
+        const _arr = this.getArray(arr);
+        _arr.length > 10240 ? _arr.splice(0, 1024) : null;
+        !_arr.includes(item) ? _arr.push(item) : null;
+        this.set(arr, _arr);
+    },
+    arrayRm: (arr, item) => ss.set(arr, ss.getArray(arr).filter(item => item != item)),
+    contains: (arr, item) => ss.getArray(arr).includes(item),
+    get(key) {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+    },
+    getJson(key) {
+        !this.get(key) ? this.set(key, {}) : null;
+        return this.get(key);
+    },
+    getArray(key) {
+        !this.get(key) ? this.set(key, []) : null;
+        return this.get(key);
+    },
+    size: key => localStorage.getItem(key)?.length ?? 0,
+    remove: key => localStorage.removeItem(key),
+    clear: () => localStorage.clear()
+}
+
+class Scheduler {
+    constructor(maxRunning,maxCache) {
+        this.waitingList = [];
+        this.destMap = {};
+        this.maxRunning = maxRunning;
+        this.maxCache = maxCache;
+        this.loadingNum = 0;
+        this.cacheNum = 0;
+    }
+
+    insert(link, selector, pos){
+        if(this.waitingList.filter(e => e!= link && e.href == link.href).length > 0)
+        {
+            link.remove();
+            return false;
+        }
+        this.remove(link);
+        this.destMap[link] = selector;
+        if(pos != 0)
+            this.waitingList.push(link);
+        else
+            this.waitingList.unshift(link);
+        return true;
+    }
+
+    append(link, selector) {
+        return this.insert(link, selector);
+    }
+
+    prepend(link, selector) {
+        return this.insert(link, selector, 0);
+    }
+
+    remove(link) {
+        const index = this.waitingList.indexOf(link);
+        if (index > -1)
+            this.waitingList.splice(index, 1);
+    }
+
+    loading(link){
+        this.remove(link);
+        this.loadingNum++;
+        link.classList.add("loading");
+    }
+
+    loaded(link){
+        this.loadingNum--;
+        link.classList.remove("loading");
+    }
+
+    addCache(link, html){
+        pageCache[link.href] = html;
+        link.classList.add("cached");
+        this.cacheNum++;
+    }
+
+    rmCache(link, flag){
+        link.classList?.remove("cached");
+        if(flag)
+            delete pageCache[link.href];
+        this.cacheNum--;
+    }
+
+    run(){
+        while (this.waitingList?.length > 0 && this.loadingNum < this.maxRunning && (this.cacheNum + this.loadingNum) < this.maxCache) {
+            const link = this.waitingList.shift();
+            const selector = this.destMap[link];
+            delete this.destMap[link];
+            loadContent(link, selector, postFuncMap[host]);
+        }
+    }
+}
 
 window.Scheduler = Scheduler;
 window.ss = ss;
