@@ -149,6 +149,9 @@ th {
     .common-container {
         max-width: 100% !important;
         min-width: unset !important;
+    }
+
+    .common-container:not(.gapgrid) {
         margin: unset !important;
     }
 
