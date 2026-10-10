@@ -17,6 +17,13 @@
     text-shadow: 0 0 10px red;
 }
 
+.gapgrid {
+    display: grid !important;
+    row-gap: 10px;
+    margin-top: 20px !important;
+    padding: 5px;
+}
+
 .contextmenu {
     display: flex;
     flex-direction: column;
@@ -41,13 +48,6 @@ img {
     margin: auto;
     max-width: 100% !important;
     max-height: unset !important;
-}
-
-.gapgrid {
-    display: grid !important;
-    row-gap: 10px;
-    margin-top: 20px;
-    padding: 5px;
 }
 
 .stickynav .loading {
