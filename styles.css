@@ -177,5 +177,8 @@ th {
     box-sizing: border-box;
     width: unset !important;
     float: unset !important;
+}
+
+.common-container, span {
     font: bold 16px/1.3 system-ui, diy !important;
 }
