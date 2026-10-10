@@ -179,6 +179,6 @@ th {
     float: unset !important;
 }
 
-.common-container, span {
+.common-container, span:not(.captions-text) {
     font: bold 16px/1.3 system-ui, diy !important;
 }
