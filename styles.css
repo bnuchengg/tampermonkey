@@ -141,6 +141,10 @@ th {
     padding-left: 5px;
 }
 
+.styled-scrollbar {
+    overflow-x: hidden;
+}
+
 @media (max-width: 1080px) {
     body {
         padding-left: 5px;
