@@ -277,7 +277,7 @@ const Utils = {
         clearInterval(scrollTimer);
         handlerMap[action]();
         function commentsTop(selector){
-            return scroller.scrollTop + __(selector).getBoundingClientRect().top - (__("div.stickynav")?.getBoundingClientRect()?.height ?? 0);
+            return scroller.scrollTop + __(selector)?.getBoundingClientRect().top - (__("div.stickynav")?.getBoundingClientRect()?.height ?? 0);
         }
     },
     rpHTML(selector) {
