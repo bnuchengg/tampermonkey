@@ -122,6 +122,7 @@ img {
 
 body {
     padding-bottom: unset !important;
+    overflow-x: hidden;
 }
 
 th {
