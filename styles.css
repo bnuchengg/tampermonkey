@@ -128,10 +128,6 @@ th {
     white-space: nowrap;
 }
 
-.simple-translate-result-wrapper {
-    width: fit-content !important;
-}
-
 .hide-button {
     scale: 2.5;
     height: 30px;
