@@ -266,7 +266,7 @@ const Utils = {
     menuAction: action => {
         const handlerMap = {
             "top": () => scroll2Pos({ top: 0 }),
-            "bottom": () => scroll2Pos({ top: bottomMap[host] ? commentsTop(bottomMap[host]) : scroller.scrollTopMax }),
+            "bottom": () => scroll2Pos({ top: __(bottomMap[host]) ? commentsTop(bottomMap[host]) : scroller.scrollTopMax }),
             "refresh": () => {
                 if(confirm("Refresh the page ?"))
                     window.location.reload();
