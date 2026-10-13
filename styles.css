@@ -12,6 +12,12 @@
     font-size: large !important;
 }
 
+.subtitle {
+    display: inline-block;
+    border: 3px ridge gold;
+    margin-bottom: 5px !important;
+}
+
 .cached {
     color: green !important;
     text-shadow: 0 0 10px red;
@@ -112,12 +118,6 @@ img {
 
 .underline {
     text-decoration: 1px underline dashed lime;
-}
-
-.subtitle {
-    display: inline-block;
-    border: 2px dashed maroon;
-    margin-bottom: 5px !important;
 }
 
 body {

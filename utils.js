@@ -137,7 +137,7 @@ const Utils = {
                 eval(func);
             lazyExec(() => {
                 scheduler.loaded(link);
-                let html = iframe.contentDocument?.querySelector(selector)?.outerHTML ?? '';
+                let html = nvl(iframe.contentDocument?.querySelector(selector)?.outerHTML, '');
                 if(/player.bilibili.com/i.test(html))
                     link.remove();
                 else {
@@ -257,7 +257,7 @@ const Utils = {
     },
     calcScrollPos(img, firstClick) {
         const scrollTop = scroller.scrollTop;
-        const fixedHeight = __(".stickynav")?.getBoundingClientRect().height ?? 0;
+        const fixedHeight = nvl(__(".stickynav")?.getBoundingClientRect().height);
         const rect = img.getBoundingClientRect();
         if (firstClick || rect.bottom <= 0 || rect.top >= window.innerHeight)
             return this.isScrollDown ? scrollTop + rect.top - fixedHeight : scrollTop - (window.innerHeight - rect.bottom);
@@ -277,8 +277,11 @@ const Utils = {
         clearInterval(scrollTimer);
         handlerMap[action]();
         function commentsTop(selector){
-            return scroller.scrollTop + __(selector)?.getBoundingClientRect().top ?? 0 - (__("div.stickynav")?.getBoundingClientRect()?.height ?? 0);
+            return scroller.scrollTop + nvl(__(selector)?.getBoundingClientRect().top) - nvl(__("div.stickynav")?.getBoundingClientRect()?.height);
         }
+    },
+    nvl(varName, defaultValue = 0){
+        return varName ?? defaultValue;
     },
     rpHTML(selector) {
         return ele => ele.closest(selector).innerHTML = ele.innerHTML;
@@ -293,7 +296,7 @@ const Utils = {
         else
             pEle.textContent = pEle.textContent.trim().slice(0, limit) + "…";
     },
-    txtLength: ele => ele?.textContent?.trim().replace(/\s/g,'').length ?? 0,
+    txtLength: ele => nvl(ele?.textContent?.trim().replace(/\s/g,'').length),
     iRandom: num => Math.random() < num,
     rpImg(tagName, src, rmSelector) {
         return img => {
@@ -357,8 +360,8 @@ const Utils = {
             });
         });
     },
-    iExec(selector, func, parent) {
-        Array.from((parent ?? document).querySelectorAll(selector))
+    iExec(selector, func, parent = document) {
+        Array.from(parent.querySelectorAll(selector))
             .filter(ele => excludeHosts.test(host) || excludeSelectors.test(selector) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
         function pushElement(ele){
@@ -428,9 +431,9 @@ const Utils = {
         }, 3000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
-    scroll2Pos(option, container) {
+    scroll2Pos(option, container = scroller) {
         option.behavior = "smooth";
-        (container ?? scroller).scrollTo(option);
+        container.scrollTo(option);
     }
 };
 
@@ -466,7 +469,7 @@ const ss = {
         !this.get(key) ? this.set(key, []) : null;
         return this.get(key);
     },
-    size: key => localStorage.getItem(key)?.length ?? 0,
+    size: key => nvl(localStorage.getItem(key)?.length),
     remove: key => localStorage.removeItem(key),
     clear: () => localStorage.clear()
 }
