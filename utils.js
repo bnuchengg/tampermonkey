@@ -305,8 +305,7 @@ const Utils = {
                 img = img.closest(rmSelector) || img.parentElement;
             img.after(node);
             img.remove();
-        };
-    },
+        }},
     crImg(img, tagName, src) {
         if (/a/i.test(tagName))
             return crLink(img.href, img.textContent, "text-decoration: none");
@@ -319,8 +318,12 @@ const Utils = {
                 appendCss(`max-width: 100%`)(node);
             }
             return node;
-        }
-    },
+        }},
+    speedUp(rate){
+        return ele => {
+            if(ele.shadowRoot && ele.shadowRoot.querySelector("video"))
+                ele.shadowRoot.querySelector("video").playbackRate = rate;
+        }},
     crLink(href, text, cssText) {
         const link = document.createElement("a");
         link.href = href;
