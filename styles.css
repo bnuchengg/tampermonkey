@@ -15,7 +15,7 @@
 .subtitle {
     display: inline-block;
     border: 3px ridge gold;
-    margin-bottom: 5px !important;
+    padding: 5px;
 }
 
 .cached {

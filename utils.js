@@ -42,6 +42,28 @@ const Utils = {
 
         window.scrollTimer = null;
         !(/\/$/.test(new URL(document.URL).pathname) || /youtube|^x.com/i.test(host)) ? autoScroll() : null;
+
+        window.excludeHosts = /youtube|^x.com|reddit|zdic|gushiwen/i;
+        window.excludeSelectors = /a\.current|\.content-image|\.btn-reply-count a|\.styled-scrollbar\.deep/;
+        window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
+                         cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
+                         yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
+                         body style,div.shadow-dialog,svg[icon-name=add-circle]`.replace(/\n\s+/g,'');
+        window.filterRmSelectors = `.tpc_cont,.left-content-html,.reply_message,.content p,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content,.comment .comment-html,.postbody p,
+                               .postbody .content,.comment-row .comment-content,.pb-content-item,.pb-lzl-item,.ui-list-item-content,[slot=comment],.tpc_content:not(#conttpc),div.case,p.word,
+                               ytd-comment-view-model`.replace(/\n\s+/g,'');
+
+        window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
+        window.bottomSelectors = "a.morecomment,#pl_box";
+        window.postFuncMap = {
+            "news.zhibo8.com": `const content = iframe.contentDocument?.querySelector(selector);
+        if(content && content.querySelector("#hotdiv")){
+            content.querySelector(".video_box") ? rmElements(Array.from(content.querySelectorAll(".video_box")), true) : null;
+            iExec("#hotdiv .btn-reply-count a", ele => ele.click(), content);
+            setTimeout(() => content.querySelector("#hotdiv").parentElement.innerHTML = content.querySelector("#hotdiv").innerHTML,3000); }`
+        };
+        [window.r9aeadS, window.goUid, window.newshowfloat, window.open, window.addAdjustedSnigelUnit].forEach(func => func = emptyFunc);
+        setScroller(/dapenti/i.test(host) ? document.body : document.documentElement);
     },
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
@@ -266,7 +288,7 @@ const Utils = {
     menuAction: action => {
         const handlerMap = {
             "top": () => scroll2Pos({ top: 0 }),
-            "bottom": () => scroll2Pos({ top: __(bottomMap[host]) ? commentsTop(bottomMap[host]) : scroller.scrollTopMax }),
+            "bottom": () => scroll2Pos({ top: __(bottomSelectors) ? commentsTop(bottomSelectors) : scroller.scrollTopMax }),
             "refresh": () => {
                 if(confirm("Refresh the page ?"))
                     window.location.reload();
