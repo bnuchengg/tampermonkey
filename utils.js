@@ -52,7 +52,6 @@ const Utils = {
         window.filterRmSelectors = `.tpc_cont,.left-content-html,.reply_message,.content p,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content,.comment .comment-html,.postbody p,
                                .postbody .content,.comment-row .comment-content,.pb-content-item,.pb-lzl-item,.ui-list-item-content,[slot=comment],.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model`.replace(/\n\s+/g,'');
-
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box";
         window.postFuncMap = {
@@ -63,7 +62,8 @@ const Utils = {
             setTimeout(() => content.querySelector("#hotdiv").parentElement.innerHTML = content.querySelector("#hotdiv").innerHTML,3000); }`
         };
         [window.r9aeadS, window.goUid, window.newshowfloat, window.open, window.addAdjustedSnigelUnit].forEach(func => func = emptyFunc);
-        setScroller(/dapenti/i.test(host) ? document.body : document.documentElement);
+        window.scrollerMap = { "www.dapenti.com": document.body };
+        setScroller(scrollerMap[host]);
     },
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
@@ -73,7 +73,7 @@ const Utils = {
         clearTimeout(countDown);
         countDown = lazyExec(() => hide(contextMenu), 1989.64);
     },
-    setScroller: ele => {
+    setScroller(ele = document.documentElement) {
         window.scroller = ele;
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
     },
