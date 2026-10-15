@@ -125,10 +125,6 @@ body {
     padding-bottom: unset !important;
 }
 
-th {
-    white-space: nowrap;
-}
-
 .hide-button {
     scale: 2.5;
     height: 30px;
