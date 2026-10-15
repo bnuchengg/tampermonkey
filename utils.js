@@ -40,16 +40,16 @@ const Utils = {
             return exec;
         })(), 404);
 
+        window.excludeHosts = /youtube|^x.com|reddit/i;
         window.scrollTimer = null;
-        !(/\/$/.test(new URL(document.URL).pathname) || /youtube|^x.com/i.test(host)) ? autoScroll() : null;
+        !(/\/$/.test(new URL(document.URL).pathname) || !excludeHosts.test(host)) ? autoScroll() : null;
 
-        window.excludeHosts = /youtube|^x.com|reddit|zdic|gushiwen/i;
         window.excludeSelectors = /a\.current|\.content-image|\.btn-reply-count a|\.styled-scrollbar\.deep/;
         window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
                          cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
                          yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
                          body style,div.shadow-dialog,svg[icon-name=add-circle],center > small`.replace(/\n\s+/g,'');
-        window.filterRmSelectors = `.left-content-html,.reply_message,.content p,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content,.comment .comment-html,.postbody p,
+        window.filterRmSelectors = `.left-content-html,.reply_message,.content:not(#signals) p,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content,.comment .comment-html,.postbody p,
                                .postbody .content,.comment-row .comment-content,.pb-content-item,.pb-lzl-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model`.replace(/\n\s+/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
@@ -408,7 +408,7 @@ const Utils = {
     },
     rmElement(condition) {
         return ele => {
-            if (!condition || !/youtube|reddit|^x.com/i.test(host) && eval(condition))
+            if (!condition || !excludeHosts.test(host) && eval(condition))
                 ele?.remove();
         };
     },
