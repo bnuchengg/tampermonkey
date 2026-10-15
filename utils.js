@@ -55,7 +55,7 @@ const Utils = {
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box";
         window.postFuncMap = {
-            "t66y.com": `iExec("img[ess-data]", img => img.setAttribute("src",img.getAttribute("ess-data")))`,
+            "t66y.com": `iExec("img[ess-data]", rpAttribute("ess-data", "src"))`,
             "news.zhibo8.com": `const content = iframe.contentDocument?.querySelector(selector);
         if(content && content.querySelector("#hotdiv")){
             content.querySelector(".video_box") ? rmElements(Array.from(content.querySelectorAll(".video_box")), true) : null;
@@ -194,7 +194,7 @@ const Utils = {
         ele.closest("article")?.append(container);
         ele.closest("div[aria-labelledby]")?.remove();
     },
-    rpElement: (ele, selector, func) => {
+    rpElement(ele, selector, func) {
         const div = document.createElement("div");
         if(ele.querySelector(selector)){
             iExec(selector, ele => func(ele, div), ele);
@@ -202,6 +202,11 @@ const Utils = {
             ele.remove();
         }
     },
+    rpAttribute(oldAttr, newAttr) {
+        return ele => {
+            ele.setAttribute(newAttr, ele.getAttribute(oldAttr));
+            ele.removeAttribute(oldAttr);
+        }},
     visitLink(ele, func) {
         const arr = "vLinks";
         const link = ele.href ? ele.href : ele.textContent;
