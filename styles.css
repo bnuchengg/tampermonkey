@@ -19,8 +19,9 @@
 }
 
 .cached {
-    color: green !important;
-    text-shadow: 0 0 10px red;
+    color: white !important;
+    text-shadow: 0 0 10px red,
+    0 0 10px red;
 }
 
 .gapgrid {
