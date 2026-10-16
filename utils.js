@@ -325,6 +325,7 @@ const Utils = {
             pEle.textContent = pEle.textContent.trim().slice(0, limit) + "…";
     },
     txtLength: ele => nvl(ele?.textContent?.trim().replace(/\s/g,'').length),
+    imgSize: ele => Array.from(ele?.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length,
     iRandom: num => Math.random() < num,
     rpImg(tagName, src, rmSelector) {
         return img => {
