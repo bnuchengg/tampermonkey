@@ -40,7 +40,7 @@ const Utils = {
             return exec;
         })(), 404);
 
-        window.excludeHosts = /youtube|^x.com|reddit/i;
+        window.excludeHosts = /youtube|^x.com|reddit|investing/i;
         window.scrollTimer = null;
         !(/\/$/.test(new URL(document.URL).pathname) || !excludeHosts.test(host)) ? autoScroll() : null;
 
