@@ -21,7 +21,7 @@
 .cached {
     color: white !important;
     text-shadow: 0 0 10px red,
-    0 0 10px red;
+    0 0 10px red,0 0 10px red;
 }
 
 .gapgrid {
@@ -61,6 +61,10 @@ img {
     position: unset !important;
     border: 2px dashed black;
     animation: blink 1s linear infinite;
+}
+
+.stickynav a {
+    margin: unset !important;
 }
 
 @keyframes blink {
@@ -174,6 +178,7 @@ body {
     box-sizing: border-box;
     width: unset !important;
     float: unset !important;
+    min-height: unset !important;
 }
 
 .common-container, span:not(.ytp-caption-segment) {

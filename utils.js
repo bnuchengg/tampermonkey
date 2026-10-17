@@ -85,10 +85,10 @@ const Utils = {
             ele.classList.remove("current"); });
         a.classList.add("current");
         function findParent(){
-            return Array.from(__(".stickynav").childNodes).filter(itm => itm.contains(a))[0];
+            return Array.from(__(".stickynav").children).filter(itm => itm.contains(a))[0];
         }
         function findPivot(){
-            return Array.from(__(".stickynav").childNodes).filter(itm => !(itm == topEle || itm.contains(__("a.current"))))[3];
+            return Array.from(__(".stickynav").children).filter(itm => !(itm == topEle || itm.contains(__("a.current"))))[3];
         }
     },
     lazyLoad(ele, target, func) {
