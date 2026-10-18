@@ -357,8 +357,12 @@ const Utils = {
         }},
     speedUp(rate){
         return ele => {
-            if(ele.shadowRoot && ele.shadowRoot.querySelector("video"))
-                ele.shadowRoot.querySelector("video").playbackRate = rate;
+            if(ele.shadowRoot && ele.shadowRoot.querySelector("video")){
+                const node = ele.shadowRoot.querySelector("video");
+                node.playbackRate = rate;
+                node.controls = true;
+                node.muted = true;
+            }
         }},
     crLink(href, text, cssText) {
         const link = document.createElement("a");
