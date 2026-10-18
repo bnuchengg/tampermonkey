@@ -48,7 +48,7 @@ const Utils = {
         window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
                          cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
                          yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
-                         body style,div.shadow-dialog,svg[icon-name=add-circle],center > small`.replace(/\n\s+/g,'');
+                         div.shadow-dialog,svg[icon-name=add-circle],center > small`.replace(/\n\s+/g,'');
         window.filterRmSelectors = `.left-content-html,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content,.comment .comment-html,.postbody p,
                                .comment-row .comment-content,.pb-content-item,.pb-lzl-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model`.replace(/\n\s+/g,'');
