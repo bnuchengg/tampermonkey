@@ -42,7 +42,7 @@ const Utils = {
 
         window.excludeHosts = /youtube|^x.com|reddit|investing/i;
         window.scrollTimer = null;
-        !(/\/$/.test(new URL(document.URL).pathname) || !excludeHosts.test(host)) ? autoScroll() : null;
+        !(excludeHosts.test(host) || /\/$/.test(new URL(document.URL).pathname)) ? autoScroll() : null;
 
         window.excludeSelectors = /a\.current|\.content-image|\.btn-reply-count a|\.styled-scrollbar\.deep|\.virtual-list-item/;
         window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
