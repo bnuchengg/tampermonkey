@@ -138,9 +138,12 @@ body {
     padding-left: 5px;
 }
 
+.content-container{
+    justify-content: start !important;
+}
+
 .styled-scrollbar {
     overflow-x: hidden;
-    justify-content: start !important;
 }
 
 @media (max-width: 1080px) {
