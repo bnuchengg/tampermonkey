@@ -140,6 +140,7 @@ body {
 
 .styled-scrollbar {
     overflow-x: hidden;
+    justify-content: start !important;
 }
 
 @media (max-width: 1080px) {
