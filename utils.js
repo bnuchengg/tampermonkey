@@ -405,7 +405,7 @@ const Utils = {
     },
     iExec(selector, func, parent = document) {
         Array.from(parent.querySelectorAll(selector))
-            .filter(ele => excludeHosts.test(host) || excludeSelectors.test(selector) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
+            .filter(ele => excludeSelectors.test(selector) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
         function pushElement(ele){
             scannedElements[selector] ? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
