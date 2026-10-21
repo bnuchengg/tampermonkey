@@ -51,7 +51,7 @@ const Utils = {
         window.scrollTimer = null;
         !(excludeHosts.test(host) || /\/$/.test(new URL(document.URL).pathname)) ? autoScroll() : null;
 
-        window.excludeSelectors = /a\.current|\.content-image|\.btn-reply-count a|\.styled-scrollbar\.deep|\.virtual-list-item|shreddit-post|shreddit-player|div\[aria-labelledby\]/;
+        window.excludeSelectors = /a\.current|\.content-image|\.btn-reply-count a|\.styled-scrollbar\.deep|\.virtual-list-item|shreddit-post|shreddit-player|div\[aria-labelledby\]|yt-lockup-view-model/;
         window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
                          cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
                          yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
