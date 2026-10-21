@@ -57,7 +57,7 @@ const Utils = {
                          yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
                          div.shadow-dialog,svg[icon-name=add-circle],center > small`.replace(/\n\s+/g,'');
         window.filterRmSelectors = `.left-content-html,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content,.comment .comment-html,.postbody p,
-                               .comment-row .comment-content,.pb-content-item,.pb-lzl-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
+                               .comment-row .comment-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model`.replace(/\n\s+/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box";
