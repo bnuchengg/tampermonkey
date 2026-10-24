@@ -1,16 +1,17 @@
 const Utils = {
     __: selector => document.querySelector(selector),
     init() {
-        const meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-        document.head.appendChild(meta);
         const redirectUrlMap = {
             "www.wenxuecity.com": "https://www.wenxuecity.com/news/",
             "newmitbbs.com": "https://newmitbbs.com/viewforum.php?f=5",
             "wap.libaclub.com": "https://wap.libaclub.com/f_106.htm" };
         if(redirectUrlMap[host] && document.URL != redirectUrlMap[host] && new URL(document.URL).pathname == "/")
             window.location.href = redirectUrlMap[host];
+        
+        const meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.head.appendChild(meta);
 
         window.pageCache = {};
         window.scannedElements = {};
