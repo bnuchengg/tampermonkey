@@ -7,7 +7,7 @@ const Utils = {
             "wap.libaclub.com": "https://wap.libaclub.com/f_106.htm" };
         if(redirectUrlMap[host] && document.URL != redirectUrlMap[host] && new URL(document.URL).pathname == "/")
             window.location.href = redirectUrlMap[host];
-        
+
         const meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
@@ -59,7 +59,7 @@ const Utils = {
                          div.shadow-dialog,svg[icon-name=add-circle],center > small`.replace(/\n\s+/g,'');
         window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,.comment .comment-html,.postbody p,
                                .comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
-                               ytd-comment-view-model`.replace(/\n\s+/g,'');
+                               ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box";
         window.postFuncMap = {
