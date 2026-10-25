@@ -85,6 +85,7 @@ const Utils = {
     setScroller(ele = document.documentElement) {
         window.scroller = ele;
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
+        scroller.scrollTopMax < 100 ? show(contextMenu, "flex") : null;
     },
     setCurrent(a) {
         const topEle = findParent();
