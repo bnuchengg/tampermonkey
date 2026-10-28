@@ -88,18 +88,18 @@ const Utils = {
         scroller.scrollTopMax < 100 ? show(contextMenu, "flex") : null;
     },
     setCurrent(a) {
-        const topEle = findParent();
-        __(".stickynav").insertBefore(topEle, findPivot());
+        const topEle = findParent(a);
         iExec("a.current", ele => {
-            ele.classList.remove("current"); });
+            ele.classList.remove("current");
+            __(".stickynav").append(findParent(ele));
+        });
+        __(".stickynav").insertBefore(topEle, findPivot());
         a.classList.add("current");
-        function findParent(){
-            return Array.from(__(".stickynav").children).filter(itm => itm.contains(a))[0];
-        }
         function findPivot(){
-            return Array.from(__(".stickynav").children).filter(itm => !(itm == topEle || itm.contains(__("a.current"))))[3];
+            return Array.from(__(".stickynav").children).filter(itm => itm != topEle)[3];
         }
     },
+    findParent: link =>Array.from(__(".stickynav").children).filter(itm => itm.contains(link))[0],
     lazyLoad(ele, target, func) {
         const href = ele.href;
         if (pageCache[href])
@@ -216,25 +216,18 @@ const Utils = {
             ele.setAttribute(newAttr, ele.getAttribute(oldAttr));
             ele.removeAttribute(oldAttr);
         }},
-    visitLink(ele, func) {
+    visitLink(ele) {
         const arr = "vLinks";
         const link = ele.href ? ele.href : ele.textContent;
         if (ss.contains(arr, link)){
             ele.classList.add("visited");
+            __(".stickynav").append(findParent(ele));
             rfUnreadCnt();
-            if(func){
-                const timer = loopExec(() => {
-                    if (!/loading|current/.test(ele.classList)) {
-                        clearInterval(timer);
-                        func(ele);
-                    }
-                });
-            }
             return true;
         } else
             ele.onclick = () => {
                 ss.add(arr, link);
-                visitLink(ele, func);
+                visitLink(ele);
             };
 
         function rfUnreadCnt(){
