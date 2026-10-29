@@ -95,12 +95,10 @@ const Utils = {
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
         scroller.scrollTopMax < 100 ? show(contextMenu, "flex") : null;
     },
-    deduplicateTxt(){
-        return ele => {
-            const txtList = [];
-            Array.from(ele.children)
-                .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : txtList.push(item.textContent));
-        };
+    deduplicateTxt(ele) {
+        const txtList = [];
+        Array.from(ele.children)
+            .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : txtList.push(item.textContent));
     },
     setCurrent(a) {
         const topEle = findParent(a);
