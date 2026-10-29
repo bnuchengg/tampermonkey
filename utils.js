@@ -307,7 +307,8 @@ const Utils = {
         clearInterval(scrollTimer);
         handlerMap[action]();
         function commentsTop(selector){
-            return scroller.scrollTop + nvl(__(selector)?.getBoundingClientRect().top) - nvl(__("div.stickynav")?.getBoundingClientRect()?.height);
+            return scroller.scrollTop + nvl(__(selector)?.getBoundingClientRect().top) -
+                nvl(__("div.stickynav")?.getBoundingClientRect()?.height) - 10;
         }
     },
     nvl(varName, defaultValue = 0){
