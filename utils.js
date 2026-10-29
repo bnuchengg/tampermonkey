@@ -74,6 +74,14 @@ const Utils = {
         window.scrollerMap = { "www.dapenti.com": document.body };
         setScroller(scrollerMap[host]);
     },
+    rmElement(condition) {
+        return ele => {
+            if (!condition || !excludeHosts.test(host) && eval(condition))
+                ele?.remove();
+        };
+    },
+    rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : insRmList(arr),
+    insRmList: arr => arr.filter(ele => !rmList.includes(ele)).forEach(ele => rmList.push(ele)),
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
     hide: (ele) => ele.style.display = 'none',
@@ -86,6 +94,13 @@ const Utils = {
         window.scroller = ele;
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
         scroller.scrollTopMax < 100 ? show(contextMenu, "flex") : null;
+    },
+    deduplicateTxt(){
+        return ele => {
+            const txtList = [];
+            Array.from(ele.children)
+                .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : txtList.push(item.textContent));
+        };
     },
     setCurrent(a) {
         const topEle = findParent(a);
@@ -408,22 +423,9 @@ const Utils = {
     },
     appendCss(cssText) {
         return ele => {
-            const style = ele.style || ele.target.style;
+            const style = ele?.style || ele?.target?.style;
             style ? style.cssText += cssText : null;
         };
-    },
-    rmElement(condition) {
-        return ele => {
-            if (!condition || !excludeHosts.test(host) && eval(condition))
-                ele?.remove();
-        };
-    },
-    rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : insRmList(arr),
-    insRmList: arr => arr.filter(ele => !rmList.includes(ele)).forEach(ele => rmList.push(ele)),
-    cancelRmElement(ele) {
-        const index = rmList.indexOf(ele);
-        if (index > -1)
-            rmList.splice(index, 1);
     },
     getURLParam: (href, param) => new URLSearchParams(new URL(href).search).get(param),
     sleep : ms => new Promise(r => setTimeout(r, ms)),
