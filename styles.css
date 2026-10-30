@@ -154,7 +154,7 @@ body {
     .common-container {
         max-width: 100% !important;
         min-width: unset !important;
-        margin: unset !important;
+        margin: 0 auto !important;
     }
 
     table {
