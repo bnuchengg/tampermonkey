@@ -98,7 +98,8 @@ const Utils = {
     deduplicateTxt(ele) {
         const txtList = [];
         Array.from(ele.children)
-            .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : txtList.push(item.textContent));
+            .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) :
+                     item.textContent ? txtList.push(item.textContent) : null);
     },
     setCurrent(a) {
         const topEle = findParent(a);
