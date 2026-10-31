@@ -1,13 +1,6 @@
 const Utils = {
     __: selector => document.querySelector(selector),
     init() {
-        const redirectUrlMap = {
-            "www.wenxuecity.com": "https://www.wenxuecity.com/news/",
-            "newmitbbs.com": "https://newmitbbs.com/viewforum.php?f=5",
-            "wap.libaclub.com": "https://wap.libaclub.com/f_106.htm" };
-        if(redirectUrlMap[host] && document.URL != redirectUrlMap[host] && new URL(document.URL).pathname == "/")
-            window.location.href = redirectUrlMap[host];
-
         const meta = document.createElement('meta');
         meta.name = 'viewport';
         meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
@@ -62,16 +55,7 @@ const Utils = {
                                ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box";
-        window.postFuncMap = {
-            "t66y.com": `iExec("img[ess-data]", rpAttribute("ess-data", "src"))`,
-            "news.zhibo8.com": `const content = iframe.contentDocument?.querySelector(selector);
-                                if(content && content.querySelector("#hotdiv")){
-                                  content.querySelector(".video_box") ? rmElements(Array.from(content.querySelectorAll(".video_box")), true) : null;
-                                  iExec("#hotdiv .btn-reply-count a", ele => ele.click(), content);
-                                  setTimeout(() => content.querySelector("#hotdiv").parentElement.innerHTML = content.querySelector("#hotdiv").innerHTML,3000); }`
-        };
         [window.r9aeadS, window.goUid, window.newshowfloat, window.open, window.addAdjustedSnigelUnit].forEach(func => func = emptyFunc);
-        window.scrollerMap = { "www.dapenti.com": document.body };
         setScroller(scrollerMap[host]);
     },
     rmElement(condition) {
