@@ -319,11 +319,11 @@ const Utils = {
         const url = new URL(href);
         return url.pathname + url.hash + url.search;
     },
-    truncText(pEle, selector, limit) {
+    truncText(pEle, limit, selector) {
         if (selector)
-            iExec(selector, ele => ele.textContent = ele.textContent.trim().slice(0, limit) + "…", pEle);
+            iExec(selector, ele => ele.textContent = ele.textContent.trim().slice(0, limit), pEle);
         else
-            pEle.textContent = pEle.textContent.trim().slice(0, limit) + "…";
+            pEle.textContent = pEle.textContent.trim().slice(0, limit);
     },
     txtLength: ele => nvl(ele?.textContent?.trim().replace(/\s/g,'').length),
     imgSize: ele => Array.from(ele?.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length,
