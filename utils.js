@@ -84,6 +84,12 @@ const Utils = {
         Array.from(ele.children)
             .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) :
                      item.textContent ? txtList.push(item.textContent) : null);
+        sortTxt(ele);
+    },
+    sortTxt(ele) {
+        Array.from(ele.children)
+            .sort((a,b) => a.textContent.length - b.textContent.length)
+            .forEach(itm => ele.append(itm));
     },
     setCurrent(a) {
         const topEle = findParent(a);
