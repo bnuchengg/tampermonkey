@@ -88,7 +88,7 @@ const Utils = {
     },
     sortTxt(ele) {
         Array.from(ele.children)
-            .sort((a,b) => a.textContent.length - b.textContent.length)
+            .sort((a,b) => txtLength(a) - txtLength(b))
             .forEach(itm => ele.append(itm));
     },
     setCurrent(a) {
