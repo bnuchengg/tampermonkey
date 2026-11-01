@@ -187,6 +187,7 @@ a {
     width: unset !important;
     float: unset !important;
     min-height: unset !important;
+    text-align: center;
 }
 
 .common-container, span:not(.ytp-caption-segment) {
