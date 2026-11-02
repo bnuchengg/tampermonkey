@@ -462,7 +462,7 @@ const Utils = {
     isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos(option, container = scroller) {
         option.behavior = "smooth";
-        container.scrollTo(option);
+        container?.scrollTo(option);
     }
 };
 
