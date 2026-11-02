@@ -81,15 +81,13 @@ const Utils = {
     },
     deduplicateTxt(ele) {
         const txtList = [];
-        Array.from(ele.children)
-            .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) :
-                     item.textContent ? txtList.push(item.textContent) : null);
+        Array.from(ele.children).forEach(item => txtList.includes(item.textContent) ? rmElements([item]) :
+                                         item.textContent ? txtList.push(item.textContent) : null);
         sortTxt(ele);
     },
     sortTxt(ele) {
-        Array.from(ele.children)
-            .sort((a,b) => txtLength(a) - txtLength(b))
-            .forEach(itm => ele.append(itm));
+        const sorted = Array.from(ele.children).sort((a,b) => txtLength(a) - txtLength(b));
+        sorted.forEach(itm => ele.append(itm));
     },
     setCurrent(a) {
         const topEle = findParent(a);
