@@ -319,8 +319,9 @@ const Utils = {
         return varName ?? defaultValue;
     },
     rpHTML(selector) {
-        return ele => ele.closest(selector).innerHTML = ele.innerHTML;
-    },
+        return ele => {
+            ele?.closest(selector)? ele.closest(selector).innerHTML = ele.outerHTML : null;
+        }},
     truncHref(href) {
         const url = new URL(href);
         return url.pathname + url.hash + url.search;
