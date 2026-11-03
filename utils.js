@@ -56,8 +56,9 @@ const Utils = {
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box";
         [window.r9aeadS, window.goUid, window.newshowfloat, window.open, window.addAdjustedSnigelUnit].forEach(func => func = emptyFunc);
-        setScroller(scrollerMap[host]);
     },
+    lazyExec: (func, timeout = 1000, ...args) => setTimeout(func, timeout, ...args),
+    loopExec: (func, timeout = 1000, ...args) => setInterval(func, timeout, ...args),
     rmElement(condition) {
         return ele => {
             if (!condition || !excludeHosts.test(host) && eval(condition))
@@ -74,10 +75,12 @@ const Utils = {
         clearTimeout(countDown);
         countDown = lazyExec(() => hide(contextMenu), 1989.64);
     },
-    setScroller(ele = document.documentElement) {
-        window.scroller = ele;
+    getScroller(){
+        const scroller = /tieba/i.test(host) ? __(".styled-scrollbar.deep") : document.body.scrollTopMax > 0 ?
+              document.body : document.documentElement;
         (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
-        scroller.scrollTopMax < 100 ? show(contextMenu, "flex") : null;
+        scroller.scrollTopMax == 0 ? show(contextMenu, "flex") : null;
+        return scroller;
     },
     deduplicateTxt(ele) {
         const txtList = [];
@@ -285,10 +288,10 @@ const Utils = {
             firstClick = true;
         } else
             zoomNext(img);
-        lazyExec(scroll2Pos,150, { top: calcScrollPos(img, firstClick) });
+        lazyExec(scroll2Pos,150, calcScrollPos(img, firstClick));
     },
     calcScrollPos(img, firstClick) {
-        const scrollTop = scroller.scrollTop;
+        const scrollTop = getScroller().scrollTop;
         const fixedHeight = nvl(__(".stickynav")?.getBoundingClientRect().height);
         const rect = img.getBoundingClientRect();
         if (firstClick || rect.bottom <= 0 || rect.top >= window.innerHeight)
@@ -297,19 +300,19 @@ const Utils = {
     },
     menuAction: action => {
         const handlerMap = {
-            "top": () => scroll2Pos({ top: 0 }),
-            "bottom": () => scroll2Pos({ top: __(bottomSelectors) ? commentsTop(bottomSelectors) : scroller.scrollTopMax }),
+            "top": () => scroll2Pos(0),
+            "bottom": () => scroll2Pos(__(bottomSelectors) ? commentsTop(bottomSelectors) : -1),
             "refresh": () => {
                 if(confirm("Refresh the page ?"))
                     window.location.reload();
-                scroll2Pos({ top: 0 });
+                scroll2Pos(0);
             },
             "back": () => window.history.back()
         }
         clearInterval(scrollTimer);
         handlerMap[action]();
         function commentsTop(selector){
-            return scroller.scrollTop + nvl(__(selector)?.getBoundingClientRect().top) -
+            return getScroller().scrollTop + nvl(__(selector)?.getBoundingClientRect().top) -
                 nvl(__("div.stickynav")?.getBoundingClientRect()?.height) - 10;
         }
     },
@@ -423,8 +426,8 @@ const Utils = {
         return doc.body.firstElementChild;
     },
     resetPos() {
-        scroll2Pos({ top: 0 });
-        scroll2Pos({ left : 0 },__(".stickynav"));
+        scroll2Pos(0);
+        scroll2Pos(0, "left", __(".stickynav"));
     },
     toggleButton() {
         this.isScrollDown = !this.isScrollDown;
@@ -439,8 +442,6 @@ const Utils = {
         const next = this.isScrollDown ? index + 1 : index - 1;
         imgs[next]?.classList.add("zoomed");
     },
-    lazyExec: (func, timeout = 1000, ...args) => setTimeout(func, timeout, ...args),
-    loopExec: (func, timeout = 1000, ...args) => setInterval(func, timeout, ...args),
     autoScroll() {
         lazyExec(() => {
             if(Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length > 10){
@@ -458,9 +459,14 @@ const Utils = {
         }, 3000);
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
-    scroll2Pos(option, container = scroller) {
-        option.behavior = "smooth";
-        container?.scrollTo(option);
+    scroll2Pos(pos, direction = "top", scroller) {
+        pos == -1 ? pos = getScroller().scrollTopMax : null;
+        const option = {
+            [direction]: pos,
+            behavior: "smooth"
+        }
+        scroller = scroller ?? getScroller();
+        scroller.scrollTo(option);
     }
 };
 
