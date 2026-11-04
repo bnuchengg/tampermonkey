@@ -28,7 +28,7 @@ const Utils = {
         document.body.append(contextMenu);
         window.countDown = lazyExec(() => hide(contextMenu), 1989.64);
 
-        window.scheduler = new Scheduler(3,5);
+        window.scheduler = new Scheduler(3,4);
         loopExec((function exec() {
             scheduler.run();
             return exec;
@@ -460,7 +460,8 @@ const Utils = {
     },
     isTouchScreen: () => navigator.maxTouchPoints > 0,
     scroll2Pos(pos, direction = "top", scroller) {
-        pos == -1 ? pos = getScroller().scrollTopMax : null;
+        scroller = scroller ?? getScroller();
+        pos == -1 ? pos = direction == "left" ? scroller.scrollLeftMax : scroller.scrollTopMax : null;
         const option = {
             [direction]: pos,
             behavior: "smooth"
