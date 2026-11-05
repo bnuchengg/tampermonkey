@@ -83,6 +83,7 @@ const Utils = {
         return scroller;
     },
     deduplicateTxt(ele) {
+        ele.classList.add("gapgrid");
         const txtList = [];
         Array.from(ele.children).forEach(item => txtList.includes(item.textContent) ? rmElements([item]) :
                                          item.textContent ? txtList.push(item.textContent) : null);
