@@ -85,13 +85,15 @@ const Utils = {
     deduplicateTxt(ele) {
         ele.classList.add("gapgrid");
         const txtList = [];
-        Array.from(ele.children).forEach(item => txtList.includes(item.textContent) ? rmElements([item]) :
-                                         item.textContent ? txtList.push(item.textContent) : null);
-        sortTxt(ele);
-    },
-    sortTxt(ele) {
-        Array.from(ele.children).sort((a,b) => txtLength(a) - txtLength(b))
-            .forEach(itm => ele.append(itm));
+        Array.from(ele.children).filter(itm => itm.getBoundingClientRect().height > 0)
+            .sort((a,b) => txtLength(a) - txtLength(b))
+            .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
+        function addItem(itm) {
+            if(itm.textContent){
+                txtList.push(itm.textContent);
+                ele.append(itm);
+            }
+        }
     },
     setCurrent(a) {
         const topEle = findParent(a);
