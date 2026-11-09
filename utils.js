@@ -55,7 +55,8 @@ const Utils = {
                                .comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
-        window.bottomSelectors = "a.morecomment,#pl_box";
+        window.bottomSelectors = "a.morecomment,#pl_box,#comment-tree";
+        window.onscroll = onScroll;
         [window.r9aeadS, window.goUid, window.newshowfloat, window.open, window.addAdjustedSnigelUnit].forEach(func => func = emptyFunc);
     },
     lazyExec: (func, timeout = 1000, ...args) => setTimeout(func, timeout, ...args),
@@ -79,7 +80,7 @@ const Utils = {
     getScroller(){
         const scroller = /tieba/i.test(host) ? __(".styled-scrollbar.deep") : document.body.scrollTopMax > 0 ?
               document.body : document.documentElement;
-        (document.documentElement == scroller ? window : scroller).onscroll = onScroll;
+        scroller.onscroll = onScroll;
         scroller.scrollTopMax == 0 ? show(contextMenu, "flex") : null;
         return scroller;
     },
