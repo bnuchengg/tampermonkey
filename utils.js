@@ -7,7 +7,6 @@ const Utils = {
         document.head.appendChild(meta);
 
         window.pageCache = {};
-        window.scannedElements = {};
         window.isScrollDown = true;
 
         window.contextMenu = document.createElement('ul');
@@ -45,8 +44,6 @@ const Utils = {
         window.scrollTimer = null;
         !(excludeHosts.test(host) || /\/$/.test(new URL(document.URL).pathname)) ? autoScroll() : null;
 
-        window.excludeSelectors = new RegExp(`a\.current|\.content-image|\.btn-reply-count a|\.styled-scrollbar\.deep|\.virtual-list-item|
-                                  shreddit-post|shreddit-player|div\[aria-labelledby\]|yt-lockup-view-model`.replace(/\s/g, ''), "i");
         window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
                          cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
                          yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
@@ -101,10 +98,7 @@ const Utils = {
         }
     },
     rpHTML(selector) {
-        return ele => {
-            ele?.closest(selector)? ele.closest(selector).innerHTML = ele.outerHTML : null;
-            ele?.closest(".gapgrid") ? deduplicateTxt(ele?.closest(".gapgrid")) : null;
-        }
+        return ele => ele?.closest(selector)? ele.closest(selector).innerHTML = ele.outerHTML : null;
     },
     setCurrent(a) {
         const topEle = findParent(a);
@@ -415,12 +409,7 @@ const Utils = {
     },
     iExec(selector, func, parent = document) {
         Array.from(parent.querySelectorAll(selector))
-            .filter(ele => excludeSelectors.test(selector) ? true : scannedElements[selector]?.includes(ele) ? false : pushElement(ele))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
-        function pushElement(ele){
-            scannedElements[selector] ? scannedElements[selector].push(ele) : scannedElements[selector] = [ele];
-            return true;
-        }
     },
     appendCss(cssText) {
         return ele => {
