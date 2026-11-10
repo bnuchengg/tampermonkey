@@ -87,6 +87,7 @@ const Utils = {
         ele.classList.add("gapgrid");
         const txtList = [];
         Array.from(ele.children).sort((a,b) => txtLength(a) - txtLength(b))
+            .filter(itm => !(/script|style|h\d/i.test(itm.tagName) || itm.querySelector("iframe")))
             .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
         function addItem(itm) {
             if(itm.textContent){
