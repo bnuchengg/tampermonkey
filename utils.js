@@ -40,7 +40,7 @@ const Utils = {
             return exec;
         })(), 404);
 
-        window.scanned = [];
+        window.scanned = {};
         window.excludeHosts = /youtube|^x.com|reddit|investing/i;
         window.scrollTimer = null;
         !(excludeHosts.test(host) || /\/$/.test(new URL(document.URL).pathname)) ? autoScroll() : null;
@@ -67,6 +67,7 @@ const Utils = {
     },
     rmElements: (arr, instantFlag) => instantFlag ? arr.forEach(ele => ele?.remove()) : insRmList(arr),
     insRmList: arr => arr.filter(ele => !rmList.includes(ele)).forEach(ele => rmList.push(ele)),
+    addScanned: (selector, ele) => scanned[selector] ? scanned[selector].push(ele) : scanned[selector] = [ele],
     emptyFunc: () => {},
     show: (ele, type = '') => ele.style.display = type,
     hide: (ele) => ele.style.display = 'none',
@@ -406,7 +407,7 @@ const Utils = {
     },
     iExec(selector, func, parent = document) {
         Array.from(parent?.querySelectorAll(selector) ?? [])
-            .filter(itm => !scanned.includes(itm))
+            .filter(itm => !scanned[selector]?.includes(itm))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
     },
     appendCss(cssText) {
