@@ -87,7 +87,10 @@ const Utils = {
     deduplicateTxt(ele) {
         ele.classList.add("gapgrid");
         const txtList = [];
-        Array.from(ele.children).filter(itm => itm.getBoundingClientRect().height > 0)
+        Array.from(ele.children).filter(itm => {
+            if(itm.getBoundingClientRect().height == 0)
+                itm.remove();
+            return itm.getBoundingClientRect().height > 0; })
             .sort((a,b) => txtLength(a) - txtLength(b))
             .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
         function addItem(itm) {
