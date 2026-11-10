@@ -90,7 +90,7 @@ const Utils = {
             .filter(itm => !(/script|style|h\d/i.test(itm.tagName) || itm.querySelector("iframe")))
             .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
         function addItem(itm) {
-            if(itm.textContent){
+            if(itm.textContent && !/[a-z]{4,}/.test(itm.textContent)){
                 txtList.push(itm.textContent);
                 ele.append(itm);
             }
