@@ -40,6 +40,7 @@ const Utils = {
             return exec;
         })(), 404);
 
+        window.scanned = [];
         window.excludeHosts = /youtube|^x.com|reddit|investing/i;
         window.scrollTimer = null;
         !(excludeHosts.test(host) || /\/$/.test(new URL(document.URL).pathname)) ? autoScroll() : null;
@@ -84,11 +85,7 @@ const Utils = {
     deduplicateTxt(ele) {
         ele.classList.add("gapgrid");
         const txtList = [];
-        Array.from(ele.children).filter(itm => {
-            if(itm.getBoundingClientRect().height == 0)
-                itm.remove();
-            return itm.getBoundingClientRect().height > 0; })
-            .sort((a,b) => txtLength(a) - txtLength(b))
+        Array.from(ele.children).sort((a,b) => txtLength(a) - txtLength(b))
             .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
         function addItem(itm) {
             if(itm.textContent){
@@ -408,7 +405,8 @@ const Utils = {
         });
     },
     iExec(selector, func, parent = document) {
-        Array.from(parent.querySelectorAll(selector))
+        Array.from(parent?.querySelectorAll(selector) ?? [])
+            .filter(itm => !scanned.includes(itm))
             .forEach(typeof func == "string" ? new Function("ele", func) : func);
     },
     appendCss(cssText) {
