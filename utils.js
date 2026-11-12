@@ -52,6 +52,7 @@ const Utils = {
         window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,.comment .comment-html,.post p,
                                .comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
+        window.userSelector = ".author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,.reply-list .user_name";
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box,#comment-tree";
         window.onscroll = onScroll;
@@ -84,13 +85,15 @@ const Utils = {
         return scroller;
     },
     deduplicateTxt(ele) {
+        if(/gapgrid/.test(ele.classList) || ele.querySelector(userSelector))
+            return;
         ele.classList.add("gapgrid");
         const txtList = [];
         Array.from(ele.children).sort((a,b) => txtLength(a) - txtLength(b))
             .filter(itm => !(/script|style|h\d/i.test(itm.tagName) || itm.querySelector("iframe")))
             .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
         function addItem(itm) {
-            if(itm.textContent && !/[a-z]{4,}/.test(itm.textContent)){
+            if(itm.textContent){
                 txtList.push(itm.textContent);
                 ele.append(itm);
             }
