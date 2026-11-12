@@ -85,7 +85,7 @@ const Utils = {
         return scroller;
     },
     deduplicateTxt(ele) {
-        if(/gapgrid/.test(ele.classList) || ele.querySelector(userSelector))
+        if(/gapgrid/.test(ele.classList) || ele.querySelector(`${userSelector},.post.search`))
             return;
         ele.classList.add("gapgrid");
         const txtList = [];
