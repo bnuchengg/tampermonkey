@@ -81,7 +81,6 @@ const Utils = {
         const scroller = /tieba/i.test(host) ? __(".styled-scrollbar.deep") : document.body.scrollTopMax > 0 ?
               document.body : document.documentElement;
         scroller.onscroll = onScroll;
-        scroller.scrollTopMax == 0 ? show(contextMenu, "flex") : null;
         return scroller;
     },
     deduplicateTxt(ele) {
