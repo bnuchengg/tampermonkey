@@ -52,7 +52,8 @@ const Utils = {
         window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,.comment .comment-html,.post p,
                                .comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
-        window.userSelector = ".author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,.reply-list .user_name";
+        window.userSelectors = ".author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,.reply-list .user_name";
+        window.commentSelectors = "span.comment-count,.btn-reply-count a,.show-more-lzl,.show-replies-button";
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box,#comment-tree";
         window.onscroll = onScroll;
@@ -84,7 +85,7 @@ const Utils = {
         return scroller;
     },
     deduplicateTxt(ele) {
-        if(/gapgrid/.test(ele.classList) || ele.querySelector(`${userSelector},.post.search`))
+        if(/gapgrid/.test(ele.classList) || ele.querySelector(`${userSelectors},.post.search`))
             return;
         ele.classList.add("gapgrid");
         const txtList = [];
