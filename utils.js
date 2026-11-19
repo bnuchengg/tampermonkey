@@ -99,9 +99,6 @@ const Utils = {
             }
         }
     },
-    rpHTML(selector) {
-        return ele => ele?.closest(selector)? ele.closest(selector).innerHTML = ele.outerHTML : null;
-    },
     setCurrent(a) {
         const topEle = findParent(a);
         iExec("a.current", ele => {
@@ -220,10 +217,9 @@ const Utils = {
     },
     rpElement(ele, selector, func) {
         const div = document.createElement("div");
-        if(ele.querySelector(selector)){
-            iExec(selector, ele => func(ele, div), ele);
-            ele.after(div);
-            ele.remove();
+        if(ele?.querySelector(selector)){
+            iExec(selector, itm => func ? func(itm, div) : div.append(itm), ele);
+            ele.innerHTML = div.innerHTML;
         }
     },
     rpAttribute(oldAttr, newAttr) {
