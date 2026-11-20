@@ -49,11 +49,13 @@ const Utils = {
                          cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
                          yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
                          div.shadow-dialog,svg[icon-name=add-circle],center > small`.replace(/\n\s+/g,'');
-        window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,.comment .comment-html,.post p,
+        window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,.comment .comment-html,#page-body p,
                                .comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
         window.userSelectors = ".author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,.reply-list .user_name";
         window.commentSelectors = "span.comment-count,.btn-reply-count a,.show-more-lzl,.show-replies-button";
+        window.gapgridSelectors = `.left-comment,.left-content-html,.post-content,.ui-list,.lzl-wrapper,.tucao-container,#page-body,
+                                  div#comment,.reply-count-ent,.pb-content-wrap,shreddit-comment-tree > section`.replace(/\s/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box,#comment-tree";
         window.onscroll = onScroll;
