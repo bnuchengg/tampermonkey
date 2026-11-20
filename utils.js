@@ -43,7 +43,7 @@ const Utils = {
         window.scanned = {};
         window.excludeHosts = /youtube|^x.com|reddit/i;
         window.scrollTimer = null;
-        !/\/$|home/i.test(new URL(document.URL).pathname) ? autoScroll() : null;
+        !(excludeHosts.test(host) || /\/$|home/i.test(new URL(document.URL).pathname)) ? autoScroll() : null;
 
         window.rmSelectors = `th[rowspan='2'],div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
                          cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
