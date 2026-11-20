@@ -219,7 +219,8 @@ const Utils = {
         const div = document.createElement("div");
         if(ele?.querySelector(selector)){
             iExec(selector, itm => func ? func(itm, div) : div.append(itm), ele);
-            ele.innerHTML = div.innerHTML;
+            ele.after(div);
+            ele.remove();
         }
     },
     rpAttribute(oldAttr, newAttr) {
