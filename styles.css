@@ -30,7 +30,7 @@
     padding: 5px !important;
 }
 
-.gapgrid .post{
+.gapgrid > div {
     width: 99% !important
 }
 
