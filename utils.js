@@ -55,7 +55,7 @@ const Utils = {
         window.userSelectors = ".author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,.reply-list .user_name";
         window.commentSelectors = "span.comment-count,.btn-reply-count a,.show-more-lzl,.show-replies-button";
         window.gapgridSelectors = `.left-comment,.left-content-html,.post-content,.ui-list,.lzl-wrapper,.tucao-container,#page-body,
-                                  div#comment,.reply-count-ent,.pb-content-wrap,shreddit-comment-tree > section`.replace(/\s/g,'');
+                                  div#comment,.reply-count-ent,.pb-content-wrap,shreddit-comment-tree > section,#main`.replace(/\s/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box,#comment-tree";
         window.onscroll = onScroll;
@@ -93,7 +93,7 @@ const Utils = {
         const txtList = [];
         Array.from(ele.children).sort((a,b) => txtLength(a) - txtLength(b))
             .filter(itm => !(/script|style|h\d/i.test(itm.tagName) || itm.querySelector("iframe")))
-            .forEach(item => txtList.includes(item.textContent) ? rmElements([item]) : addItem(item));
+            .forEach(item => item.getBoundingClientRect().height == 0 || txtList.includes(item.textContent) ? rmElements([item],true) : addItem(item));
         function addItem(itm) {
             if(itm.textContent){
                 txtList.push(itm.textContent);
