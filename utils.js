@@ -56,7 +56,8 @@ const Utils = {
                                 .reply-list .user_name,.t.t2 th[rowspan],.tpc_detail.fl`.replace(/\n\s+/g,'');
         window.txtSelectors = `.comment-row .comment-content,.comment-html,.postbody .content,.reply-list .case,.ui-list-item-content,
                                .tpc_content,.tpc_cont`.replace(/\n\s+/g,'');
-        window.commentSelectors = "span.comment-count,.btn-reply-count a,.show-more-lzl,.show-replies-button";
+        window.commentSelectors = `span.comment-count,.btn-reply-count a,.show-more-lzl,.show-replies-button,
+                                   button [noun=more_replies]`.replace(/\n\s+/g,'');
         window.gapgridSelectors = `.left-comment,.left-content-html,.post-content,.ui-list,.lzl-wrapper,.tucao-container,#page-body,
                                   div#comment,.reply-count-ent,.pb-content-wrap,shreddit-comment-tree > section,
                                   #main,#phpbb > div .content,.lzl-wrapper`.replace(/\n\s+/g,'');
