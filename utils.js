@@ -54,10 +54,12 @@ const Utils = {
                                ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
         window.userSelectors = `.author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,
                                 .reply-list .user_name,.t.t2 th[rowspan],.tpc_detail.fl`.replace(/\n\s+/g,'');
+        window.txtSelectors = `.comment-row .comment-content,.comment-html,.postbody .content,.reply-list .case,.ui-list-item-content,
+                               .tpc_content,.tpc_cont`.replace(/\n\s+/g,'');
         window.commentSelectors = "span.comment-count,.btn-reply-count a,.show-more-lzl,.show-replies-button";
         window.gapgridSelectors = `.left-comment,.left-content-html,.post-content,.ui-list,.lzl-wrapper,.tucao-container,#page-body,
                                   div#comment,.reply-count-ent,.pb-content-wrap,shreddit-comment-tree > section,
-                                  #main`.replace(/\n\s+/g,'');
+                                  #main,#phpbb > div .content,.lzl-wrapper`.replace(/\n\s+/g,'');
         window.destSelectors = "main,#page-body,#main,.tzhanbao,#content,.post-details,.detail-page,.ui-box-content";
         window.bottomSelectors = "a.morecomment,#pl_box,#comment-tree";
         window.onscroll = onScroll;
@@ -224,8 +226,8 @@ const Utils = {
         if(ele?.querySelector(selector)){
             iExec(selector, itm => func ? func(itm, div) : div.append(itm), ele);
             ele.after(div);
+            ele.remove();
         }
-        ele.remove();
     },
     rpAttribute(oldAttr, newAttr) {
         return ele => {
