@@ -46,12 +46,12 @@ const Utils = {
         !(excludeHosts.test(host) || /\/$|home/i.test(new URL(document.URL).pathname)) ? autoScroll() : null;
 
         window.rmSelectors = `div.t_like,#preview,#comment .commentmeta,.advert,.ylh-ad-container,.bottom_con,.blurred,svg[icon-name=subtract-circle],shreddit-comment [slot=commentMeta],[slot=commentAvatar],
-                         cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
-                         yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
-                         div.shadow-dialog,svg[icon-name=add-circle],center > small,.sptable_do_not_remove`.replace(/\n\s+/g,'');
-        window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,.comment .comment-html,#page-body p,
-                               .comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
-                               ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
+                              cbau-trigger,shreddit-comment-tree-ad,[slot=actionRow],[slot=full-post-link],.content blockquote,.newfloat,.ui-list-item .quote,.metadata-snippet-container,
+                              yt-badge-supported-renderer,.metadata-snippet-container-one-line,shreddit-ad-post,ytd-watch-next-secondary-results-renderer ytd-continuation-item-renderer,.virtual-list-item .video-wrapper,
+                              div.shadow-dialog,svg[icon-name=add-circle],center > small,.sptable_do_not_remove`.replace(/\n\s+/g,'');
+        window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,
+                                    .comment-html,#page-body p,.comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
+                                    ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
         window.userSelectors = `.author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,
                                 .reply-list .user_name,.t.t2 th[rowspan],.tpc_detail.fl`.replace(/\n\s+/g,'');
         window.txtSelectors = `.comment-row .comment-content,.comment-html,.postbody .content,.reply-list .case,.ui-list-item-content,
