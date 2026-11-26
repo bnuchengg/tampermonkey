@@ -189,12 +189,8 @@ const Utils = {
             lazyExec(() => {
                 scheduler.loaded(link);
                 let html = nvl(iframe.contentDocument?.querySelector(selector)?.outerHTML, '');
-                if(/player.bilibili.com/i.test(html))
-                    link.remove();
-                else {
-                    link.getAttribute("cloneLink") ? decorate() : null;
-                    scheduler.addCache(link, html);
-                }
+                link.getAttribute("cloneLink") ? decorate() : null;
+                scheduler.addCache(link, html);
                 iframe.remove();
                 function decorate(){
                     const a = cloneLink(link);
