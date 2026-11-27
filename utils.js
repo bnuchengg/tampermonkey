@@ -52,7 +52,7 @@ const Utils = {
         window.filterRmSelectors = `.left-content-html p,.reply_message,.postbody strong,.btn-reply-count a,.commentbody,.content-section .post-content p,
                                     .comment-html,#page-body p,.comment-row .comment-content,.sub-content,.pb-content-item,.ui-list-item-content,[slot=comment],.tpc_cont:not(#conttpc),.tpc_content:not(#conttpc),div.case,p.word,
                                     ytd-comment-view-model yt-attributed-string[slot=content]`.replace(/\n\s+/g,'');
-        window.userSelectors = `.author,.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,
+        window.userSelectors = `.author-anonymous,.author-name,.user-nickname,.username,.head-name,.ui-list-item-info,
                                 .reply-list .user_name,.t.t2 th[rowspan],.tpc_detail.fl`.replace(/\n\s+/g,'');
         window.txtSelectors = `.comment-row .comment-content,.comment-html,.postbody .content,.reply-list .case,.ui-list-item-content,
                                .tpc_content,.tpc_cont`.replace(/\n\s+/g,'');
