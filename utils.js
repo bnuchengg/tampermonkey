@@ -447,17 +447,18 @@ const Utils = {
     },
     autoScroll() {
         lazyExec(() => {
-            if(Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150).length > 10){
-                let index = 0;
-                this.isScrollDown = true;
+            const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
+            if(imgs.length >= 10){
+                imgs.forEach(img => img.classList.add("zoomed"));
+                let pos = 0;
                 window.scrollTimer = loopExec(() => {
-                    const imgs = Array.from(document.querySelectorAll("img")).filter(img => img.getBoundingClientRect().height >= 150);
-                    imgs[index++]?.click();
-                    if(index == imgs.length){
+                    pos += 2;
+                    scroll2Pos(pos);
+                    if(pos >= getScroller().scrollTopMax){
                         clearInterval(scrollTimer);
                         lazyExec(resetPos);
                     }
-                });
+                }, 16);
             }
         }, 3000);
     },
